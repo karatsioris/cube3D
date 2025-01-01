@@ -6,13 +6,14 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2024/12/26 12:07:08 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 09:29:40 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #define PARSER_H
 #include <stdbool.h>
 #include <stdlib.h>
+#include "../lib/MLX42/include/MLX42/MLX42.h"
 
 typedef struct s_memory
 {
