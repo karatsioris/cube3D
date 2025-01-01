@@ -6,11 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 10:58:25 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 15:39:04 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Cube3d.h"
+#include "cube3d.h"
 
 void	parse_line(char *line, t_config *config)
 {
@@ -24,10 +24,11 @@ void	parse_line(char *line, t_config *config)
 	else if (*line == '1' || *line == '0' || *line == ' ')
 		process_line(&config->map, ft_strdup(line));
 	else if (*line == '\n' || *line == '\0')
-		return; // Ignore empty lines
+		return ;
 	else
-		ft_error(-9); // Error: Invalid map configuration line
+		ft_error(-9);
 }
+
 void	parse_cub_file(t_config *config, char *file_path)
 {
 	int		fd;
@@ -35,7 +36,7 @@ void	parse_cub_file(t_config *config, char *file_path)
 
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
-		ft_error(-1); // Error: Cannot open file
+		ft_error(-1);
 
 	while ((line = get_next_line(fd)))
 	{

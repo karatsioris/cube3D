@@ -6,11 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 10:59:14 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 15:39:18 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cub3d.h"
+#include "cube3d.h"
 
 char	*extract_path(char *line)
 {
@@ -69,7 +69,7 @@ void	parse_color(char *line, int color[3])
 		validate_color_range(color[i]);
 		i++;
 	}
-	free_split(rgb);
+	ft_free_split(rgb);
 }
 
 void	validate_textures_and_colors(t_config *config)

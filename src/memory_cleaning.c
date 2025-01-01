@@ -6,17 +6,18 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:23:39 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 09:55:01 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 15:49:29 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "cube3d.h"
 
 void	mlx_clean(t_map *map)
 {
-	if (map->mlx == NULL)
+	if (!map || !map->mlx)
 		return ;
-	if (map->mlx->window != NULL)
+
+	if (map->mlx->window)
 	{
 		mlx_close_window(map->mlx);
 		map->mlx->window = NULL;
@@ -29,8 +30,6 @@ void	ft_clean(t_map *map)
 {
 	if (map != NULL)
 	{
-		free_map_resources(map);
-		free_img_grid(map);
 		mlx_clean(map);
 	}
 	exit(0);
@@ -40,6 +39,8 @@ void	cleanup_resources(t_resources *res, mlx_t *mlx)
 {
 	int	i;
 
+	if (!res || !mlx)
+		return ;
 	i = res->texture_count;
 	while (i--)
 	{
@@ -62,4 +63,20 @@ void	cleanup_resources(t_resources *res, mlx_t *mlx)
 	}
 	free(res->images);
 	res->images = NULL;
+}
+
+void	free_map_lines(t_map *map, int rows)
+{
+	int	i;
+
+	i = 0;
+	if (!map->grid)
+		return ;
+	while (i < rows)
+	{
+		free(map->grid[i]);
+		i++;
+	}
+	free(map->grid);
+	map->grid = NULL;
 }
