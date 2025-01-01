@@ -6,11 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 10:53:14 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 12:26:30 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define PARSER_H
+#define CUBE3D_H
 #include <stdbool.h>
 #include <stdlib.h>
 #include <fcntl.h> 

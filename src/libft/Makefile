@@ -4,9 +4,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 # Library name
 NAME = libft.a
-
-# Build directory
-OBJDIR = ../../bin/libft
+SRCDIR  := ./
+OBJDIR  := ./bin
 
 # Source files for libft
 SRCS = \
@@ -21,7 +20,7 @@ SRCS = \
 	get_next_line.c ft_strleni.c ft_realloc.c get_next_utils.c \
 
 # Object files
-OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
+OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 
 # Rules
 all: $(OBJDIR)/$(NAME)
