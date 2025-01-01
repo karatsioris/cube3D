@@ -6,11 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:32:54 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 09:36:59 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 09:54:44 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Parsing.h"
+#include "cub3d.h"
 
 void	validate_args_and_load_map(int argc, char **argv, t_map *map)
 {

@@ -6,11 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:46:07 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 09:48:25 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 09:54:50 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Parsing.h"
+#include "cub3d.h"
 
 t_position	find_element(char **map, char element, int height, int width)
 {

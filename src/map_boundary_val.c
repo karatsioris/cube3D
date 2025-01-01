@@ -6,11 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 09:41:27 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 09:54:56 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Parsing.h"
+#include "cub3d.h"
 
 void	validate_top_bottom_walls(const char *line, int num_columns, int is_top)
 {
