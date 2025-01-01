@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Parsing.h                                          :+:      :+:    :+:   */
+/*   Cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 09:29:40 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 10:53:14 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #define PARSER_H
 #include <stdbool.h>
 #include <stdlib.h>
+#include <fcntl.h> 
 #include "../lib/MLX42/include/MLX42/MLX42.h"
 
 typedef struct s_memory

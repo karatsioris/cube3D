@@ -6,11 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 09:58:03 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 10:32:15 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cub3d.h"
+#include "cub3d.h"
 
 void	count_map_elements(char *line, t_map *map)
 {
@@ -31,6 +31,7 @@ void	count_map_elements(char *line, t_map *map)
 		line++;
 	}
 }
+
 void	realloc_map(t_map *map)
 {
 	map->map = (char **)ft_realloc(map->map,
