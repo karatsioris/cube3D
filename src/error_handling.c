@@ -6,11 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:51:55 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 10:09:42 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 15:50:04 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "cube3d.h"
 
 void	ft_error(int code)
 {
@@ -39,4 +39,13 @@ void	ft_error(int code)
 		ft_printf("Error: Initialization failed!\n");
 	}
 	exit(1);
+}
+
+void	validate_map(t_map *map)
+{
+	validate_file_extension(map);
+
+	realloc_map(map);
+	process_line(map, "111111");
+	process_line(map, "100001");
 }

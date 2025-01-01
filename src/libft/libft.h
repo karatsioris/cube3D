@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 20:35:20 by pwojnaro          #+#    #+#             */
-/*   Updated: 2024/09/13 10:44:22 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/01/01 14:57:08 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,9 @@ int		print_hex(unsigned long number, int upper, int fd);
 void	*ft_realloc(void *pointr, size_t original_size, size_t new_size);
 int		read_from_fd(int fd, char *storage, int *bytes_read);
 char	*store_and_join(char *line, const char *storage);
+int		ft_strncmp(const char *s1, const char *s2, unsigned int n);
+char	**ft_split(char const *s, char c);
+void	ft_free_split(char **split);
+size_t	ft_arraylen(char **array);
 
 #endif
