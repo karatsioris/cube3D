@@ -6,11 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:51:55 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 09:54:37 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/01 10:09:42 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cub3d.h"
+#include "cub3d.h"
 
 void	ft_error(int code)
 {
