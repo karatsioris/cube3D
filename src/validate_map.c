@@ -6,73 +6,51 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 15:40:34 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/04 12:49:56 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
 
-void	count_map_elements(char *line, t_map *map)
+int	put_on_list(char *line, t_map *map, t_memory *mem)
 {
-	while (*line)
+	t_list	*node;
+
+	if (!line || *line == '\0')
 	{
-		if (*line == 'N' || *line == 'S' || *line == 'E' || *line == 'W')
-		{
-			map->player_n++;
-			if (map->player_n > 1)
-				ft_error(-3);
-		}
-		else if (*line == '1')
-			map->wall_n++;
-		else if (*line == '0' || *line == ' ')
-			;
-		else
-			ft_error(-5);
-		line++;
+		ft_printf("[ERROR] Cannot add an empty or NULL line to the list.\n");
+		return (0);
 	}
+	node = mem_alloc(mem, sizeof(t_list));
+	if (!node)
+	{
+		ft_printf("[ERROR] Failed to allocate memory for map list node.\n");
+		return (0);
+	}
+	node->content = ft_strdup(line);
+	node->next = NULL;
+
+	if (!node->content)
+	{
+		ft_printf("[ERROR] Failed to duplicate map line content.\n");
+		return (0);
+	}
+	ft_lstadd_back(&map->list, node);
+	return (1);
 }
 
-void	realloc_map(t_map *map)
+void	process_line(t_map *map, t_memory *mem, char *line)
 {
-	map->grid = (char **)ft_realloc(map->grid,
-			map->current_row * sizeof(char *),
-			(map->current_row + 1) * sizeof(char *));
-	if (!map->grid)
+	if (!line || *line == '\0' || *line == '\n')
 	{
-		free_map_lines(map, map->current_row);
-		printf("Error: Memory allocation failed during map reallocation.\n");
+		ft_printf("[DEBUG] Skipping invalid or empty map line.\n");
+		return ;
+	}
+
+	ft_printf("[DEBUG] Adding map line to list: %s\n", line);
+	if (!put_on_list(line, map, mem))
+	{
+		ft_printf("[ERROR] Failed to add map line to list.\n");
 		exit(1);
 	}
-}
-
-void	process_line(t_map *map, char *line)
-{
-	int	i;
-
-	i = 0;
-	map->grid[map->current_row++] = line;
-	while (line[i])
-	{
-		if (line[i] == 'P')
-			map->player_n++;
-		else if (line[i] == '1')
-			map->wall_n++;
-		i++;
-	}
-}
-
-int	load_map(t_map *map, const char *path)
-{
-	map->path = strdup(path);
-	if (!map->path)
-		return (-1);
-	map->fd = open(map->path, O_RDONLY);
-	if (map->fd == -1)
-	{
-		free(map->path);
-		return (-1);
-	}
-	validate_file_extension(map);
-	close(map->fd);
-	return (0);
 }

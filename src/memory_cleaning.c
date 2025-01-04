@@ -6,34 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:23:39 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 15:49:29 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/04 13:00:58 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
-
-void	mlx_clean(t_map *map)
-{
-	if (!map || !map->mlx)
-		return ;
-
-	if (map->mlx->window)
-	{
-		mlx_close_window(map->mlx);
-		map->mlx->window = NULL;
-	}
-	mlx_terminate(map->mlx);
-	map->mlx = NULL;
-}
-
-void	ft_clean(t_map *map)
-{
-	if (map != NULL)
-	{
-		mlx_clean(map);
-	}
-	exit(0);
-}
 
 void	cleanup_resources(t_resources *res, mlx_t *mlx)
 {
@@ -65,18 +42,17 @@ void	cleanup_resources(t_resources *res, mlx_t *mlx)
 	res->images = NULL;
 }
 
-void	free_map_lines(t_map *map, int rows)
+void	ft_clean(t_map *map, t_memory *mem)
 {
-	int	i;
-
-	i = 0;
-	if (!map->grid)
-		return ;
-	while (i < rows)
+	if (map && map->mlx)
 	{
-		free(map->grid[i]);
-		i++;
+		mlx_terminate(map->mlx);
+		map->mlx = NULL;
 	}
-	free(map->grid);
-	map->grid = NULL;
+	if (mem)
+	{
+		mem_free_all(mem);
+	}
+	ft_printf("[DEBUG] Resources and memory cleaned. Exiting...\n");
+	exit(0);
 }
