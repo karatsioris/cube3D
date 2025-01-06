@@ -6,45 +6,86 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 16:35:32 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 20:36:54 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
 
+int	validate_line(char *line)
+{
+	char	*trimmed;
+
+	if (!line)
+		return (0);
+	trimmed = ft_strtrim(line, " \n\t");
+	if (!trimmed || *trimmed == '\0')
+	{
+		free(trimmed);
+		return (0);
+	}
+	free(trimmed);
+	return (1);
+}
+
+void	print_list1(t_list *list)
+{
+	int	i;
+
+	i = 0;
+	if (!list)
+	{
+		printf("[ERROR] Linked list is NULL.\n");
+		return ;
+	}
+	while (list)
+	{
+		if (list->line)
+			printf("[DEBUG] List Node %d: '%s'\n", i, list->line);
+		else
+			printf("[ERROR] List Node %d: (NULL line)\n", i);
+		list = list->next;
+		i++;
+	}
+}
+
 int	put_on_list(char *line, t_list **list, t_memory *mem)
 {
 	t_list	*node;
-	t_list	*temp;
 
 	if (!line || *line == '\0' || *line == '\n')
 	{
-		ft_printf("[ERROR] Cannot add an empty or NULL line to the list.\n");
+		printf("[ERROR] Cannot add an empty or NULL line to the list.\n");
 		return (0);
 	}
 	node = mem_alloc(mem, sizeof(t_list));
 	if (!node)
 	{
-		ft_printf("[ERROR] Failed to allocate memory for map list node.\n");
+		printf("[ERROR] Failed to allocate memory for map list node.\n");
 		return (0);
 	}
 	node->line = ft_strdup_cub(line, mem);
 	if (!node->line || node->line[0] == '\0')
 	{
-		ft_printf("[ERROR] Failed to duplicate map line content.\n");
+		printf("[ERROR] Failed to duplicate map line content.\n");
 		return (0);
 	}
 	node->next = NULL;
 	if (!(*list))
+	{
 		*list = node;
+		printf("[DEBUG] Added first node to map list: '%s'\n", node->line);
+	}
 	else
 	{
-		temp = *list;
+		t_list *temp = *list;
 		while (temp->next)
 			temp = temp->next;
 		temp->next = node;
+		printf("[DEBUG] Added node to map list: '%s'\n", node->line);
 	}
-	ft_printf("[DEBUG] Added line to map list: '%s'\n", node->line);
+	printf("[DEBUG] Current state of the linked list:\n");
+	print_list1(*list);
 	return (1);
 }
 
