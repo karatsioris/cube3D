@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 09:39:53 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 16:36:14 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 20:37:45 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 void	list_to_array(t_map *map, t_memory *mem)
 {
-	int		i;
-	int		rows;
+	int		i = 0;
+	int		rows = 0;
 	t_list	*temp;
 
-	i = 0;
-	rows = 0;
 	if (!map || !map->list)
 	{
 		ft_printf("[ERROR] Map structure or map list is NULL.\n");
@@ -30,7 +28,7 @@ void	list_to_array(t_map *map, t_memory *mem)
 	{
 		if (!temp->line || temp->line[0] == '\0' || temp->line[0] == '\n')
 		{
-			ft_printf("[ERROR] Invalid or empty line detected in the map list at row %d.\n", rows);
+			ft_printf("[ERROR] Invalid or empty line detected in map list at row %d.\n", rows);
 			exit(1);
 		}
 		rows++;
@@ -51,12 +49,7 @@ void	list_to_array(t_map *map, t_memory *mem)
 			ft_printf("[ERROR] NULL or invalid line detected at row %d.\n", i);
 			exit(1);
 		}
-		map->grid[i] = ft_strdup_cub(temp->line, mem);
-		if (!map->grid[i])
-		{
-			ft_printf("[ERROR] Failed to duplicate map line at row %d.\n", i);
-			exit(1);
-		}
+		map->grid[i] = temp->line;
 		ft_printf("[DEBUG] Grid Row %d: '%s'\n", i, map->grid[i]);
 		i++;
 		temp = temp->next;

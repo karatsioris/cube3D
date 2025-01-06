@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:51:55 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 16:14:55 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 20:39:37 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,45 @@ void	get_map_dimensions(t_map *map)
 	}
 	ft_printf("[DEBUG] ----- Map Dimensions Calculated Successfully -----\n");
 }
+void	print_list(t_list *list)
+{
+	int i = 0;
+	if (!list)
+	{
+		printf("[ERROR] Linked list is NULL.\n");
+		return ;
+	}
+	while (list)
+	{
+		if (list->line)
+			printf("[DEBUG] List Node %d: '%s'\n", i, list->line);
+		else
+			printf("[ERROR] List Node %d: (NULL line)\n", i);
+		list = list->next;
+		i++;
+	}
+}
 
 void	validate_map(t_map *map, t_memory *mem)
 {
-	ft_printf("[DEBUG] ----- Validating Map Structure -----\n");
+	printf("[DEBUG] ----- Validating Map Structure -----\n");
+	printf("[DEBUG] Printing linked list before converting to grid...\n");
+	print_list(map->list);
+	printf("[DEBUG] Validating file extension...\n");
 	validate_file_extension(map);
-	ft_printf("[DEBUG] File extension validated.\n");
-	ft_printf("[DEBUG] Converting map list to grid array...\n");
+	printf("[DEBUG] File extension validated.\n");
+	printf("[DEBUG] Converting map list to grid array...\n");
 	list_to_array(map, mem);
-	ft_printf("[DEBUG] Map list converted to grid array.\n");
-	ft_printf("[DEBUG] Printing map grid...\n");
+	printf("[DEBUG] Map list converted to grid array.\n");
+	printf("[DEBUG] Printing map grid...\n");
 	for (int i = 0; map->grid[i]; i++)
-		ft_printf("[DEBUG] Grid Row %d: '%s'\n", i, map->grid[i]);
-	ft_printf("[DEBUG] Calculating map dimensions...\n");
+		printf("[DEBUG] Grid Row %d: '%s'\n", i, map->grid[i]);
+	printf("[DEBUG] Calculating map dimensions...\n");
 	get_map_dimensions(map);
-	ft_printf("[DEBUG] Map dimensions calculated: Height=%d, Width=%d\n",
+	printf("[DEBUG] Map dimensions calculated: Height=%d, Width=%d\n",
 		map->height, map->width);
-	ft_printf("[DEBUG] Validating map boundaries...\n");
+	printf("[DEBUG] Validating map boundaries...\n");
 	validate_map_boundary(map);
-	ft_printf("[DEBUG] Map boundaries validated.\n");
-	ft_printf("[DEBUG] ----- Map Structure Validated Successfully -----\n");
+	printf("[DEBUG] Map boundaries validated.\n");
+	printf("[DEBUG] ----- Map Structure Validated Successfully -----\n");
 }

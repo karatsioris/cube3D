@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:23:39 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 16:40:54 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 20:39:02 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,40 @@ void	ft_clean(t_map *map, t_memory *mem, t_resources *res)
 	{
 		cleanup_resources(res, map->mlx);
 	}
-	if (map && map->mlx)
+	if (map)
 	{
-		mlx_terminate(map->mlx);
-		map->mlx = NULL;
+		if (map->mlx)
+		{
+			mlx_terminate(map->mlx);
+			map->mlx = NULL;
+		}
+		if (map->grid)
+		{
+			for (int i = 0; i < map->height; i++)
+			{
+				free(map->grid[i]);
+			}
+			free(map->grid);
+			map->grid = NULL;
+		}
+		if (map->list)
+		{
+			t_list *temp;
+			while (map->list)
+			{
+				temp = map->list->next;
+				free(map->list->line);
+				free(map->list);
+				map->list = temp;
+			}
+			map->list = NULL;
+		}
+		ft_printf("[DEBUG] Map resources freed successfully.\n");
 	}
 	if (mem)
 	{
 		mem_free_all(mem);
+		ft_printf("[DEBUG] Memory manager freed successfully.\n");
 	}
 	ft_printf("[DEBUG] Resources and memory cleaned. Exiting...\n");
 	exit(0);
