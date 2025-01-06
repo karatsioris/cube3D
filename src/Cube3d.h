@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 11:47:33 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 12:57:51 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ typedef struct s_position
 }	t_position;
 
 void	ft_error(int code);
-void	parse_texture(char *line, t_texture *textures);
+void	parse_texture(char *line, t_texture *textures, t_memory *mem);
 void	parse_color(char *line, int color[3]);
 void	process_line(t_map *map, t_memory *mem, char *line);
 void	validate_file_extension(t_map *map);
@@ -111,5 +111,6 @@ void	parse_cub_file(t_config *config, t_memory *mem, char *file_path);
 void	list_to_array(t_map *map, t_memory *mem);
 void	cleanup_resources(t_resources *res, mlx_t *mlx);
 int		has_valid_extension(const char *path, const char *extension);
+char	*ft_strdup_cub(const char *src, t_memory *mem);
 
 #endif

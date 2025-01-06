@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 13:02:49 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 12:54:36 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	validate_top_bottom_walls(char *line, int width, int is_top)
 			is_top ? "Top" : "Bottom");
 		exit(1);
 	}
-
 	i = 0;
 	while (i < width)
 	{
@@ -48,7 +47,6 @@ void	validate_side_walls(char *line, int width)
 		ft_printf("[ERROR] Line is NULL while validating side walls.\n");
 		exit(1);
 	}
-
 	if (line[0] != '1' || line[width - 1] != '1')
 	{
 		ft_printf("[ERROR] Side walls are not fully closed: Start=%c, End=%c\n",
@@ -75,7 +73,6 @@ void	validate_map_boundary(t_map *map)
 	}
 	ft_printf("[DEBUG] Map dimensions - Height: %d, Width: %d\n",
 		map->height, map->width);
-
 	if (map->height < 2 || map->width < 2)
 	{
 		ft_printf("[ERROR] Invalid map dimensions. Height=%d, Width=%d\n",
@@ -100,4 +97,3 @@ void	validate_map_boundary(t_map *map)
 	}
 	ft_printf("[DEBUG] Map boundaries validated successfully.\n");
 }
-

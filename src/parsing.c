@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 09:39:53 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 12:51:51 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 12:56:26 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	list_to_array(t_map *map, t_memory *mem)
 		temp = temp->next;
 	}
 	ft_printf("[DEBUG] Total Rows in Map List: %d\n", rows);
-
 	map->grid = mem_alloc(mem, sizeof(char *) * (rows + 1));
 	if (!map->grid)
 	{
@@ -52,7 +51,7 @@ void	list_to_array(t_map *map, t_memory *mem)
 			ft_printf("[ERROR] NULL content copy to grid at row %d.\n", i);
 			exit(1);
 		}
-		map->grid[i] = ft_strdup(temp->content);
+		map->grid[i] = ft_strdup_cub(temp->content, mem);
 		if (!map->grid[i])
 		{
 			ft_printf("[ERROR] Failed to copy map line at row %d.\n", i);

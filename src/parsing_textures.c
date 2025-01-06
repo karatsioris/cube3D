@@ -6,25 +6,24 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 12:56:22 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 13:00:37 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
 
-char	*extract_path(char *line)
+char	*extract_path(char *line, t_memory *mem)
 {
 	char	*raw_path;
 	int		len;
 	int		fd;
 
 	ft_printf("[DEBUG] Extracting path from line: '%s'\n", line);
-
 	while (*line && *line != ' ')
 		line++;
 	while (*line && *line == ' ')
 		line++;
-	raw_path = ft_strdup(line);
+	raw_path = ft_strdup_cub(line, mem); // Pass mem here
 	if (!raw_path)
 	{
 		ft_printf("[ERROR] Memory allocation failed while extracting path.\n");
@@ -47,23 +46,20 @@ char	*extract_path(char *line)
 		ft_error(-6);
 	}
 	close(fd);
-
 	ft_printf("[DEBUG] Successfully validated texture path: '%s'\n", raw_path);
 	return raw_path;
 }
-
-void	parse_texture(char *line, t_texture *textures)
+void	parse_texture(char *line, t_texture *textures, t_memory *mem)
 {
 	char	*path;
 
 	ft_printf("[DEBUG] Entering parse_texture with line: '%s'\n", line);
-	path = extract_path(line);
+	path = extract_path(line, mem); // Pass mem to extract_path
 	if (!path)
 	{
 		ft_printf("[ERROR] Failed to extract path from texture: '%s'\n", line);
 		ft_error(-6);
 	}
-
 	if (ft_strncmp(line, "NO ", 3) == 0)
 	{
 		ft_printf("[DEBUG] Setting North texture: %s\n", path);
@@ -87,7 +83,6 @@ void	parse_texture(char *line, t_texture *textures)
 	else
 	{
 		ft_printf("[ERROR] Unknown texture directive: '%s'\n", line);
-		free(path);
 		ft_error(-6);
 	}
 	ft_printf("[DEBUG] Texture parsed successfully: %s\n", path);
@@ -124,7 +119,6 @@ void	parse_color(char *line, int color[3])
 void	validate_textures_and_colors(t_config *config)
 {
 	ft_printf("[DEBUG] Validating textures and colors...\n");
-
 	if (!config->textures.north || !config->textures.south
 		|| !config->textures.west || !config->textures.east)
 	{
@@ -135,7 +129,6 @@ void	validate_textures_and_colors(t_config *config)
 			config->textures.east ? config->textures.east : "NULL");
 		ft_error(-10);
 	}
-
 	if (config->colors.floor[0] == -1 || config->colors.ceiling[0] == -1)
 	{
 		ft_printf("[ERROR] Missing floor or ceiling color! Floor: %d,%d,%d, Ceiling: %d,%d,%d\n",
@@ -145,4 +138,3 @@ void	validate_textures_and_colors(t_config *config)
 	}
 	ft_printf("[DEBUG] Textures and colors validated successfully.\n");
 }
-
