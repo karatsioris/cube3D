@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 12:58:22 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 13:44:52 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,18 @@ void	parse_line(char *line, t_config *config, t_memory *mem,
 {
 	ft_printf("\n[DEBUG] ----- Parsing Line -----\n");
 	ft_printf("[DEBUG] Received line: '%s'\n", line);
-	ft_printf("[DEBUG] Parsing state: %s\n", *is_parsing_map ? "Parsing Map"
-		: "Parsing Config");
+	ft_printf("[DEBUG] Parsing state: %s\n", *is_parsing_map ? "Parsing Map" : "Parsing Config");
 	if (*is_parsing_map)
 	{
+		if (*line == '\n' || *line == '\0')
+		{
+			ft_printf("[ERROR] Empty line detected in the map section. Invalid map format.\n");
+			ft_error(-9);
+		}
 		if (is_map_line(line))
 		{
-			ft_printf("[DEBUG] Valid map line detected. Processing ...\n");
-			process_line(&config->map, mem, ft_strdup_cub(line,mem));
-		}
-		else if (*line == '\n' || *line == '\0')
-		{
-			ft_printf("[DEBUG] Empty map line detected. Skipping...\n");
-			return ;
+			ft_printf("[DEBUG] Valid map line detected. Processing...\n");
+			process_line(&config->map, mem, ft_strdup_cub(line, mem));
 		}
 		else
 		{
@@ -54,38 +53,36 @@ void	parse_line(char *line, t_config *config, t_memory *mem,
 	{
 		ft_printf("[DEBUG] Texture directive detected: '%s'\n", line);
 		parse_texture(line, &config->textures, mem);
+		return ;
 	}
-	else if (line[0] == 'F' || line[0] == 'C')
+	if (line[0] == 'F' || line[0] == 'C')
 	{
 		ft_printf("[DEBUG] Color directive detected: '%s'\n", line);
 		parse_color(line, (line[0] == 'F') ? config->colors.floor
 			: config->colors.ceiling);
+		return ;
 	}
-	else if (is_map_line(line))
+	if (is_map_line(line))
 	{
 		ft_printf("[DEBUG] Start of map grid detected.\n");
 		*is_parsing_map = true;
-		process_line(&config->map, mem, ft_strdup_cub(line,mem));
+		process_line(&config->map, mem, ft_strdup_cub(line, mem));
+		return ;
 	}
-	else
-	{
-		ft_printf("[ERROR] Unknown configuration directive: '%s'\n", line);
-		ft_error(-12);
-	}
+	ft_printf("[ERROR] Unknown configuration directive: '%s'\n", line);
+	ft_error(-12);
 }
 
 void	parse_cub_file(t_config *config, t_memory *mem, char *file_path)
 {
 	int		fd;
 	char	*line;
-	bool	is_parsing_map = false;
+	bool	is_parsing_map;
 
+	is_parsing_map = false;
 	ft_printf("[DEBUG] Validating file extension: %s\n", file_path);
 	if (!has_valid_extension(file_path, ".cub"))
-	{
-		ft_printf("[ERROR] Invalid map file extension. Expected '.cub'\n");
-		exit(1);
-	}
+		ft_error(-1);
 	ft_printf("[DEBUG] Opening map file: %s\n", file_path);
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
@@ -107,20 +104,9 @@ void	parse_cub_file(t_config *config, t_memory *mem, char *file_path)
 	}
 	close(fd);
 	if (!config->map.list)
-	{
-		ft_printf("[ERROR] Map list was not populated!\n");
-		exit(1);
-	}
+		ft_error(-13);
 	ft_printf("[DEBUG] Converting map list to grid...\n");
 	list_to_array(&config->map, mem);
-	ft_printf("[DEBUG] Calculating map dimensions...\n");
-	config->map.height = 0;
-	while (config->map.grid[config->map.height])
-		config->map.height++;
-	config->map.width = (config->map.height > 0)
-		? ft_strlen(config->map.grid[0]) : 0;
-	ft_printf("[DEBUG] Map dimensions: Height=%d, Width=%d\n",
-		config->map.height, config->map.width);
 	ft_printf("[DEBUG] Validating textures and colors...\n");
 	validate_textures_and_colors(config);
 	ft_printf("[DEBUG] Validating map boundaries...\n");

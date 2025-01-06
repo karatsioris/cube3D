@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 12:57:51 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 13:56:14 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,8 @@ void	list_to_array(t_map *map, t_memory *mem);
 void	cleanup_resources(t_resources *res, mlx_t *mlx);
 int		has_valid_extension(const char *path, const char *extension);
 char	*ft_strdup_cub(const char *src, t_memory *mem);
+void	initialize_config(t_config *config);
+void	initialize_player(t_config *config, t_map *map);
+void	initialize_game(t_config *config, t_map *map);
 
 #endif

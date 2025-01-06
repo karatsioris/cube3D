@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 12:16:57 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 13:42:31 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	process_line(t_map *map, t_memory *mem, char *line)
 		ft_printf("[DEBUG] Skipping invalid or empty map line.\n");
 		return ;
 	}
-
 	ft_printf("[DEBUG] Adding map line to list: %s\n", line);
 	if (!put_on_list(line, map, mem))
 	{

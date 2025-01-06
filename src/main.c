@@ -6,30 +6,15 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 11:35:14 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 13:54:14 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
 
-void	initialize_game(t_config *config, t_map *map)
-{
-	ft_printf("[DEBUG] Validating map boundaries...\n");
-	validate_map_boundary(map);
-
-	ft_printf("[DEBUG] Initializing player position...\n");
-	initialize_player(config, map);
-
-	ft_printf("[DEBUG] Validating textures and colors...\n");
-	validate_textures_and_colors(config);
-
-	ft_printf("[DEBUG] Game initialized successfully.\n");
-}
-
 void key_event_handler(mlx_key_data_t keydata, void *param)
 {
 	(void)param;
-
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{
 		ft_printf("[DEBUG] ESC key pressed. Closing window...\n");
@@ -55,7 +40,6 @@ void	load_textures(t_resources *res, t_texture *textures,
 		textures->west,
 		textures->east
 	};
-
 	for (int i = 0; i < 4; i++)
 	{
 		ft_printf("[DEBUG] Loading texture: %s\n", texture_paths[i]);
@@ -104,6 +88,8 @@ int	main(int argc, char **argv)
 		ft_printf("[ERROR] Memory initialization failed. Exiting...\n");
 		return (1);
 	}
+	ft_printf("[DEBUG] Initializing configuration...\n");
+	initialize_config(&config);
 	ft_printf("[DEBUG] Validating arguments and parsing map...\n");
 	validate_args_and_load_map(argc, argv, &config, &mem);
 	ft_printf("[DEBUG] Initializing MLX window...\n");
