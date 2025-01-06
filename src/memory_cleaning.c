@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:23:39 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 20:39:02 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 21:54:52 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void	cleanup_textures(t_resources *res, mlx_t *mlx)
 
 void	ft_clean(t_map *map, t_memory *mem, t_resources *res)
 {
+	t_list	*temp;
+
 	if (res && map && map->mlx)
 	{
 		cleanup_resources(res, map->mlx);
@@ -100,7 +102,6 @@ void	ft_clean(t_map *map, t_memory *mem, t_resources *res)
 		}
 		if (map->list)
 		{
-			t_list *temp;
 			while (map->list)
 			{
 				temp = map->list->next;

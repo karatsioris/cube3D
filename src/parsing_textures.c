@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 16:37:23 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 21:47:34 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	parse_texture(char *line, t_texture *textures, t_memory *mem)
 	path = extract_path(line, mem);
 	if (!path)
 	{
-		ft_printf("[ERROR] Failed to extract path from texture line: '%s'\n", line);
+		ft_printf("[ERROR] Failed to extract path from line: '%s'\n", line);
 		exit(1);
 	}
 	if (ft_strncmp(line, "NO ", 3) == 0)

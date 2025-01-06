@@ -6,27 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 20:36:54 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 22:01:18 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
-
-int	validate_line(char *line)
-{
-	char	*trimmed;
-
-	if (!line)
-		return (0);
-	trimmed = ft_strtrim(line, " \n\t");
-	if (!trimmed || *trimmed == '\0')
-	{
-		free(trimmed);
-		return (0);
-	}
-	free(trimmed);
-	return (1);
-}
 
 void	print_list1(t_list *list)
 {
@@ -52,6 +36,7 @@ void	print_list1(t_list *list)
 int	put_on_list(char *line, t_list **list, t_memory *mem)
 {
 	t_list	*node;
+	t_list	*temp;
 
 	if (!line || *line == '\0' || *line == '\n')
 	{
@@ -78,7 +63,7 @@ int	put_on_list(char *line, t_list **list, t_memory *mem)
 	}
 	else
 	{
-		t_list *temp = *list;
+		temp = *list;
 		while (temp->next)
 			temp = temp->next;
 		temp->next = node;
@@ -87,19 +72,4 @@ int	put_on_list(char *line, t_list **list, t_memory *mem)
 	printf("[DEBUG] Current state of the linked list:\n");
 	print_list1(*list);
 	return (1);
-}
-
-void	process_line(t_map *map, t_memory *mem, char *line)
-{
-	if (!line || *line == '\0' || *line == '\n')
-	{
-		ft_printf("[DEBUG] Skipping invalid or empty map line.\n");
-		return ;
-	}
-	ft_printf("[DEBUG] Adding map line to list: %s\n", line);
-	if (!put_on_list(line, &map->list, mem))
-	{
-		ft_printf("[ERROR] Failed to add map line to list.\n");
-		exit(1);
-	}
 }

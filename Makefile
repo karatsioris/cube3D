@@ -15,11 +15,10 @@ LIB_MLX    := $(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 HEADERS    := -I $(SRCDIR) -I $(LIBMLX)/include -I $(LIBFTDIR)
 
 SRCS       := $(SRCDIR)/error_handling.c $(SRCDIR)/file_and_argv_valid.c \
-			  $(SRCDIR)/finding_direction.c $(SRCDIR)/map_boundary_val.c \
+			$(SRCDIR)/map_boundary_val.c $(SRCDIR)/initialize_game.c \
 			  $(SRCDIR)/memory_cleaning.c $(SRCDIR)/parsing_functions.c \
 			  $(SRCDIR)/parsing_textures.c $(SRCDIR)/validate_map.c \
 			  $(SRCDIR)/main.c  $(SRCDIR)/memory.c $(SRCDIR)/parsing.c \
-			  $(SRCDIR)/initialize_game.c \
 
 OBJS       := $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 

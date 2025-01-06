@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 16:39:04 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 21:48:17 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	parse_line(char *line, t_config *config, t_memory *mem,
 		line++;
 	if (*line == '\0' || *line == '\n')
 	{
-		ft_printf("[DEBUG] Empty or whitespace-only line detected. Skipping...\n");
+		ft_printf("[DEBUG] Empty line detected. Skipping...\n");
 		return ;
 	}
 	if (*is_parsing_map)

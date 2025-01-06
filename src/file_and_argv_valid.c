@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:32:54 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 11:47:02 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 22:05:31 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,4 @@ int	has_valid_extension(const char *path, const char *extension)
 		extension++;
 	}
 	return (1);
-}
-
-void	validate_file_extension(t_map *map)
-{
-	if (!has_valid_extension(map->path, ".cub"))
-	{
-		ft_printf("Error: The map file must end with *.cub!\n");
-		exit(1);
-	}
-	map->fd = open(map->path, O_RDONLY);
 }
