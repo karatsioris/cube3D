@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 13:05:28 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 11:35:14 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,8 @@ void	load_textures(t_resources *res, t_texture *textures,
 void	game_loop(mlx_t *mlx)
 {
 	ft_printf("[DEBUG] Starting game loop...\n");
-
 	mlx_key_hook(mlx, key_event_handler, NULL);
-
 	mlx_loop(mlx);
-
 	ft_printf("[DEBUG] Game loop ended.\n");
 }
 
@@ -102,7 +99,11 @@ int	main(int argc, char **argv)
 	t_memory	mem = {0};
 
 	ft_printf("[DEBUG] Initializing memory manager...\n");
-	mem_init(&mem);
+	if (!mem_init(&mem))
+	{
+		ft_printf("[ERROR] Memory initialization failed. Exiting...\n");
+		return (1);
+	}
 	ft_printf("[DEBUG] Validating arguments and parsing map...\n");
 	validate_args_and_load_map(argc, argv, &config, &mem);
 	ft_printf("[DEBUG] Initializing MLX window...\n");

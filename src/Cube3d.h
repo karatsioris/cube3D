@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 13:10:17 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 11:36:31 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 
 #define	WINDOW_WIDTH 800
 #define	WINDOW_HEIGHT 600
+#define INITIAL_MEM_CAPACITY 10
 
 typedef struct s_memory
 {
@@ -73,7 +74,6 @@ typedef struct s_resources
 	int				image_count;
 }	t_resources;
 
-
 typedef struct s_config
 {
 	t_texture	textures;
@@ -103,7 +103,7 @@ void	validate_args_and_load_map(int argc, char **argv, t_config *config,
 			t_memory *mem);
 void	mem_free_all(t_memory *mem);
 void	*mem_alloc(t_memory *mem, size_t size);
-void	mem_init(t_memory *mem);
+bool	mem_init(t_memory *mem);
 void	ft_clean(t_map *map, t_memory *mem);
 void	parse_line(char *line, t_config *config, t_memory *mem,
 			bool *is_parsing_map);

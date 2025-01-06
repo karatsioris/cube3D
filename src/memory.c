@@ -6,29 +6,30 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 20:34:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 13:00:48 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 11:33:37 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
 
-void	mem_init(t_memory *mem)
+bool	mem_init(t_memory *mem)
 {
 	if (!mem)
 	{
 		ft_printf("[ERROR] mem_init received a NULL pointer.\n");
-		exit(1);
+		return (false);
 	}
-	mem->capacity = 10;
+	mem->capacity = INITIAL_MEM_CAPACITY;
 	mem->count = 0;
-	mem->allocated_pointers = malloc(sizeof(void *) * mem->capacity);
+	mem->allocated_pointers = calloc(mem->capacity, sizeof(void *));
 	if (!mem->allocated_pointers)
 	{
 		ft_printf("[ERROR] Failed to allocate memory for pointer array.\n");
-		exit(1);
+		return (false);
 	}
 	ft_printf("[DEBUG] Memory manager initialized with capacity: %lu\n",
 		(unsigned long)mem->capacity);
+	return (true);
 }
 
 void	*mem_alloc(t_memory *mem, size_t size)
