@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 12:54:36 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 13:09:37 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,11 @@ void	validate_side_walls(char *line, int width)
 
 void	validate_map_boundary(t_map *map)
 {
-	int	i;
+	int		i;
+	char	current;
+	int		player_found;
 
+	player_found = 0;
 	ft_printf("[DEBUG] Validating map boundaries...\n");
 	if (!map)
 	{
@@ -73,7 +76,7 @@ void	validate_map_boundary(t_map *map)
 	}
 	ft_printf("[DEBUG] Map dimensions - Height: %d, Width: %d\n",
 		map->height, map->width);
-	if (map->height < 2 || map->width < 2)
+	if (map->height < 3 || map->width < 3)
 	{
 		ft_printf("[ERROR] Invalid map dimensions. Height=%d, Width=%d\n",
 			map->height, map->width);
@@ -86,14 +89,39 @@ void	validate_map_boundary(t_map *map)
 	i = 1;
 	while (i < map->height - 1)
 	{
-		ft_printf("[DEBUG] Validating side walls of row %d...\n", i);
+		ft_printf("[DEBUG] Validating side walls and player of row %d...\n", i);
 		if (!map->grid[i])
 		{
 			ft_printf("[ERROR] Row %d is NULL.\n", i);
 			exit(1);
 		}
 		validate_side_walls(map->grid[i], map->width);
+		for (int j = 1; j < map->width - 1; j++)
+		{
+			current = map->grid[i][j];
+			if (current == 'N' || current == 'S' || current == 'E'
+				|| current == 'W')
+			{
+				player_found++;
+				if (map->grid[i - 1][j] == ' ' || map->grid[i + 1][j] == ' ' ||
+					map->grid[i][j - 1] == ' ' || map->grid[i][j + 1] == ' ')
+				{
+					ft_printf("[ERROR] Player at (%d, %d) is exposed to an invalid area.\n", i, j);
+					exit(1);
+				}
+			}
+		}
 		i++;
 	}
-	ft_printf("[DEBUG] Map boundaries validated successfully.\n");
+	if (player_found == 0)
+	{
+		ft_printf("[ERROR] No player start position found on the map.\n");
+		exit(1);
+	}
+	else if (player_found > 1)
+	{
+		ft_printf("[ERROR] Multiple player start positions found on the map.\n");
+		exit(1);
+	}
+	ft_printf("[DEBUG] Map boundaries and player positions validated successfully.\n");
 }
