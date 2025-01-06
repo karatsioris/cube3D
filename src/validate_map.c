@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 12:49:56 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 12:16:57 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	put_on_list(char *line, t_map *map, t_memory *mem)
 	}
 	node->content = ft_strdup(line);
 	node->next = NULL;
-
 	if (!node->content)
 	{
 		ft_printf("[ERROR] Failed to duplicate map line content.\n");

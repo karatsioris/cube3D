@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 11:36:31 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 11:47:33 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	validate_map(t_map *map, t_memory *mem);
 void	validate_map_boundary(t_map *map);
 void	validate_textures_and_colors(t_config *config);
 void	initialize_player(t_config *config, t_map *map);
-void	validate_args_and_load_map(int argc, char **argv, t_config *config,
+bool	validate_args_and_load_map(int argc, char **argv, t_config *config,
 			t_memory *mem);
 void	mem_free_all(t_memory *mem);
 void	*mem_alloc(t_memory *mem, size_t size);

@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 12:58:44 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 12:20:24 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@ bool	is_map_line(char *line)
 {
 	while (*line)
 	{
-		if (*line != '1' && *line != '0' && *line != 'N' && *line != 'S'
-			&& *line != 'E' && *line != 'W' && *line != ' ' && *line != '\n')
+		if (*line != '1' && *line != '0' && *line != ' ' && *line != '\n')
 			return (false);
 		line++;
 	}
@@ -85,7 +84,6 @@ void	parse_cub_file(t_config *config, t_memory *mem, char *file_path)
 		ft_printf("[ERROR] Invalid map file extension. Expected '.cub'\n");
 		exit(1);
 	}
-
 	ft_printf("[DEBUG] Opening map file: %s\n", file_path);
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
@@ -95,7 +93,6 @@ void	parse_cub_file(t_config *config, t_memory *mem, char *file_path)
 	}
 	config->map.path = mem_alloc(mem, ft_strlen(file_path) + 1);
 	ft_strlcpy(config->map.path, file_path, ft_strlen(file_path) + 1);
-
 	config->map.current_row = 0;
 	config->map.height = 0;
 	config->map.width = 0;

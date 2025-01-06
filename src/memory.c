@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 20:34:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 11:33:37 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 12:25:15 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ bool	mem_init(t_memory *mem)
 void	*mem_alloc(t_memory *mem, size_t size)
 {
 	void	*ptr;
-	size_t new_capacity;
+	size_t	new_capacity;
 
 	if (!mem || !mem->allocated_pointers)
 	{
-		ft_printf("[ERROR] mem_alloc received an memory manager.\n");
-		exit(1);
+		ft_printf("[ERROR] mem_alloc received an invalid memory manager.\n");
+		return (NULL);
 	}
 	if (mem->count >= mem->capacity)
 	{
@@ -50,7 +50,7 @@ void	*mem_alloc(t_memory *mem, size_t size)
 		if (!new_alloc)
 		{
 			ft_printf("[ERROR] Failed to expand memory manager capacity.\n");
-			exit(1);
+			return (NULL);
 		}
 		mem->allocated_pointers = new_alloc;
 		mem->capacity = new_capacity;
@@ -62,23 +62,20 @@ void	*mem_alloc(t_memory *mem, size_t size)
 	{
 		ft_printf("[ERROR] Failed to allocate %lu bytes.\n",
 			(unsigned long)size);
-		exit(1);
+		return (NULL);
 	}
 	mem->allocated_pointers[mem->count++] = ptr;
 	ft_printf("[DEBUG] Allocated %lu bytes. Total allocations: %lu\n",
 		(unsigned long)size, (unsigned long)mem->count);
 	return (ptr);
 }
-
-
 void	mem_free_all(t_memory *mem)
 {
 	if (!mem || !mem->allocated_pointers)
 	{
-		ft_printf("Error: mem_free_all received an uninitialized memory manager.\n");
-		return;
+		ft_printf("[ERROR] mem_free_all uninitialized memory manager.\n");
+		return ;
 	}
-
 	ft_printf("[DEBUG] Freeing %zu allocations...\n", mem->count);
 	for (size_t i = 0; i < mem->count; i++)
 	{
@@ -92,8 +89,5 @@ void	mem_free_all(t_memory *mem)
 	mem->allocated_pointers = NULL;
 	mem->count = 0;
 	mem->capacity = 0;
-
 	ft_printf("[DEBUG] All memory allocations have been freed.\n");
 }
-
-
