@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:46:07 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 13:58:59 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 16:46:06 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	initialize_player(t_config *config, t_map *map)
 				ft_printf("[ERROR] Multiple player start positions found on the map!\n");
 				exit(1);
 			}
-			ft_printf("[DEBUG] Player found at (%d, %d) facing %c\n", pos.row, pos.col, directions[i]);
+			ft_printf("[DEBUG] Player found at (%d, %d) facing %c\n",
+				pos.row, pos.col, directions[i]);
 			config->player.x = pos.col;
 			config->player.y = pos.row;
 			config->player.direction = directions[i];

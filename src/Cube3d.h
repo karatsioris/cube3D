@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 13:56:14 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 16:14:27 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ bool	validate_args_and_load_map(int argc, char **argv, t_config *config,
 void	mem_free_all(t_memory *mem);
 void	*mem_alloc(t_memory *mem, size_t size);
 bool	mem_init(t_memory *mem);
-void	ft_clean(t_map *map, t_memory *mem);
+void	ft_clean(t_map *map, t_memory *mem, t_resources *res);
 void	parse_line(char *line, t_config *config, t_memory *mem,
 			bool *is_parsing_map);
 void	parse_cub_file(t_config *config, t_memory *mem, char *file_path);
@@ -115,5 +115,7 @@ char	*ft_strdup_cub(const char *src, t_memory *mem);
 void	initialize_config(t_config *config);
 void	initialize_player(t_config *config, t_map *map);
 void	initialize_game(t_config *config, t_map *map);
+void	cleanup_textures(t_resources *res, mlx_t *mlx);
+int		put_on_list(char *line, t_list **list, t_memory *mem);
 
 #endif

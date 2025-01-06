@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 13:44:52 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 16:39:04 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ bool	is_map_line(char *line)
 {
 	while (*line)
 	{
-		if (*line != '1' && *line != '0' && *line != ' ' && *line != '\n')
+		if (*line != '1' && *line != '0' && *line != 'N' && *line != 'S' &&
+			*line != 'E' && *line != 'W' && *line != ' ' && *line != '\n')
 			return (false);
 		line++;
 	}
@@ -24,53 +25,66 @@ bool	is_map_line(char *line)
 }
 
 void	parse_line(char *line, t_config *config, t_memory *mem,
-		bool *is_parsing_map)
+	bool *is_parsing_map)
 {
 	ft_printf("\n[DEBUG] ----- Parsing Line -----\n");
 	ft_printf("[DEBUG] Received line: '%s'\n", line);
-	ft_printf("[DEBUG] Parsing state: %s\n", *is_parsing_map ? "Parsing Map" : "Parsing Config");
+	ft_printf("[DEBUG] Parsing state: %s\n", *is_parsing_map ? "Parsing Map"
+		: "Parsing Config");
+	while (*line == ' ' || *line == '\t')
+		line++;
+	if (*line == '\0' || *line == '\n')
+	{
+		ft_printf("[DEBUG] Empty or whitespace-only line detected. Skipping...\n");
+		return ;
+	}
 	if (*is_parsing_map)
 	{
-		if (*line == '\n' || *line == '\0')
-		{
-			ft_printf("[ERROR] Empty line detected in the map section. Invalid map format.\n");
-			ft_error(-9);
-		}
 		if (is_map_line(line))
 		{
 			ft_printf("[DEBUG] Valid map line detected. Processing...\n");
-			process_line(&config->map, mem, ft_strdup_cub(line, mem));
+			if (!put_on_list(line, &config->map.list, mem))
+			{
+				ft_printf("[ERROR] Failed to add map line to the list.\n");
+				exit(1);
+			}
 		}
 		else
 		{
 			ft_printf("[ERROR] Invalid line in map section: '%s'\n", line);
-			ft_error(-9);
+			exit(1);
 		}
 		return ;
 	}
 	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0 ||
 		ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
 	{
-		ft_printf("[DEBUG] Texture directive detected: '%s'\n", line);
+		ft_printf("[DEBUG] Texture directive detected.\n");
 		parse_texture(line, &config->textures, mem);
 		return ;
 	}
-	if (line[0] == 'F' || line[0] == 'C')
+	else if (line[0] == 'F' || line[0] == 'C')
 	{
-		ft_printf("[DEBUG] Color directive detected: '%s'\n", line);
+		ft_printf("[DEBUG] Color directive detected.\n");
 		parse_color(line, (line[0] == 'F') ? config->colors.floor
 			: config->colors.ceiling);
 		return ;
 	}
-	if (is_map_line(line))
+	else if (is_map_line(line))
 	{
-		ft_printf("[DEBUG] Start of map grid detected.\n");
+		ft_printf("[DEBUG] Map section detected. Switching to Parsing Map state.\n");
 		*is_parsing_map = true;
-		process_line(&config->map, mem, ft_strdup_cub(line, mem));
-		return ;
+		if (!put_on_list(line, &config->map.list, mem))
+		{
+			ft_printf("[ERROR] Failed to add map line to the list.\n");
+			exit(1);
+		}
 	}
-	ft_printf("[ERROR] Unknown configuration directive: '%s'\n", line);
-	ft_error(-12);
+	else
+	{
+		ft_printf("[ERROR] Unknown configuration directive: '%s'\n", line);
+		exit(1);
+	}
 }
 
 void	parse_cub_file(t_config *config, t_memory *mem, char *file_path)

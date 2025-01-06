@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 20:35:20 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/01/06 12:46:10 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 15:58:09 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,10 @@
 #  define BUFFER_SIZE 42
 # endif
 
-# ifdef CUB3D
-# include "../cube3d.h"
-# endif
-
 typedef struct s_list
 {
-	void			*content;
 	char			*line;
 	struct s_list	*next;
-	struct s_list	*prev;
 }	t_list;
 
 int		ft_isalnum(int c);

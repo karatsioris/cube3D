@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 13:43:34 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 16:37:23 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,16 @@ char	*extract_path(char *line, t_memory *mem)
 		line++;
 	while (*line && *line == ' ')
 		line++;
+	if (!*line)
+	{
+		ft_printf("[ERROR] No valid path found after directive.\n");
+		return (NULL);
+	}
 	raw_path = ft_strdup_cub(line, mem);
 	if (!raw_path)
 	{
 		ft_printf("[ERROR] Memory allocation failed while extracting path.\n");
-		ft_error(-6);
+		exit(1);
 	}
 	len = ft_strlen(raw_path);
 	while (len > 0 && (raw_path[len - 1] == ' ' || raw_path[len - 1] == '\n'
@@ -43,7 +48,7 @@ char	*extract_path(char *line, t_memory *mem)
 		ft_printf("[ERROR] Failed to open file: '%s' (errno: %d, %s)\n",
 			raw_path, errno, strerror(errno));
 		free(raw_path);
-		ft_error(-6);
+		exit(1);
 	}
 	close(fd);
 	ft_printf("[DEBUG] Successfully validated texture path: '%s'\n", raw_path);
@@ -55,58 +60,32 @@ void	parse_texture(char *line, t_texture *textures, t_memory *mem)
 	char	*path;
 
 	ft_printf("[DEBUG] Entering parse_texture with line: '%s'\n", line);
+	if (!line || *line == '\0')
+	{
+		ft_printf("[ERROR] Received NULL or empty line in parse_texture.\n");
+		exit(1);
+	}
 	path = extract_path(line, mem);
 	if (!path)
 	{
-		ft_printf("[ERROR] Failed to extract path from texture: '%s'\n", line);
-		ft_error(-6);
+		ft_printf("[ERROR] Failed to extract path from texture line: '%s'\n", line);
+		exit(1);
 	}
 	if (ft_strncmp(line, "NO ", 3) == 0)
-	{
-		if (textures->north)
-		{
-			ft_printf("[ERROR] Duplicate North texture directive found.\n");
-			ft_error(-14);
-		}
-		ft_printf("[DEBUG] Setting North texture: %s\n", path);
 		textures->north = path;
-	}
 	else if (ft_strncmp(line, "SO ", 3) == 0)
-	{
-		if (textures->south)
-		{
-			ft_printf("[ERROR] Duplicate South texture directive found.\n");
-			ft_error(-14);
-		}
-		ft_printf("[DEBUG] Setting South texture: %s\n", path);
 		textures->south = path;
-	}
 	else if (ft_strncmp(line, "WE ", 3) == 0)
-	{
-		if (textures->west)
-		{
-			ft_printf("[ERROR] Duplicate West texture directive found.\n");
-			ft_error(-14);
-		}
-		ft_printf("[DEBUG] Setting West texture: %s\n", path);
 		textures->west = path;
-	}
 	else if (ft_strncmp(line, "EA ", 3) == 0)
-	{
-		if (textures->east)
-		{
-			ft_printf("[ERROR] Duplicate East texture directive found.\n");
-			ft_error(-14);
-		}
-		ft_printf("[DEBUG] Setting East texture: %s\n", path);
 		textures->east = path;
-	}
 	else
 	{
 		ft_printf("[ERROR] Unknown texture directive: '%s'\n", line);
-		ft_error(-6);
+		free(path);
+		exit(1);
 	}
-	ft_printf("[DEBUG] Texture parsed successfully: %s\n", path);
+	ft_printf("[DEBUG] Texture path set successfully: '%s'\n", path);
 }
 
 void	validate_color_range(int color)
