@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:51:55 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 13:08:55 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 16:14:55 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,11 @@ void	get_map_dimensions(t_map *map)
 		row_length = ft_strlen(map->grid[i]);
 		ft_printf("[DEBUG] Row %d Length: %d | Content: '%s'\n",
 			i, row_length, map->grid[i]);
-
 		if (row_length > map->width)
 			map->width = row_length;
-
 		map->height++;
 	}
 	ft_printf("Map Dimensions: Height=%d, Width=%d\n", map->height, map->width);
-
 	if (map->height == 0 || map->width == 0)
 	{
 		ft_printf("[ERROR] Invalid map dimensions detected.\n");
@@ -93,6 +90,5 @@ void	validate_map(t_map *map, t_memory *mem)
 	ft_printf("[DEBUG] Validating map boundaries...\n");
 	validate_map_boundary(map);
 	ft_printf("[DEBUG] Map boundaries validated.\n");
-
 	ft_printf("[DEBUG] ----- Map Structure Validated Successfully -----\n");
 }

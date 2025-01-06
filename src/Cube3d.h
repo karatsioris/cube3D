@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 13:10:17 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 16:14:27 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 
 #define	WINDOW_WIDTH 800
 #define	WINDOW_HEIGHT 600
+#define INITIAL_MEM_CAPACITY 10
 
 typedef struct s_memory
 {
@@ -73,7 +74,6 @@ typedef struct s_resources
 	int				image_count;
 }	t_resources;
 
-
 typedef struct s_config
 {
 	t_texture	textures;
@@ -91,7 +91,7 @@ typedef struct s_position
 }	t_position;
 
 void	ft_error(int code);
-void	parse_texture(char *line, t_texture *textures);
+void	parse_texture(char *line, t_texture *textures, t_memory *mem);
 void	parse_color(char *line, int color[3]);
 void	process_line(t_map *map, t_memory *mem, char *line);
 void	validate_file_extension(t_map *map);
@@ -99,17 +99,23 @@ void	validate_map(t_map *map, t_memory *mem);
 void	validate_map_boundary(t_map *map);
 void	validate_textures_and_colors(t_config *config);
 void	initialize_player(t_config *config, t_map *map);
-void	validate_args_and_load_map(int argc, char **argv, t_config *config,
+bool	validate_args_and_load_map(int argc, char **argv, t_config *config,
 			t_memory *mem);
 void	mem_free_all(t_memory *mem);
 void	*mem_alloc(t_memory *mem, size_t size);
-void	mem_init(t_memory *mem);
-void	ft_clean(t_map *map, t_memory *mem);
+bool	mem_init(t_memory *mem);
+void	ft_clean(t_map *map, t_memory *mem, t_resources *res);
 void	parse_line(char *line, t_config *config, t_memory *mem,
 			bool *is_parsing_map);
 void	parse_cub_file(t_config *config, t_memory *mem, char *file_path);
 void	list_to_array(t_map *map, t_memory *mem);
 void	cleanup_resources(t_resources *res, mlx_t *mlx);
 int		has_valid_extension(const char *path, const char *extension);
+char	*ft_strdup_cub(const char *src, t_memory *mem);
+void	initialize_config(t_config *config);
+void	initialize_player(t_config *config, t_map *map);
+void	initialize_game(t_config *config, t_map *map);
+void	cleanup_textures(t_resources *res, mlx_t *mlx);
+int		put_on_list(char *line, t_list **list, t_memory *mem);
 
 #endif

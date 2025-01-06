@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 13:02:49 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 16:43:12 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	validate_top_bottom_walls(char *line, int width, int is_top)
 			is_top ? "Top" : "Bottom");
 		exit(1);
 	}
-
 	i = 0;
 	while (i < width)
 	{
@@ -48,7 +47,6 @@ void	validate_side_walls(char *line, int width)
 		ft_printf("[ERROR] Line is NULL while validating side walls.\n");
 		exit(1);
 	}
-
 	if (line[0] != '1' || line[width - 1] != '1')
 	{
 		ft_printf("[ERROR] Side walls are not fully closed: Start=%c, End=%c\n",
@@ -60,23 +58,21 @@ void	validate_side_walls(char *line, int width)
 
 void	validate_map_boundary(t_map *map)
 {
-	int	i;
+	int		i;
+	int		j;
+	char	current;
+	int		player_found;
 
+	player_found = 0;
 	ft_printf("[DEBUG] Validating map boundaries...\n");
-	if (!map)
+	if (!map || !map->grid)
 	{
-		ft_printf("[ERROR] Map structure is NULL.\n");
-		exit(1);
-	}
-	if (!map->grid)
-	{
-		ft_printf("[ERROR] Map grid is NULL.\n");
+		ft_printf("[ERROR] Map structure or grid is NULL.\n");
 		exit(1);
 	}
 	ft_printf("[DEBUG] Map dimensions - Height: %d, Width: %d\n",
 		map->height, map->width);
-
-	if (map->height < 2 || map->width < 2)
+	if (map->height < 3 || map->width < 3)
 	{
 		ft_printf("[ERROR] Invalid map dimensions. Height=%d, Width=%d\n",
 			map->height, map->width);
@@ -86,18 +82,40 @@ void	validate_map_boundary(t_map *map)
 	validate_top_bottom_walls(map->grid[0], map->width, 1);
 	ft_printf("[DEBUG] Validating bottom wall...\n");
 	validate_top_bottom_walls(map->grid[map->height - 1], map->width, 0);
-	i = 1;
-	while (i < map->height - 1)
+	for (i = 1; i < map->height - 1; i++)
 	{
-		ft_printf("[DEBUG] Validating side walls of row %d...\n", i);
+		ft_printf("[DEBUG] Validating row %d...\n", i);
 		if (!map->grid[i])
 		{
 			ft_printf("[ERROR] Row %d is NULL.\n", i);
 			exit(1);
 		}
 		validate_side_walls(map->grid[i], map->width);
-		i++;
+		for (j = 1; j < map->width - 1; j++)
+		{
+			current = map->grid[i][j];
+			if (current == 'N' || current == 'S' || current == 'E' || current == 'W')
+			{
+				player_found++;
+				ft_printf("[DEBUG] Player found at (%d, %d)\n", i, j);
+				if (map->grid[i - 1][j] == ' ' || map->grid[i + 1][j] == ' ' ||
+					map->grid[i][j - 1] == ' ' || map->grid[i][j + 1] == ' ')
+				{
+					ft_printf("[ERROR] Player at (%d, %d) is exposed to an invalid area.\n", i, j);
+					exit(1);
+				}
+			}
+		}
 	}
-	ft_printf("[DEBUG] Map boundaries validated successfully.\n");
+	if (player_found == 0)
+	{
+		ft_printf("[ERROR] No player start position found on the map.\n");
+		exit(1);
+	}
+	else if (player_found > 1)
+	{
+		ft_printf("[ERROR] Multiple player start positions found on the map.\n");
+		exit(1);
+	}
+	ft_printf("[DEBUG] Map boundaries and player positions validated successfully.\n");
 }
-
