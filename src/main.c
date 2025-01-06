@@ -6,7 +6,7 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 16:45:10 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 22:19:00 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	load_textures(t_resources *res, t_texture *textures,
 	}
 	if (!map->grid)
 	{
-		ft_printf("[ERROR] Map grid is not initialized before loading textures.\n");
+		ft_printf("[ERROR] Map grid is not initialized.\n");
 		exit(1);
 	}
 	const char *texture_paths[] = {
@@ -90,6 +90,58 @@ void	game_loop(t_map *map)
 	ft_printf("[DEBUG] Game loop ended.\n");
 }
 
+void	validate_file_extension(t_map *map)
+{
+	if (!has_valid_extension(map->path, ".cub"))
+	{
+		ft_printf("[ERROR] Invalid file extension. Expected '.cub'\n");
+		exit(1);
+	}
+	ft_printf("[DEBUG] File extension validated successfully.\n");
+}
+
+void	get_map_dimensions(t_map *map)
+{
+	if (!map || !map->grid)
+	{
+		printf("[ERROR] Invalid map structure or grid.\n");
+		exit(1);
+	}
+	map->height = 0;
+	while (map->grid[map->height])
+		map->height++;
+	if (map->grid[0])
+		map->width = ft_strlen(map->grid[0]);
+	else
+		map->width = 0;
+	printf("[DEBUG] Map dimensions calculated: Height=%d, Width=%d\n",
+		map->height, map->width);
+}
+
+void	validate_map(t_map *map, t_memory *mem)
+{
+	ft_printf("[DEBUG] ----- Validating Map Structure -----\n");
+	ft_printf("[DEBUG] Printing linked list before converting to grid...\n");
+
+	ft_printf("[DEBUG] Validating file extension...\n");
+	validate_file_extension(map);
+	ft_printf("[DEBUG] File extension validated.\n");
+	ft_printf("[DEBUG] Converting map list to grid array...\n");
+	list_to_array(map, mem);
+	ft_printf("[DEBUG] Map list converted to grid array.\n");
+	ft_printf("[DEBUG] Calculating map dimensions...\n");
+	get_map_dimensions(map);
+	ft_printf("[DEBUG] Map dimensions calculated: Height=%d, Width=%d\n",
+		map->height, map->width);
+	ft_printf("[DEBUG] Printing map grid...\n");
+	for (int i = 0; map->grid[i]; i++)
+		ft_printf("[DEBUG] Grid Row %d: '%s'\n", i, map->grid[i]);
+	ft_printf("[DEBUG] Validating map boundaries...\n");
+	validate_map_boundary(map);
+	ft_printf("[DEBUG] Map boundaries validated.\n");
+	ft_printf("[DEBUG] ----- Map Structure Validated Successfully -----\n");
+}
+
 int	main(int argc, char **argv)
 {
 	t_config	config = {0};
@@ -105,6 +157,8 @@ int	main(int argc, char **argv)
 	initialize_config(&config);
 	ft_printf("[DEBUG] Validating arguments and parsing map...\n");
 	validate_args_and_load_map(argc, argv, &config, &mem);
+	ft_printf("[DEBUG] Validating map structure...\n");
+	validate_map(&config.map, &mem);
 	ft_printf("[DEBUG] Initializing MLX window...\n");
 	config.map.mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT,
 			"Cube3D - Textures Loaded", true);

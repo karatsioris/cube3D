@@ -6,20 +6,11 @@
 /*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:51:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 16:45:24 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/06 22:04:06 by piotrwojnar      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
-
-void	initialize_game(t_config *config, t_map *map)
-{
-	ft_printf("[DEBUG] Validating map boundaries...\n");
-	validate_map_boundary(map);
-	ft_printf("[DEBUG] Validating textures and colors...\n");
-	validate_textures_and_colors(config);
-	ft_printf("[DEBUG] Game initialized successfully.\n");
-}
 
 void	initialize_config(t_config *config)
 {
