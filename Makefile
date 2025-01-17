@@ -1,5 +1,5 @@
 CC         := cc
-CFLAGS     := -Wall -Wextra -Werror -g -arch arm64
+CFLAGS     := -Wall -Wextra -Werror -g 
 CFLAGS_MLX := -Wextra -Wall -Werror -Wunreachable-code -Ofast
 
 SRCDIR     := ./src

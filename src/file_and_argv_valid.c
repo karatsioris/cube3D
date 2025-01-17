@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_and_argv_valid.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:32:54 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 22:05:31 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/17 12:21:04 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

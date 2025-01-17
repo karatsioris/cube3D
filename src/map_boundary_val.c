@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_boundary_val.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 21:55:55 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/17 12:20:26 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

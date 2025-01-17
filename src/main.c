@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 22:19:00 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/17 12:41:26 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,29 +118,65 @@ void	get_map_dimensions(t_map *map)
 		map->height, map->width);
 }
 
-void	validate_map(t_map *map, t_memory *mem)
-{
-	ft_printf("[DEBUG] ----- Validating Map Structure -----\n");
-	ft_printf("[DEBUG] Printing linked list before converting to grid...\n");
+int calculate_map_dimensions(char **grid, int *height, int *width) {
+    int max_width = 0;
+    int row_count = 0;
 
-	ft_printf("[DEBUG] Validating file extension...\n");
-	validate_file_extension(map);
-	ft_printf("[DEBUG] File extension validated.\n");
-	ft_printf("[DEBUG] Converting map list to grid array...\n");
-	list_to_array(map, mem);
-	ft_printf("[DEBUG] Map list converted to grid array.\n");
-	ft_printf("[DEBUG] Calculating map dimensions...\n");
-	get_map_dimensions(map);
-	ft_printf("[DEBUG] Map dimensions calculated: Height=%d, Width=%d\n",
-		map->height, map->width);
-	ft_printf("[DEBUG] Printing map grid...\n");
-	for (int i = 0; map->grid[i]; i++)
-		ft_printf("[DEBUG] Grid Row %d: '%s'\n", i, map->grid[i]);
-	ft_printf("[DEBUG] Validating map boundaries...\n");
-	validate_map_boundary(map);
-	ft_printf("[DEBUG] Map boundaries validated.\n");
-	ft_printf("[DEBUG] ----- Map Structure Validated Successfully -----\n");
+    if (!grid || !height || !width) {
+        printf("[ERROR] Invalid grid or dimension pointers.\n");
+        return -1;
+    }
+
+    for (int i = 0; grid[i] != NULL; i++) {
+        row_count++;
+        int row_length = strlen(grid[i]);
+        if (row_length > max_width) {
+            max_width = row_length;
+        }
+    }
+
+    *height = row_count;
+    *width = max_width;
+
+    if (*height == 0 || *width == 0) {
+        printf("[ERROR] Invalid map dimensions. Height=%d, Width=%d\n", *height, *width);
+        return -1;
+    }
+
+    printf("[DEBUG] Map dimensions calculated successfully. Height=%d, Width=%d\n", *height, *width);
+    return 0;
 }
+
+void validate_map(t_map *map, t_memory *mem)
+{
+    ft_printf("[DEBUG] ----- Validating Map Structure -----\n");
+    ft_printf("[DEBUG] Printing linked list before converting to grid...\n");
+
+    ft_printf("[DEBUG] Validating file extension...\n");
+    validate_file_extension(map);
+    ft_printf("[DEBUG] File extension validated.\n");
+
+    ft_printf("[DEBUG] Converting map list to grid array...\n");
+    list_to_array(map, mem);  // Convert the linked list into a grid array.
+    ft_printf("[DEBUG] Map list converted to grid array.\n");
+
+    // Calculate and assign dimensions of the map
+    ft_printf("[DEBUG] Calculating map dimensions...\n");
+    get_map_dimensions(map);  // Call the dimension calculation function here.
+    ft_printf("[DEBUG] Map dimensions calculated: Height=%d, Width=%d\n",
+        map->height, map->width);
+
+    ft_printf("[DEBUG] Printing map grid...\n");
+    for (int i = 0; map->grid[i]; i++)
+        ft_printf("[DEBUG] Grid Row %d: '%s'\n", i, map->grid[i]);
+
+    ft_printf("[DEBUG] Validating map boundaries...\n");
+    validate_map_boundary(map);  // Validate the boundaries after dimensions are calculated.
+    ft_printf("[DEBUG] Map boundaries validated.\n");
+
+    ft_printf("[DEBUG] ----- Map Structure Validated Successfully -----\n");
+}
+
 
 int	main(int argc, char **argv)
 {
