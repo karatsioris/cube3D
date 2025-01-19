@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory_cleaning.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:23:39 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 21:54:52 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/19 12:57:12 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,16 @@ void	cleanup_resources(t_resources *res, mlx_t *mlx)
 
 void	cleanup_textures(t_resources *res, mlx_t *mlx)
 {
+	int	i;
+
+	i = 0;
 	if (!res || !mlx)
 	{
 		ft_printf("[ERROR] cleanup_textures received NULL pointer.\n");
 		return ;
 	}
 	ft_printf("[DEBUG] Cleaning up images...\n");
-	for (int i = 0; i < res->image_count; i++)
+	while (i < res->image_count)
 	{
 		if (res->images && res->images[i])
 		{
@@ -66,6 +69,7 @@ void	cleanup_textures(t_resources *res, mlx_t *mlx)
 			res->images[i] = NULL;
 			ft_printf("[DEBUG] Deleted image %d.\n", i);
 		}
+		i++;
 	}
 	if (res->images)
 	{
@@ -79,7 +83,9 @@ void	cleanup_textures(t_resources *res, mlx_t *mlx)
 void	ft_clean(t_map *map, t_memory *mem, t_resources *res)
 {
 	t_list	*temp;
+	int		i;
 
+	i = 0;
 	if (res && map && map->mlx)
 	{
 		cleanup_resources(res, map->mlx);
@@ -93,9 +99,10 @@ void	ft_clean(t_map *map, t_memory *mem, t_resources *res)
 		}
 		if (map->grid)
 		{
-			for (int i = 0; i < map->height; i++)
+			while (i < map->height)
 			{
 				free(map->grid[i]);
+				i++;
 			}
 			free(map->grid);
 			map->grid = NULL;

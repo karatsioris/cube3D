@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/17 12:20:26 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/01/19 13:13:04 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,17 @@
 
 void	validate_top_bottom_walls(char *line, int width, int is_top)
 {
-	int	i;
+	int		i;
+	char	*wall_name;
 
-	ft_printf("[DEBUG] Validating %s wall: %s\n",
-		is_top ? "Top" : "Bottom", line);
+	if (is_top)
+		wall_name = "Top";
+	else
+		wall_name = "Bottom";
+	ft_printf("[DEBUG] Validating %s wall: %s\n", wall_name, line);
 	if (!line)
 	{
-		ft_printf("[ERROR] Line is NULL while validating %s wall.\n",
-			is_top ? "Top" : "Bottom");
+		ft_printf("[ERROR] Line is NULL while %s wall.\n", wall_name);
 		exit(1);
 	}
 	i = 0;
@@ -30,13 +33,12 @@ void	validate_top_bottom_walls(char *line, int width, int is_top)
 		if (line[i] != '1')
 		{
 			ft_printf("[ERROR] %s wall is not closed at index %d (value: %c)\n",
-				is_top ? "Top" : "Bottom", i, line[i]);
+				wall_name, i, line[i]);
 			exit(1);
 		}
 		i++;
 	}
-	ft_printf("[DEBUG] %s wall validated successfully.\n",
-		is_top ? "Top" : "Bottom");
+	ft_printf("[DEBUG] %s wall validated successfully.\n", wall_name);
 }
 
 void	validate_side_walls(char *line, int width)
@@ -82,7 +84,8 @@ void	validate_map_boundary(t_map *map)
 	validate_top_bottom_walls(map->grid[0], map->width, 1);
 	ft_printf("[DEBUG] Validating bottom wall...\n");
 	validate_top_bottom_walls(map->grid[map->height - 1], map->width, 0);
-	for (i = 1; i < map->height - 1; i++)
+	i = 1;
+	while (i < map->height - 1)
 	{
 		ft_printf("[DEBUG] Validating row %d...\n", i);
 		if (!map->grid[i])
@@ -91,7 +94,8 @@ void	validate_map_boundary(t_map *map)
 			exit(1);
 		}
 		validate_side_walls(map->grid[i], map->width);
-		for (j = 1; j < map->width - 1; j++)
+		j = 1;
+		while (j < map->width - 1)
 		{
 			current = map->grid[i][j];
 			if (current == 'N' || current == 'S' || current == 'E'
@@ -106,7 +110,9 @@ void	validate_map_boundary(t_map *map)
 					exit(1);
 				}
 			}
+			j++;
 		}
+		i++;
 	}
 	if (player_found == 0)
 	{

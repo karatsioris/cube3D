@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_textures.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 21:47:34 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/19 13:17:44 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,27 +125,4 @@ void	parse_color(char *line, int color[3])
 	ft_free_split(rgb);
 	ft_printf("[DEBUG] Color parsed successfully: %d, %d, %d\n",
 		color[0], color[1], color[2]);
-}
-
-void	validate_textures_and_colors(t_config *config)
-{
-	ft_printf("[DEBUG] Validating textures and colors...\n");
-	if (!config->textures.north || !config->textures.south
-		|| !config->textures.west || !config->textures.east)
-	{
-		ft_printf("[ERROR] Missing texture path! North: %s, South: %s, West: %s, East: %s\n",
-			config->textures.north ? config->textures.north : "NULL",
-			config->textures.south ? config->textures.south : "NULL",
-			config->textures.west ? config->textures.west : "NULL",
-			config->textures.east ? config->textures.east : "NULL");
-		ft_error(-10);
-	}
-	if (config->colors.floor[0] == -1 || config->colors.ceiling[0] == -1)
-	{
-		ft_printf("[ERROR] Missing floor or ceiling color! Floor: %d,%d,%d, Ceiling: %d,%d,%d\n",
-			config->colors.floor[0], config->colors.floor[1], config->colors.floor[2],
-			config->colors.ceiling[0], config->colors.ceiling[1], config->colors.ceiling[2]);
-		ft_error(-11);
-	}
-	ft_printf("[DEBUG] Textures and colors validated successfully.\n");
 }

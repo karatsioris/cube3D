@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   memory.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 20:34:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 21:53:00 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/19 12:47:02 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,10 @@ void	*mem_alloc(t_memory *mem, size_t size)
 			printf("[ERROR] Failed to expand memory capacity.\n");
 			exit(1);
 		}
-		printf("[DEBUG] Memory manager capacity expanded to: %zu\n",
-			mem->capacity);
 	}
 	ptr = malloc(size);
 	if (!ptr)
-	{
-		printf("[ERROR] Failed to allocate %zu bytes.\n", size);
 		exit(1);
-	}
 	mem->allocated_pointers[mem->count++] = ptr;
 	printf("[DEBUG] Allocated %zu bytes. Total allocations: %zu\n",
 		size, mem->count);
@@ -68,19 +63,23 @@ void	*mem_alloc(t_memory *mem, size_t size)
 
 void	mem_free_all(t_memory *mem)
 {
+	size_t	i;
+
+	i = 0;
 	if (!mem || !mem->allocated_pointers)
 	{
 		printf("[ERROR] mem_free_all received an uninitialized memory.\n");
 		return ;
 	}
 	printf("[DEBUG] Freeing %zu allocations...\n", mem->count);
-	for (size_t i = 0; i < mem->count; i++)
+	while (i < mem->count)
 	{
 		if (mem->allocated_pointers[i])
 		{
 			free(mem->allocated_pointers[i]);
 			mem->allocated_pointers[i] = NULL;
 		}
+		i++;
 	}
 	free(mem->allocated_pointers);
 	mem->allocated_pointers = NULL;

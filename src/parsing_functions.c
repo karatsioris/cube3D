@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 21:48:17 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/19 12:44:50 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ bool	is_map_line(char *line)
 {
 	while (*line)
 	{
-		if (*line != '1' && *line != '0' && *line != 'N' && *line != 'S' &&
-			*line != 'E' && *line != 'W' && *line != ' ' && *line != '\n')
+		if (*line != '1' && *line != '0' && *line != 'N' && *line != 'S'
+			&& *line != 'E' && *line != 'W' && *line != ' ' && *line != '\n')
 			return (false);
 		line++;
 	}
@@ -29,8 +29,6 @@ void	parse_line(char *line, t_config *config, t_memory *mem,
 {
 	ft_printf("\n[DEBUG] ----- Parsing Line -----\n");
 	ft_printf("[DEBUG] Received line: '%s'\n", line);
-	ft_printf("[DEBUG] Parsing state: %s\n", *is_parsing_map ? "Parsing Map"
-		: "Parsing Config");
 	while (*line == ' ' || *line == '\t')
 		line++;
 	if (*line == '\0' || *line == '\n')
@@ -56,8 +54,8 @@ void	parse_line(char *line, t_config *config, t_memory *mem,
 		}
 		return ;
 	}
-	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0 ||
-		ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
+	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0
+		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
 	{
 		ft_printf("[DEBUG] Texture directive detected.\n");
 		parse_texture(line, &config->textures, mem);
@@ -72,7 +70,7 @@ void	parse_line(char *line, t_config *config, t_memory *mem,
 	}
 	else if (is_map_line(line))
 	{
-		ft_printf("[DEBUG] Map section detected. Switching to Parsing Map state.\n");
+		ft_printf("[DEBUG] Switching to Parsing Map state.\n");
 		*is_parsing_map = true;
 		if (!put_on_list(line, &config->map.list, mem))
 		{
@@ -106,10 +104,6 @@ void	parse_cub_file(t_config *config, t_memory *mem, char *file_path)
 	}
 	config->map.path = mem_alloc(mem, ft_strlen(file_path) + 1);
 	ft_strlcpy(config->map.path, file_path, ft_strlen(file_path) + 1);
-	config->map.current_row = 0;
-	config->map.height = 0;
-	config->map.width = 0;
-	config->map.list = NULL;
 	while ((line = get_next_line(fd)))
 	{
 		ft_printf("[DEBUG] Parsing line: %s\n", line);
@@ -121,9 +115,5 @@ void	parse_cub_file(t_config *config, t_memory *mem, char *file_path)
 		ft_error(-13);
 	ft_printf("[DEBUG] Converting map list to grid...\n");
 	list_to_array(&config->map, mem);
-	ft_printf("[DEBUG] Validating textures and colors...\n");
-	validate_textures_and_colors(config);
-	ft_printf("[DEBUG] Validating map boundaries...\n");
-	validate_map_boundary(&config->map);
-	ft_printf("[DEBUG] Map successfully parsed and validated!\n");
+	ft_printf("[DEBUG] Map parsing completed.\n");
 }
