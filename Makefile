@@ -104,34 +104,43 @@
 
 
 NAME	= cube3D
-
+# Compiler
 CC		= gcc
 CFLAGS	= -Wextra -Wall -Werror
 # MLXFLAGS = -lglfw -L "$(HOME)/.brew/opt/glfw/lib/"
 MLXFLAGS = -lglfw -L /usr/local/lib
 
-SRC = src/main.c
+SRC_DIR = src
+OBJ_DIR = src/bin
 
-OBJ = $(SRC:.c=.o)
+# Source files for Cube3d
+SRC = main.c
+
+# Object files
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 LIB = src/libft/bin/libft.a
 
 MLX42 = MLX42/build/libmlx42.a
 
-$(NAME) : $(MLX42) $(OBJ)
+$(OBJ_DIR)/$(NAME) : $(MLX42) $(OBJ)
 	@cd src/libft && make
-	@$(CC) $(CFLAGS) $(MLXFLAGS) -o $(NAME) $(MLX42) $(OBJ) $(LIB)
-	@echo "Compilation done"
+	@$(CC) $(CFLAGS) $(MLXFLAGS) -o $(OBJ_DIR)/$(NAME) $(MLX42) $(OBJ) $(LIB)
+	@echo "\033[0;37mCompilation of the Project OK!\033[0m"
 
-%.o	: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@ && echo "\033[0;35m$< OK!\033[0m" || echo "\033[0;31m$< KO!\033[0m"
+
+# $(OBJ_DIR)/$(NAME): $(OBJ)
+# 	@ar rcs $@ $^
 
 $(MLX42) :
 	@if [ ! -d MLX42/build ]; then git clone https://github.com/codam-coding-college/MLX42.git; fi
 	@cd MLX42 && cmake -B build
 	@cd MLX42 && cmake --build build -j4
 
-all : $(MLX42) $(NAME)
+all : $(MLX42) $(OBJ_DIR)/$(NAME) $(OBJ)
 
 cleanmlx :
 	@rm -rf MLX42
@@ -145,7 +154,7 @@ clean :
 fclean : 
 	@cd src/libft && make fclean
 	@rm -rf $(OBJ)
-	@rm -rf $(NAME)
+	@rm -rf $(OBJ_DIR)/$(NAME)
 	@echo "Objects and executable removed"
 
 re : fclean all
