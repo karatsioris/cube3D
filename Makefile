@@ -123,9 +123,9 @@ LIB = src/libft/bin/libft.a
 
 MLX42 = MLX42/build/libmlx42.a
 
-$(NAME) : $(MLX42) $(OBJ)
+$(OBJ_DIR)/$(NAME) : $(MLX42) $(OBJ)
 	@cd src/libft && make
-	@$(CC) $(CFLAGS) $(MLXFLAGS) -o $(NAME) $(MLX42) $(OBJ) $(LIB)
+	@$(CC) $(CFLAGS) $(MLXFLAGS) -o $(OBJ_DIR)/$(NAME) $(MLX42) $(OBJ) $(LIB)
 	@echo "\033[0;37mCompilation of the Project OK!\033[0m"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -154,7 +154,7 @@ clean :
 fclean : 
 	@cd src/libft && make fclean
 	@rm -rf $(OBJ)
-	@rm -rf $(NAME)
+	@rm -rf $(OBJ_DIR)/$(NAME)
 	@echo "Objects and executable removed"
 
 re : fclean all
