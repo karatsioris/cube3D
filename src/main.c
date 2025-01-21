@@ -6,7 +6,7 @@
 /*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/04 19:43:23 by kkaratsi         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:20:01 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 
 #define MAP_ROW 6
 #define MAP_COLUMN 8
+#define Window_Width 800
+#define Window_Height 600
 
 // 0 = empty space
 // 1 = wall  
@@ -134,19 +136,30 @@ void print_map()
 //     return (false);
 // }
 
+void	calculate_draw_parameters(int h, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd)
+{
+	*lineHeight = (int)(h / perpWallDist);
+	*drawStart = -(*lineHeight) / 2 + h / 2;
+	if (*drawStart < 0)
+		*drawStart = 0;
+	*drawEnd = (*lineHeight) / 2 + h / 2;
+	if (*drawEnd >= h)
+		*drawEnd = h - 1;
+	printf("Line height: %d, drawStart: %d, drawEnd: %d\n", *lineHeight, *drawStart, *drawEnd);
+}
 
 bool	cast_horizontal_ray(float start_x, float start_y, float angle)
 {
-	float ray_dir_x;
-	float ray_dir_y;
-	float delta_dist_x;
-	float delta_dist_y;
-	float side_dist_x;
-	float side_dist_y;
-	int step_x;
-	int step_y;
-	int map_x;
-	int map_y;
+	float	ray_dir_x;
+	float	ray_dir_y;
+	float	delta_dist_x;
+	float	delta_dist_y;
+	float	side_dist_x;
+	float	side_dist_y;
+	int		step_x;
+	int		step_y;
+	int		map_x;
+	int		map_y;
 
 	ray_dir_x = cos(angle);
 	ray_dir_y = sin(angle);
@@ -165,6 +178,8 @@ bool	cast_horizontal_ray(float start_x, float start_y, float angle)
 	// 	printf("Error: ray direction is 0\n");
 	// 	return (false);
 	// }
+
+	//calculate step and initial sideDist
 	if (ray_dir_x < 0)
 	{
 		step_x = -1;
@@ -203,10 +218,22 @@ bool	cast_horizontal_ray(float start_x, float start_y, float angle)
 		}
 		printf("Current map position: (%d, %d), side: %d\n", map_x, map_y, side);
 		if (map[map_y][map_x] == 1)
+		{
+			printf("Wall hit at (%d, %d)\n", map_x, map_y);
+			//Calculate distance of perpendicular ray (Euclidean distance would give fisheye effect!)
+			int perpWallDist;
+			int h = 500;
+			if(side == 0)
+				perpWallDist = (side_dist_x - delta_dist_x);
+			else
+				perpWallDist = (side_dist_y - delta_dist_y);
+			//Calculate height of line to draw on screen
+			int lineHeight, drawStart, drawEnd;
+			calculate_draw_parameters(h, perpWallDist, &lineHeight, &drawStart, &drawEnd);
 			return (true);
+		}
 	}
 	return (false);
-
 }
 
 bool	cast_vertical_ray(float start_x, float start_y, float angle)
@@ -294,6 +321,5 @@ int main (void)
 	// transform angle to radians with the formula: angle * M_PI / 180
     printf("\nHorizontal Ray hit wall: %d\n", cast_horizontal_ray(player_x, player_y, 45 * M_PI / 180));
     printf("\nVertical Ray hit wall: %d\n", cast_vertical_ray(player_x, player_y, 45 * M_PI / 180));
-
-    return (0);
+    return	(0);
 }

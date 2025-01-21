@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 15:45:54 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/21 17:00:58 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "../lib/MLX42/include/MLX42/MLX42.h"
 #include "libft/libft.h"
 #include <stdio.h>
+#include <math.h>
 
 typedef struct s_memory
 {
@@ -59,6 +60,14 @@ typedef struct s_map
 	mlx_t	*mlx;
 }	t_map;
 
+typedef struct s_resources
+{
+	mlx_texture_t	**textures;
+	int				texture_count;
+	mlx_image_t		**images;
+	int				image_count;
+}	t_resources;
+
 typedef struct s_config
 {
 	t_texture	textures;
@@ -74,13 +83,6 @@ typedef struct s_position
 	int	col;
 }	t_position;
 
-typedef struct s_resources
-{
-	mlx_texture_t	**textures;
-	int				texture_count;
-	mlx_image_t		**images;
-	int				image_count;
-}	t_resources;
 
 
 int		load_map(t_map *map, const char *path);
