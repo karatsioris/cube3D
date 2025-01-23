@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 22:19:00 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/23 19:47:33 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,54 @@ void	key_event_handler(mlx_key_data_t keydata, void *param)
 		ft_printf("[DEBUG] ESC key pressed. Closing window...\n");
 		exit(0);
 	}
+	else
+		player_move_handler(keydata, param);
 }
+
+void	player_move_handler(mlx_key_data_t keydata, t_config *config)
+{
+	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
+	{
+		if (keydata.key == MLX_KEY_W)
+			config->player.y -= 0.1;
+		else if (keydata.key == MLX_KEY_S)
+			config->player.y += 0.1;
+		else if (keydata.key == MLX_KEY_A)
+			config->player.x -= 0.1;
+		else if (keydata.key == MLX_KEY_D)
+			config->player.x += 0.1;
+		else if (keydata.key == MLX_KEY_LEFT)
+			config->player.angle -= 0.1;
+		else if (keydata.key == MLX_KEY_RIGHT)
+			config->player.angle += 0.1;
+	}
+	render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT);
+}
+
+void	clear_image(t_config *config, int color)
+{
+	int x;
+	int y;
+	
+	if (config == NULL || config->resources.images == NULL || config->resources.images[0] == NULL)
+    {
+        fprintf(stderr, "Error: Invalid config or image resource\n");
+        return;
+    }
+	x = 0;
+	while (x < WINDOW_WIDTH)
+	{
+		y = 0;
+		while (y < WINDOW_HEIGHT)
+		{
+			mlx_put_pixel(config->resources.images[0], x, y, color);
+			y++;
+		}
+		x++;
+	}
+	mlx_image_to_window(config->map.mlx, config->resources.images[0], 0, 0);
+}
+
 
 void	load_textures(t_resources *res, t_texture *textures,
 	mlx_t *mlx, t_memory *mem, t_map *map)
@@ -83,9 +130,11 @@ void	load_textures(t_resources *res, t_texture *textures,
 }
 
 void	game_loop(t_map *map)
-{
+{	
+	t_config	config = {0};
 	ft_printf("[DEBUG] Starting game loop...\n");
 	mlx_key_hook(map->mlx, key_event_handler, NULL);
+	render_scene(map->mlx, map, &config, WINDOW_HEIGHT);
 	mlx_loop(map->mlx);
 	ft_printf("[DEBUG] Game loop ended.\n");
 }
@@ -131,6 +180,7 @@ void	validate_map(t_map *map, t_memory *mem)
 	ft_printf("[DEBUG] Map list converted to grid array.\n");
 	ft_printf("[DEBUG] Calculating map dimensions...\n");
 	get_map_dimensions(map);
+	// printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~i am here\n");
 	ft_printf("[DEBUG] Map dimensions calculated: Height=%d, Width=%d\n",
 		map->height, map->width);
 	ft_printf("[DEBUG] Printing map grid...\n");
@@ -178,3 +228,28 @@ int	main(int argc, char **argv)
 	ft_clean(&config.map, &mem, &config.resources);
 	return (0);
 }
+
+// int main(void)
+// {
+//     mlx_t *mlx;
+//     mlx_image_t *img;
+
+//     mlx = mlx_init(Window_Width, Window_Height, "Cube3d", false);
+//     if (!mlx)
+//     {
+//         printf("Error: mlx_init failed\n");
+//         return 0;
+//     }
+
+//     img = mlx_new_image(mlx, Window_Width, Window_Height);
+//     if (!img)
+//     {
+//         printf("Error: mlx_new_image failed\n");
+//         return 0;
+//     }
+
+//     mlx_key_hook(mlx, key_hook, mlx);
+//     render_scene(mlx, img);
+//     mlx_loop(mlx);
+//     return 0;
+// }

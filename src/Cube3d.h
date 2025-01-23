@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 19:45:08 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/23 17:26:11 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,26 @@
 #include "libft/libft.h"
 #include <stdio.h>
 #include <errno.h>
+#include <string.h>
+#include <math.h>
 
 #define	WINDOW_WIDTH 800
 #define	WINDOW_HEIGHT 600
 #define INITIAL_MEM_CAPACITY 10
+#define FOV 3.14159 / 3
+
+typedef struct s_ray
+{
+	float side_dist_x;
+	float side_dist_y;
+	float delta_dist_x;
+	float delta_dist_y;
+	int map_x;
+	int map_y;
+	int step_x;
+	int step_y;
+	int side;
+}	t_ray;
 
 typedef struct s_memory
 {
@@ -43,6 +59,7 @@ typedef struct s_color
 {
 	int	floor[3];
 	int	ceiling[3];
+	int	wall[3];
 }	t_color;
 
 typedef struct s_player
@@ -50,6 +67,7 @@ typedef struct s_player
 	int		x;
 	int		y;
 	char	direction;
+	int		angle;
 }	t_player;
 
 typedef struct s_map
@@ -117,5 +135,14 @@ void	initialize_player(t_config *config, t_map *map);
 void	initialize_game(t_config *config, t_map *map);
 void	cleanup_textures(t_resources *res, mlx_t *mlx);
 int		put_on_list(char *line, t_list **list, t_memory *mem);
+
+/* -------------------   kkaratsi functions  ---------------------*/
+
+void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uint32_t color);
+void	calculate_draw_parameters(int window_height, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd);
+bool	cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight, int *drawStart, int *drawEnd, t_map *map, t_config *config);
+void	render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height);
+void	clear_image(t_config *config, int color);
+void	player_move_handler(mlx_key_data_t keydata, t_config *config);
 
 #endif
