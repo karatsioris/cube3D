@@ -170,6 +170,9 @@
 //     return 0;
 // }
 
+
+// This is the first try of casting rays and drawing walls
+
 #define MAP_ROW 20
 #define MAP_COLUMN 20
 #define Window_Width 1000

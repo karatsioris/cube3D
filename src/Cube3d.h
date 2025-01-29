@@ -6,7 +6,7 @@
 /*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/23 17:26:11 by kkaratsi         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:07:02 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_config
 	t_player	player;
 	t_memory	*memory;
 	t_resources	resources;
+	bool		use_textures;
 }	t_config;
 
 typedef struct s_position
@@ -142,7 +143,7 @@ void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uin
 void	calculate_draw_parameters(int window_height, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd);
 bool	cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight, int *drawStart, int *drawEnd, t_map *map, t_config *config);
 void	render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height);
-void	clear_image(t_config *config, int color);
+void	clear_image(t_config *config, uint32_t color);
 void	player_move_handler(mlx_key_data_t keydata, t_config *config);
 
 #endif

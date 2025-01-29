@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 09:39:53 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 21:44:19 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/29 12:35:50 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
+
+void	get_map_dimensions(t_map *map);
 
 void	list_to_array(t_map *map, t_memory *mem)
 {
@@ -37,6 +39,7 @@ void	list_to_array(t_map *map, t_memory *mem)
 		temp = temp->next;
 	}
 	printf("[DEBUG] Total rows in map list: %d\n", rows);
+	map->height = rows;
 	map->grid = mem_alloc(mem, sizeof(char *) * (rows + 1));
 	if (!map->grid)
 	{
@@ -64,4 +67,15 @@ void	list_to_array(t_map *map, t_memory *mem)
 	}
 	map->grid[rows] = NULL;
 	printf("[DEBUG] Map list successfully converted to grid array.\n");
+	// Set map width based on the longest line
+    for (i = 0; i < rows; i++)
+    {
+        int line_length = strlen(map->grid[i]);
+        if (line_length > map->width)
+        {
+            map->width = line_length;
+        }
+    }
+    printf("[DEBUG] Map dimensions - Height: %d, Width: %d\n", map->height, map->width);
+
 }

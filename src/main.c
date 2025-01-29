@@ -6,7 +6,7 @@
 /*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/23 19:47:33 by kkaratsi         ###   ########.fr       */
+/*   Updated: 2025/01/29 15:07:14 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	player_move_handler(mlx_key_data_t keydata, t_config *config)
 	render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT);
 }
 
-void	clear_image(t_config *config, int color)
+void	clear_image(t_config *config, uint32_t color)
 {
 	int x;
 	int y;
@@ -72,6 +72,13 @@ void	clear_image(t_config *config, int color)
 void	load_textures(t_resources *res, t_texture *textures,
 	mlx_t *mlx, t_memory *mem, t_map *map)
 {
+	bool	use_textures = false;
+	  if (!use_textures)
+    {
+        ft_printf("[DEBUG] Skipping texture loading, using colors instead.\n");
+        return;
+    }
+	
 	xpm_t	*xpm_texture;
 
 	ft_printf("[DEBUG] Allocating memory for textures and images...\n");
@@ -131,10 +138,10 @@ void	load_textures(t_resources *res, t_texture *textures,
 
 void	game_loop(t_map *map)
 {	
-	t_config	config = {0};
+	// t_config	config = {0};
 	ft_printf("[DEBUG] Starting game loop...\n");
 	mlx_key_hook(map->mlx, key_event_handler, NULL);
-	render_scene(map->mlx, map, &config, WINDOW_HEIGHT);
+	// render_scene(map->mlx, map, &config, WINDOW_HEIGHT);
 	mlx_loop(map->mlx);
 	ft_printf("[DEBUG] Game loop ended.\n");
 }
@@ -180,7 +187,6 @@ void	validate_map(t_map *map, t_memory *mem)
 	ft_printf("[DEBUG] Map list converted to grid array.\n");
 	ft_printf("[DEBUG] Calculating map dimensions...\n");
 	get_map_dimensions(map);
-	// printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~i am here\n");
 	ft_printf("[DEBUG] Map dimensions calculated: Height=%d, Width=%d\n",
 		map->height, map->width);
 	ft_printf("[DEBUG] Printing map grid...\n");
@@ -196,6 +202,7 @@ int	main(int argc, char **argv)
 {
 	t_config	config = {0};
 	t_memory	mem = {0};
+	config.use_textures = false;
 
 	ft_printf("[DEBUG] Initializing memory manager...\n");
 	if (!mem_init(&mem))
@@ -222,7 +229,9 @@ int	main(int argc, char **argv)
 	load_textures(&config.resources, &config.textures, config.map.mlx,
 		&mem, &config.map);
 	ft_printf("[DEBUG] Textures successfully loaded. Starting game loop...\n");
+	
 	game_loop(&config.map);
+	render_scene(config.map.mlx, &config.map, &config, WINDOW_HEIGHT);
 	ft_printf("[DEBUG] Cleaning up resources...\n");
 	cleanup_resources(&config.resources, config.map.mlx);
 	ft_clean(&config.map, &mem, &config.resources);
