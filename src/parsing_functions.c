@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 21:48:17 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/30 10:41:25 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,16 @@ void	parse_line(char *line, t_config *config, t_memory *mem,
 				ft_printf("[ERROR] Failed to add map line to the list.\n");
 				exit(1);
 			}
+			   // Check for player position --- i add it
+            for (int i = 0; line[i] != '\0'; i++)
+            {
+                if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
+                {
+                    config->player.x = config->map.current_row + 1;
+                    config->player.y = i;
+                }
+            }
+            config->map.current_row++;
 		}
 		else
 		{

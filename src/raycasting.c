@@ -305,7 +305,7 @@ void clear_image(mlx_image_t *img, uint32_t color)
 //     mlx_image_to_window(mlx, img, 0, 0);
 // }
 
-void render_scene(mlx_t *mlx, mlx_image_t *img)
+void    render_scene(mlx_t *mlx, mlx_image_t *img)
 {
     int y, x, lineHeight, drawStart, drawEnd;
 

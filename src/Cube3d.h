@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cube3d.h                                           :+:      :+:    :+:   */
+/*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/29 15:07:02 by kkaratsi         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:51:31 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 #include <string.h>
 #include <math.h>
 
-#define	WINDOW_WIDTH 800
-#define	WINDOW_HEIGHT 600
+#define	WINDOW_WIDTH 1200
+#define	WINDOW_HEIGHT 1000
 #define INITIAL_MEM_CAPACITY 10
 #define FOV 3.14159 / 3
 
@@ -67,8 +67,10 @@ typedef struct s_player
 	int		x;
 	int		y;
 	char	direction;
-	int		angle;
+	float		angle;
 }	t_player;
+
+typedef struct s_config t_config;
 
 typedef struct s_map
 {
@@ -82,6 +84,7 @@ typedef struct s_map
 	int		wall_n;
 	mlx_t	*mlx;
 	t_list	*list;
+	t_config	*config;
 }	t_map;
 
 typedef struct s_resources
@@ -143,7 +146,9 @@ void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uin
 void	calculate_draw_parameters(int window_height, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd);
 bool	cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight, int *drawStart, int *drawEnd, t_map *map, t_config *config);
 void	render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height);
-void	clear_image(t_config *config, uint32_t color);
-void	player_move_handler(mlx_key_data_t keydata, t_config *config);
+// void	clear_image(t_config *config, uint32_t color);
+void	clear_image(mlx_image_t *img, uint32_t color);
+// void	player_move_handler(mlx_key_data_t keydata, t_config *config);
+void player_move_handler(mlx_key_data_t keydata, void *param);
 
 #endif

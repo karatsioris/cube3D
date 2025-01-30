@@ -6,7 +6,7 @@
 /*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 09:39:53 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/29 12:35:50 by kkaratsi         ###   ########.fr       */
+/*   Updated: 2025/01/30 10:41:20 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	list_to_array(t_map *map, t_memory *mem)
 	}
 	map->grid[rows] = NULL;
 	printf("[DEBUG] Map list successfully converted to grid array.\n");
-	// Set map width based on the longest line
+	// Set map width based on the longest line --- i add it
     for (i = 0; i < rows; i++)
     {
         int line_length = strlen(map->grid[i]);

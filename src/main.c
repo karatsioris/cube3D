@@ -6,7 +6,7 @@
 /*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/29 15:07:14 by kkaratsi         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:41:03 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,48 +24,95 @@ void	key_event_handler(mlx_key_data_t keydata, void *param)
 		player_move_handler(keydata, param);
 }
 
-void	player_move_handler(mlx_key_data_t keydata, t_config *config)
+// void	player_move_handler(mlx_key_data_t keydata, t_config *config)
+// {
+// 	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
+// 	{
+// 		if (keydata.key == MLX_KEY_W)
+// 			config->player.y -= 0.1;
+// 		else if (keydata.key == MLX_KEY_S)
+// 			config->player.y += 0.1;
+// 		else if (keydata.key == MLX_KEY_A)
+// 			config->player.x -= 0.1;
+// 		else if (keydata.key == MLX_KEY_D)
+// 			config->player.x += 0.1;
+// 		else if (keydata.key == MLX_KEY_LEFT)
+// 			config->player.angle -= 0.1;
+// 		else if (keydata.key == MLX_KEY_RIGHT)
+// 			config->player.angle += 0.1;
+// 	}
+// 	render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT);
+// }
+
+void player_move_handler(mlx_key_data_t keydata, void *param)
 {
-	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
-	{
-		if (keydata.key == MLX_KEY_W)
-			config->player.y -= 0.1;
-		else if (keydata.key == MLX_KEY_S)
-			config->player.y += 0.1;
-		else if (keydata.key == MLX_KEY_A)
-			config->player.x -= 0.1;
-		else if (keydata.key == MLX_KEY_D)
-			config->player.x += 0.1;
-		else if (keydata.key == MLX_KEY_LEFT)
-			config->player.angle -= 0.1;
-		else if (keydata.key == MLX_KEY_RIGHT)
-			config->player.angle += 0.1;
-	}
-	render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT);
+    t_config *config = (t_config *)param;
+
+    if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
+    {
+        switch (keydata.key)
+        {
+            case MLX_KEY_W:
+                config->player.y -= 0.1;
+                break;
+            case MLX_KEY_S:
+                config->player.y += 0.1;
+                break;
+            case MLX_KEY_A:
+                config->player.x -= 0.1;
+                break;
+            case MLX_KEY_D:
+                config->player.x += 0.1;
+                break;
+            case MLX_KEY_LEFT:
+                config->player.angle -= 0.1;
+                break;
+            case MLX_KEY_RIGHT:
+                config->player.angle += 0.1;
+                break;
+            default:
+                break;
+        }
+        render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT);
+        printf("\nPlayer position: x = %d, y = %d angle = %f\n", config->player.x, config->player.y, config->player.angle);
+    }
 }
 
-void	clear_image(t_config *config, uint32_t color)
-{
-	int x;
-	int y;
+// this function is not used for images that are not mlx_image_t
+// void	clear_image(t_config *config, uint32_t color)
+// {
+// 	int x;
+// 	int y;
 	
-	if (config == NULL || config->resources.images == NULL || config->resources.images[0] == NULL)
+// 	if (config == NULL || config->resources.images == NULL || config->resources.images[0] == NULL)
+//     {
+//         fprintf(stderr, "Error: Invalid config or image resource\n");
+//         return;
+//     }
+// 	x = 0;
+// 	while (x < WINDOW_WIDTH)
+// 	{
+// 		y = 0;
+// 		while (y < WINDOW_HEIGHT)
+// 		{
+// 			mlx_put_pixel(config->resources.images[0], x, y, color);
+// 			y++;
+// 		}
+// 		x++;
+// 	}
+// 	mlx_image_to_window(config->map.mlx, config->resources.images[0], 0, 0);
+// }
+
+// this function is not used for mlx_image_t *img
+void clear_image(mlx_image_t *img, uint32_t color)
+{
+    for (uint32_t y = 0; y < img->height; y++)
     {
-        fprintf(stderr, "Error: Invalid config or image resource\n");
-        return;
+        for (uint32_t x = 0; x < img->width; x++)
+        {
+            mlx_put_pixel(img, x, y, color);
+        }
     }
-	x = 0;
-	while (x < WINDOW_WIDTH)
-	{
-		y = 0;
-		while (y < WINDOW_HEIGHT)
-		{
-			mlx_put_pixel(config->resources.images[0], x, y, color);
-			y++;
-		}
-		x++;
-	}
-	mlx_image_to_window(config->map.mlx, config->resources.images[0], 0, 0);
 }
 
 
@@ -108,7 +155,7 @@ void	load_textures(t_resources *res, t_texture *textures,
 			cleanup_textures(res, mlx);
 			exit(1);
 		}
-		ft_printf("[DEBUG] Loading texture: %s\n", texture_paths[i]);
+		ft_printf("[DEBUG] Loading texture: %s\n", texture_paths[i]); 
 		xpm_texture = mlx_load_xpm42(texture_paths[i]);
 		if (!xpm_texture)
 		{
@@ -136,12 +183,15 @@ void	load_textures(t_resources *res, t_texture *textures,
 	ft_printf("[DEBUG] All textures loaded successfully.\n");
 }
 
-void	game_loop(t_map *map)
+void	game_loop(t_map *map, t_config *config)
 {	
-	// t_config	config = {0};
-	ft_printf("[DEBUG] Starting game loop...\n");
-	mlx_key_hook(map->mlx, key_event_handler, NULL);
-	// render_scene(map->mlx, map, &config, WINDOW_HEIGHT);
+	// ft_printf("k Starting game loop...\n");
+    // ft_printf("k Player position: (%d, %d)\n", config->player.x, config->player.y);
+    // ft_printf("k Use textures: %s\n", config->use_textures ? "true" : "false");
+    // ft_printf("k Image pointer: %p\n", config->resources.images[0]);
+	// mlx_key_hook(map->mlx, key_event_handler, NULL);
+	mlx_key_hook(map->mlx, key_event_handler, config);
+	render_scene(map->mlx, &config->map, config, WINDOW_HEIGHT);
 	mlx_loop(map->mlx);
 	ft_printf("[DEBUG] Game loop ended.\n");
 }
@@ -226,39 +276,13 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	ft_printf("[DEBUG] Loading textures...\n");
+	
 	load_textures(&config.resources, &config.textures, config.map.mlx,
 		&mem, &config.map);
 	ft_printf("[DEBUG] Textures successfully loaded. Starting game loop...\n");
-	
-	game_loop(&config.map);
-	render_scene(config.map.mlx, &config.map, &config, WINDOW_HEIGHT);
+	game_loop(&config.map, &config);
 	ft_printf("[DEBUG] Cleaning up resources...\n");
 	cleanup_resources(&config.resources, config.map.mlx);
 	ft_clean(&config.map, &mem, &config.resources);
 	return (0);
 }
-
-// int main(void)
-// {
-//     mlx_t *mlx;
-//     mlx_image_t *img;
-
-//     mlx = mlx_init(Window_Width, Window_Height, "Cube3d", false);
-//     if (!mlx)
-//     {
-//         printf("Error: mlx_init failed\n");
-//         return 0;
-//     }
-
-//     img = mlx_new_image(mlx, Window_Width, Window_Height);
-//     if (!img)
-//     {
-//         printf("Error: mlx_new_image failed\n");
-//         return 0;
-//     }
-
-//     mlx_key_hook(mlx, key_hook, mlx);
-//     render_scene(mlx, img);
-//     mlx_loop(mlx);
-//     return 0;
-// }
