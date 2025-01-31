@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize_game.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:51:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 22:04:06 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/01/30 16:52:31 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,12 @@ void	initialize_config(t_config *config)
 	config->colors.ceiling[0] = -1;
 	config->colors.ceiling[1] = -1;
 	config->colors.ceiling[2] = -1;
+	config->colors.wall[0] = -1;
+	config->colors.wall[1] = -1;
+	config->colors.wall[2] = -1;
 	config->player.x = -1;
 	config->player.y = -1;
+	config->player.angle = 3.14;
 	config->player.direction = '\0';
 	config->map.grid = NULL;
 	config->map.width = 0;

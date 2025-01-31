@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   map_boundary_val.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
 /*   Updated: 2025/01/19 13:13:04 by pwojnaro         ###   ########.fr       */
+=======
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
+/*   Updated: 2025/01/30 10:24:24 by kkaratsi         ###   ########.fr       */
+>>>>>>> 65ac913c6d78f2c2c50a27b7732a73cd95b0ef02
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +35,7 @@ void	validate_top_bottom_walls(char *line, int width, int is_top)
 		exit(1);
 	}
 	i = 0;
-	while (i < width)
+	while (i < width - 1)
 	{
 		if (line[i] != '1')
 		{
@@ -49,7 +56,7 @@ void	validate_side_walls(char *line, int width)
 		ft_printf("[ERROR] Line is NULL while validating side walls.\n");
 		exit(1);
 	}
-	if (line[0] != '1' || line[width - 1] != '1')
+	if (line[0] != '1' || line[width - 2] != '1')
 	{
 		ft_printf("[ERROR] Side walls are not fully closed: Start=%c, End=%c\n",
 			line[0], line[width - 1]);

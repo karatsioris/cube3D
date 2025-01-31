@@ -18,7 +18,7 @@ SRCS = \
 	ft_putendl_fd.c ft_putnbr_fd.c ft_utoa_base.c ft_arraylen.c \
 	ft_printf.c ft_putunsignednbr_fd.c print_hex.c \
 	get_next_line.c ft_strleni.c ft_realloc.c get_next_utils.c \
-	ft_lstadd_back.c ft_lstlast.c\
+	ft_lstadd_back.c ft_lstlast.c
 
 # Object files
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
