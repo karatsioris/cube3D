@@ -6,17 +6,29 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:33:24 by kkaratsi          #+#    #+#             */
-/*   Updated: 2025/02/01 17:07:46 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 18:25:46 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
 
+uint32_t convert_abgr_to_rgba(uint32_t abgr)
+{
+	uint32_t a = (abgr & 0xFF000000);
+	uint32_t b = (abgr & 0x00FF0000) >> 16;
+	uint32_t g = (abgr & 0x0000FF00);
+	uint32_t r = (abgr & 0x000000FF) << 16;
+	return a | r | g | b;
+}
+
 uint32_t get_texture_pixel(mlx_image_t *texture, int x, int y)
 {
 	uint32_t const *pixels = (uint32_t *)texture->pixels;
 	int index = y * texture->width + x;
-	return pixels[index];
+	uint32_t color = pixels[index];
+	color = convert_abgr_to_rgba(color);
+	color |= 0xFF000000;
+	return color;
 }
 
 void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uint32_t color)

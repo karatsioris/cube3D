@@ -1,8 +1,8 @@
 C 255,255,254
-NO ./assets/exit_open.png  
-SO ./assets/exit_open.png
-WE ./assets/exit_open.png
-EA ./assets/exit_open.png 
+NO ./assets/sand.png  
+SO ./assets/sand.png
+WE ./assets/sand.png
+EA ./assets/sand.png 
 
 F 50,50,50
 
