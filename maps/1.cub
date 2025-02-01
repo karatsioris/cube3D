@@ -1,8 +1,8 @@
 C 255,255,254
-NO ./assets/m.xpm  
-SO ./assets/brick.xpm
-WE ./assets/m.xpm
-EA ./assets/ceiling.xpm
+NO ./assets/exit_open.png  
+SO ./assets/exit_open.png
+WE ./assets/exit_open.png
+EA ./assets/exit_open.png 
 
 F 50,50,50
 

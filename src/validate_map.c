@@ -6,11 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/19 13:17:08 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:04:06 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "parser.h"
 
 void	print_list1(t_list *list)
 {
@@ -19,47 +19,47 @@ void	print_list1(t_list *list)
 	i = 0;
 	if (!list)
 	{
-		printf("[ERROR] Linked list is NULL.\n");
+		ft_printf("[ERROR] Linked list is NULL.\n");
 		return ;
 	}
 	while (list)
 	{
 		if (list->line)
-			printf("[DEBUG] List Node %d: '%s'\n", i, list->line);
+			ft_printf("[DEBUG] List Node %d: '%s'\n", i, list->line);
 		else
-			printf("[ERROR] List Node %d: (NULL line)\n", i);
+			ft_printf("[ERROR] List Node %d: (NULL line)\n", i);
 		list = list->next;
 		i++;
 	}
 }
 
-int	put_on_list(char *line, t_list **list, t_memory *mem)
+int	put_on_list(const char *line, t_list **list, t_memory *mem)
 {
 	t_list	*node;
 	t_list	*temp;
 
 	if (!line || *line == '\0' || *line == '\n')
 	{
-		printf("[ERROR] Cannot add an empty or NULL line to the list.\n");
+		ft_printf("[ERROR] Cannot add an empty or NULL line to the list.\n");
 		return (0);
 	}
 	node = mem_alloc(mem, sizeof(t_list));
 	if (!node)
 	{
-		printf("[ERROR] Failed to allocate memory for map list node.\n");
+		ft_printf("[ERROR] Failed to allocate memory for map list node.\n");
 		return (0);
 	}
 	node->line = ft_strdup_cub(line, mem);
 	if (!node->line || node->line[0] == '\0')
 	{
-		printf("[ERROR] Failed to duplicate map line content.\n");
+		ft_printf("[ERROR] Failed to duplicate map line content.\n");
 		return (0);
 	}
 	node->next = NULL;
 	if (!(*list))
 	{
 		*list = node;
-		printf("[DEBUG] Added first node to map list: '%s'\n", node->line);
+		ft_printf("[DEBUG] Added first node to map list: '%s'\n", node->line);
 	}
 	else
 	{
@@ -67,9 +67,8 @@ int	put_on_list(char *line, t_list **list, t_memory *mem)
 		while (temp->next)
 			temp = temp->next;
 		temp->next = node;
-		printf("[DEBUG] Added node to map list: '%s'\n", node->line);
+		ft_printf("[DEBUG] Added node to map list: '%s'\n", node->line);
 	}
-	printf("[DEBUG] Current state of the linked list:\n");
 	print_list1(*list);
 	return (1);
 }
@@ -86,14 +85,14 @@ int	calculate_map_dimensions(char **grid, int *height, int *width)
 	i = 0;
 	if (!grid || !height || !width)
 	{
-		printf("[ERROR] Invalid grid or dimension pointers.\n");
+		ft_printf("[ERROR] Invalid grid or dimension pointers.\n");
 		return (-1);
 	}
 	while (grid[i] != NULL)
 	{
 		row_count++;
 		row_length = strlen(grid[i]);
-		printf("[DEBUG] Processing Grid Row %d: '%s' (Length: %d)\n",
+		ft_printf("[DEBUG] Processing Grid Row %d: '%s' (Length: %d)\n",
 			i, grid[i], row_length);
 		if (row_length > max_width)
 		{
@@ -105,11 +104,11 @@ int	calculate_map_dimensions(char **grid, int *height, int *width)
 	*width = max_width;
 	if (*height == 0 || *width == 0)
 	{
-		printf("[ERROR] Invalid map dimensions. Height=%d, Width=%d\n",
+		ft_printf("[ERROR] Invalid map dimensions. Height=%d, Width=%d\n",
 			*height, *width);
 		return (-1);
 	}
-	printf("[DEBUG] Map dimensions calculated successfully.");
+	ft_printf("[DEBUG] Map dimensions calculated successfully.");
 	return (0);
 }
 

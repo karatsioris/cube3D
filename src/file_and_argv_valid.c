@@ -6,11 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:32:54 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/17 12:21:04 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:37:11 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "parser.h"
 
 bool	validate_args_and_load_map(int argc,
 			char **argv, t_config *config, t_memory *mem)
