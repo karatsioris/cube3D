@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 16:48:00 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:04:06 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	print_list1(t_list *list)
 	}
 }
 
-int	put_on_list(char *line, t_list **list, t_memory *mem)
+int	put_on_list(const char *line, t_list **list, t_memory *mem)
 {
 	t_list	*node;
 	t_list	*temp;

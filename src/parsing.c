@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 09:39:53 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 16:46:05 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:15:52 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	list_to_array(t_map *map, t_memory *mem)
 {
-	int		i;
-	int		len;
-	int		rows;
-	t_list	*temp;
-	char	*line;
+	int				i;
+	int				len;
+	int				rows;
+	const t_list	*temp;
+	char			*line;
 
 	i = 0;
 	rows = 0;

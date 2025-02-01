@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 16:37:31 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:18:35 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ char	*extract_path(char *line, t_memory *mem)
 	int		fd;
 
 	ft_printf("[DEBUG] Extracting path from line: '%s'\n", line);
-	while (*line && *line != ' ')
+	while (*line != ' ')
 		line++;
-	while (*line && *line == ' ')
+	while (*line == ' ')
 		line++;
 	if (!*line)
 	{
@@ -105,9 +105,9 @@ void	parse_color(char *line, int color[3])
 		ft_printf("[ERROR] Duplicate color directive found.\n");
 		ft_error(-15);
 	}
-	while (*line && *line != ' ')
+	while (*line != ' ')
 		line++;
-	while (*line && *line == ' ')
+	while (*line == ' ')
 		line++;
 	rgb = ft_split(line, ',');
 	if (!rgb || ft_arraylen(rgb) != 3)

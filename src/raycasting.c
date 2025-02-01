@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:33:24 by kkaratsi          #+#    #+#             */
-/*   Updated: 2025/02/01 16:14:42 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:07:46 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 uint32_t get_texture_pixel(mlx_image_t *texture, int x, int y)
 {
-	uint32_t *pixels = (uint32_t *)texture->pixels;
+	uint32_t const *pixels = (uint32_t *)texture->pixels;
 	int index = y * texture->width + x;
 	return pixels[index];
 }

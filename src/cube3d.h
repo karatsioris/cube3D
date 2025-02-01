@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 16:40:41 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:09:10 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ void	cleanup_resources(t_resources *res, mlx_t *mlx);
 /* -------------------   kkaratsi functions  ---------------------*/
 
 void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uint32_t color);
-void	calculate_draw_parameters(int window_height, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd);
-bool cast_ray(float start_x, float start_y, float angle, int h,
+void	calculate_draw_parameters(int h, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd);
+bool	cast_ray(float start_x, float start_y, float angle, int h,
 			  int *lineHeight, int *drawStart, int *drawEnd, float *wallX, int *hit_side,
 			  t_map *map, t_config *config);
 void	render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height);
