@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 15:52:15 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:40:41 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,35 +94,23 @@ typedef struct s_config
 }	t_config;
 
 void	ft_error(int code);
-void	parse_texture(char *line, t_texture *textures, t_memory *mem);
-void	parse_color(char *line, int color[3]);
 void	validate_map(t_map *map);
 void	validate_map_boundary(t_map *map);
-bool	validate_args_and_load_map(int argc, char **argv, t_config *config,
-			t_memory *mem);
 void	mem_free_all(t_memory *mem);
 void	*mem_alloc(t_memory *mem, size_t size);
 bool	mem_init(t_memory *mem);
 void	ft_clean(t_map *map, t_memory *mem, t_resources *res);
-void	parse_line(char *line, t_config *config, t_memory *mem,
-			bool *is_parsing_map);
-void	parse_cub_file(t_config *config, t_memory *mem, char *file_path);
 void	initialize_config(t_config *config);
 void	cleanup_textures(t_resources *res, mlx_t *mlx);
-int		put_on_list(char *line, t_list **list, t_memory *mem);
-void	list_to_array(t_map *map, t_memory *mem);
 void	cleanup_resources(t_resources *res, mlx_t *mlx);
-int		has_valid_extension(const char *path, const char *extension);
-char	*ft_strdup_cub(const char *src, t_memory *mem);
 
 /* -------------------   kkaratsi functions  ---------------------*/
 
 void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uint32_t color);
 void	calculate_draw_parameters(int window_height, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd);
-// bool	cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight, int *drawStart, int *drawEnd, t_map *map, t_config *config);
 bool cast_ray(float start_x, float start_y, float angle, int h,
-              int *lineHeight, int *drawStart, int *drawEnd, float *wallX, int *hit_side,
-              t_map *map, t_config *config);
+			  int *lineHeight, int *drawStart, int *drawEnd, float *wallX, int *hit_side,
+			  t_map *map, t_config *config);
 void	render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height);
 void	clear_image(mlx_image_t *img, uint32_t color);
 void	player_move_handler(mlx_key_data_t keydata, void *param);

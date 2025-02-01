@@ -6,11 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/19 13:17:44 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:37:31 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "parser.h"
 
 char	*extract_path(char *line, t_memory *mem)
 {

@@ -6,11 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 16:12:40 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/01 16:42:46 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "parser.h"
 
 void	key_event_handler(mlx_key_data_t keydata, void *param)
 {
@@ -60,8 +60,6 @@ void player_move_handler(mlx_key_data_t keydata, void *param)
 				break;
 		}
 		render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT);
-		printf("\nPlayer position: x = %f, y = %f, angle = %f\n",
-			   config->player.x, config->player.y, config->player.angle);
 	}
 }
 
