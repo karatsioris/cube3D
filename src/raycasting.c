@@ -1,83 +1,136 @@
-#include "Cube3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycasting.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/23 15:33:24 by kkaratsi          #+#    #+#             */
+/*   Updated: 2025/02/01 12:41:58 by pwojnaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// #define MAP_ROW 6
-// #define MAP_COLUMN 8
-// #define Window_Width 800
-// #define Window_Height 600
+#include "cube3d.h"
 
-// // 0 = empty space
-// // 1 = wall  
-// // 2 = player
-// float player_x = 2;
-// float player_y = 2;
+void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uint32_t color)
+{
+	int y;
+	y = drawStart;
+	while (y < drawEnd)
+	{
+		mlx_put_pixel(img, x, y, color);
+		y++;
+	}
+}
 
-// int map[MAP_ROW][MAP_COLUMN] =
+void calculate_draw_parameters(int h, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd)
+{
+    // Clamp perpWallDist to a minimum positive value to avoid division by zero
+    if (perpWallDist <= 0.0f) {
+        perpWallDist = 0.0001f; // Small epsilon to prevent division issues
+    }
+
+    // Calculate lineHeight based on the perpendicular wall distance
+    *lineHeight = (int)(h / perpWallDist);
+
+    // Clamp lineHeight to prevent overflow or invalid values
+    if (*lineHeight < 1) {
+        *lineHeight = 1; // Ensure lineHeight is at least 1 pixel
+    }
+    if (*lineHeight > h * 10) { // Prevent excessively large values
+        *lineHeight = h * 10;
+    }
+
+    // Calculate drawStart and drawEnd (vertical slice of the wall to draw)
+    *drawStart = -(*lineHeight) / 2 + h / 2;
+    if (*drawStart < 0) {
+        *drawStart = 0; // Clamp to the top of the screen
+    }
+
+    *drawEnd = (*lineHeight) / 2 + h / 2;
+    if (*drawEnd >= h) {
+        *drawEnd = h - 1; // Clamp to the bottom of the screen
+    }
+
+    // Debugging output (optional)
+    printf("Line height: %d, drawStart: %d, drawEnd: %d\n", *lineHeight, *drawStart, *drawEnd);
+}
+
+// bool cast_ray(float start_x, float start_y, float angle, int window_height, int *lineHeight, int *drawStart, int *drawEnd, t_map *map, t_config *config)
 // {
-//     {1, 1, 1, 1, 1, 1, 1, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 0, 2, 0, 0, 0, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 0, 0, 0, 0, 0, 0, 1},
-//     {1, 1, 1, 1, 1, 1, 1, 1},
-// };
+// 	t_ray	ray;
 
-// void print_map()
-// {
-//     int x;
-//     int y;
-//     int P;
-
-//     x = 0;
-//     P = 2;
-//     y = 0;
-//     printf("   ");
-//     while (y < MAP_COLUMN)
-//     {
-//         printf("%d", y);
-//         y++;
-//     }
-//     printf("\n");
-//     printf("\n");
-//     while (x < MAP_ROW)
-//     {
-//         y = 0;
-//         printf("%d  ", x);
-//         while (y < MAP_COLUMN)
-//         {
-//             if (map[x][y] == P)
-//                 printf("P");
-//             else
-//                 printf("%d", map[x][y]);
-//             y++;
-//         }
-//         x++;
-//         printf("\n");
-//     }
-//     printf("\n");
+// 	//  float ray_dir_x = cos(angle);
+//     // float ray_dir_y = sin(angle);
+// 	ray.map_x = (int)start_x;
+// 	ray.map_y = (int)start_y;
+// 	ray.delta_dist_x = fabs(1 / cos(angle));
+// 	ray.delta_dist_y = fabs(1 / sin(angle));
+// 	// ray.delta_dist_x = fabs(1 / ray_dir_x);
+// 	// ray.delta_dist_y = fabs(1 / ray_dir_y);
+// 	if (angle > 3.14159)
+// 	// if (ray_dir_x < 0)
+// 	{
+// 		ray.step_x = -1;
+// 		ray.side_dist_x = (start_x - ray.map_x) * ray.delta_dist_x;
+// 	}
+// 	else
+// 	{
+// 		ray.step_x = 1;
+// 		ray.side_dist_x = (ray.map_x + 1.0 - start_x) * ray.delta_dist_x;
+// 	}
+// 	if (angle > 1.5708 && angle < 4.71239)
+// 	// if (ray_dir_y < 0)
+// 	{
+// 		ray.step_y = -1;
+// 		ray.side_dist_y = (start_y - ray.map_y) * ray.delta_dist_y;
+// 	}
+// 	else
+// 	{
+// 		ray.step_y = 1;
+// 		ray.side_dist_y = (ray.map_y + 1.0 - start_y) * ray.delta_dist_y;
+// 	}
+// 	while (ray.map_y >= 0 && ray.map_y < WINDOW_HEIGHT && ray.map_x >= 0 && ray.map_x < WINDOW_WIDTH)
+// 	{
+// 		if (ray.side_dist_x < ray.side_dist_y)
+// 		{
+// 			ray.side_dist_x += ray.delta_dist_x;
+// 			ray.map_x += ray.step_x;
+// 			ray.side = 0;
+// 		}
+// 		else
+// 		{
+// 			ray.side_dist_y += ray.delta_dist_y;
+// 			ray.map_y += ray.step_y;
+// 			ray.side = 1;
+// 		}
+// 		if (map->grid[ray.map_y][ray.map_x] == '1')
+// 		{
+// 			float perpWallDist;
+// 			if (ray.side == 0)
+// 				perpWallDist = (ray.side_dist_x - ray.delta_dist_x);
+// 			else
+// 				perpWallDist = (ray.side_dist_y - ray.delta_dist_y);
+// 			perpWallDist *= cos(angle - config->player.angle);
+// 			calculate_draw_parameters(window_height, perpWallDist, lineHeight, drawStart, drawEnd);
+// 			return true;
+// 		}
+// 	}
+// 	return false;
 // }
+// 
 
-// void calculate_draw_parameters(int h, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd)
-// {
-//     *lineHeight = (int)(h / perpWallDist);
-//     *drawStart = -(*lineHeight) / 2 + h / 2;
-//     if (*drawStart < 0)
-//         *drawStart = 0;
-//     *drawEnd = (*lineHeight) / 2 + h / 2;
-//     if (*drawEnd >= h)
-//         *drawEnd = h - 1;
-//     printf("Line height: %d, drawStart: %d, drawEnd: %d\n", *lineHeight, *drawStart, *drawEnd);
-// }
-
-// bool cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight, int *drawStart, int *drawEnd)
+// bool cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight, int *drawStart, int *drawEnd, t_map *map, t_config *config)
 // {
 //     float ray_dir_x = cos(angle);
 //     float ray_dir_y = sin(angle);
-//     float delta_dist_x = fabs(1 / ray_dir_x);
-//     float delta_dist_y = fabs(1 / ray_dir_y);
-//     float side_dist_x;
-//     float side_dist_y;
-//     int step_x;
-//     int step_y;
+
+//     // Fix division by zero
+//     float delta_dist_x = (ray_dir_x == 0) ? 1e30 : fabs(1 / ray_dir_x);
+//     float delta_dist_y = (ray_dir_y == 0) ? 1e30 : fabs(1 / ray_dir_y);
+
+//     float side_dist_x, side_dist_y;
+//     int step_x, step_y;
 //     int map_x = (int)start_x;
 //     int map_y = (int)start_y;
 //     int side;
@@ -92,6 +145,7 @@
 //         step_x = 1;
 //         side_dist_x = (map_x + 1.0 - start_x) * delta_dist_x;
 //     }
+
 //     if (ray_dir_y < 0)
 //     {
 //         step_y = -1;
@@ -103,7 +157,7 @@
 //         side_dist_y = (map_y + 1.0 - start_y) * delta_dist_y;
 //     }
 
-//     while (map_x >= 0 && map_x < MAP_COLUMN && map_y >= 0 && map_y < MAP_ROW)
+//     while (map_x >= 0 && map_x < map->width && map_y >= 0 && map_y < map->height)
 //     {
 //         if (side_dist_x < side_dist_y)
 //         {
@@ -117,13 +171,18 @@
 //             map_y += step_y;
 //             side = 1;
 //         }
-//         if (map[map_y][map_x] == 1)
+
+//         if (map->grid[map_y][map_x] == '1') // Wall detected
 //         {
 //             float perpWallDist;
 //             if (side == 0)
-//                 perpWallDist = (side_dist_x - delta_dist_x);
+//                 perpWallDist = fmax((side_dist_x - delta_dist_x), 0.0001);
 //             else
-//                 perpWallDist = (side_dist_y - delta_dist_y);
+//                 perpWallDist = fmax((side_dist_y - delta_dist_y), 0.0001);
+
+//             // Correct the fish-eye effect using player's angle
+//             perpWallDist *= cos(angle - config->player.angle);
+
 //             calculate_draw_parameters(h, perpWallDist, lineHeight, drawStart, drawEnd);
 //             return true;
 //         }
@@ -131,89 +190,17 @@
 //     return false;
 // }
 
-// void draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uint32_t color)
-// {
-//     for (int y = drawStart; y < drawEnd; y++)
-//     {
-//         mlx_put_pixel(img, x, y, color);
-//     }
-// }
-
-// int main(void)
-// {
-//     mlx_t *mlx;
-//     mlx_image_t *img;
-//     int lineHeight, drawStart, drawEnd;
-
-//     mlx = mlx_init(Window_Width, Window_Height, "Cube3d", false);
-//     if (!mlx)
-//     {
-//         printf("Error: mlx_init failed\n");
-//         return 0;
-//     }
-
-//     img = mlx_new_image(mlx, Window_Width, Window_Height);
-//     if (!img)
-//     {
-//         printf("Error: mlx_new_image failed\n");
-//         return 0;
-//     }
-
-//     float angle = 0.785398; // 45 degrees in radians
-//     if (cast_ray(player_x, player_y, angle, Window_Height, &lineHeight, &drawStart, &drawEnd))
-//     {
-//         draw_vertical_line(img, Window_Width / 2, drawStart, drawEnd, 0xFFFFFF); // Draw a vertical line in the middle of the screen
-//     }
-
-//     mlx_image_to_window(mlx, img, 0, 0);
-//     mlx_loop(mlx);
-//     return 0;
-// }
-
-
-// This is the first try of casting rays and drawing walls
-
-#define MAP_ROW 20
-#define MAP_COLUMN 20
-#define Window_Width 1000
-#define Window_Height 1000
-#define FOV 3.14159 / 3
-
-// 0 = empty space
-// 1 = wall  
-// 2 = player
-float player_x = 2;
-float player_y = 2;
-float player_angle = 0.9;
-
-int map[MAP_ROW][MAP_COLUMN] =
+bool cast_ray(float start_x, float start_y, float angle, int h,
+              int *lineHeight, int *drawStart, int *drawEnd,
+              t_map *map, t_config *config)
 {
-    {1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 2, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1},
-};
+    float ray_dir_x = cosf(angle);
+    float ray_dir_y = sinf(angle);
 
-void calculate_draw_parameters(int h, float perpWallDist, int *lineHeight, int *drawStart, int *drawEnd)
-{
-    *lineHeight = (int)(h / perpWallDist);
-    *drawStart = -(*lineHeight) / 2 + h / 2;
-    if (*drawStart < 0)
-        *drawStart = 0;
-    *drawEnd = (*lineHeight) / 2 + h / 2;
-    if (*drawEnd >= h)
-        *drawEnd = h - 1;
-    printf("Line height: %d, drawStart: %d, drawEnd: %d\n", *lineHeight, *drawStart, *drawEnd);
-}
+    // Prevent division by zero
+    float delta_dist_x = (ray_dir_x == 0.0f) ? 1e30f : fabsf(1.0f / ray_dir_x);
+    float delta_dist_y = (ray_dir_y == 0.0f) ? 1e30f : fabsf(1.0f / ray_dir_y);
 
-bool cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight, int *drawStart, int *drawEnd)
-{
-    float ray_dir_x = cos(angle);
-    float ray_dir_y = sin(angle);
-    float delta_dist_x = fabs(1 / ray_dir_x);
-    float delta_dist_y = fabs(1 / ray_dir_y);
     float side_dist_x;
     float side_dist_y;
     int step_x;
@@ -222,7 +209,8 @@ bool cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight,
     int map_y = (int)start_y;
     int side;
 
-    if (ray_dir_x < 0)
+    // Calculate step_x and initial side_dist_x
+    if (ray_dir_x < 0.0f)
     {
         step_x = -1;
         side_dist_x = (start_x - map_x) * delta_dist_x;
@@ -230,9 +218,11 @@ bool cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight,
     else
     {
         step_x = 1;
-        side_dist_x = (map_x + 1.0 - start_x) * delta_dist_x;
+        side_dist_x = ((float)map_x + 1.0f - start_x) * delta_dist_x;
     }
-    if (ray_dir_y < 0)
+
+    // Calculate step_y and initial side_dist_y
+    if (ray_dir_y < 0.0f)
     {
         step_y = -1;
         side_dist_y = (start_y - map_y) * delta_dist_y;
@@ -240,11 +230,13 @@ bool cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight,
     else
     {
         step_y = 1;
-        side_dist_y = (map_y + 1.0 - start_y) * delta_dist_y;
+        side_dist_y = ((float)map_y + 1.0f - start_y) * delta_dist_y;
     }
 
-    while (map_x >= 0 && map_x < MAP_COLUMN && map_y >= 0 && map_y < MAP_ROW)
+    // Ray-casting loop
+    while (true)
     {
+        // Move to the next map square in X or Y direction
         if (side_dist_x < side_dist_y)
         {
             side_dist_x += delta_dist_x;
@@ -257,194 +249,64 @@ bool cast_ray(float start_x, float start_y, float angle, int h, int *lineHeight,
             map_y += step_y;
             side = 1;
         }
-        if (map[map_y][map_x] == 1)
+
+        // 1) Check boundaries immediately after incrementing
+        // If out of bounds, break so we don't index out-of-range
+        if (map_x < 0 || map_x >= map->width || map_y < 0 || map_y >= map->height)
+            break;
+
+        // 2) Now it's safe to index into the map
+        if (map->grid[map_y][map_x] == '1') // a wall hit
         {
-            float perpWallDist;
+            float perpWallDist = 0.0001f; // small default to avoid zero
+
             if (side == 0)
-                perpWallDist = (side_dist_x - delta_dist_x);
+                perpWallDist = fmaxf(side_dist_x - delta_dist_x, 0.0001f);
             else
-                perpWallDist = (side_dist_y - delta_dist_y);
+                perpWallDist = fmaxf(side_dist_y - delta_dist_y, 0.0001f);
 
-             // Correct the fish-eye effect
-            perpWallDist *= cos(angle - player_angle);
+            // Correct fish-eye
+            perpWallDist *= cosf(angle - config->player.angle);
 
+            // Calculate drawing parameters
             calculate_draw_parameters(h, perpWallDist, lineHeight, drawStart, drawEnd);
             return true;
         }
     }
+    // If we exit the loop, no wall was hit within bounds
     return false;
 }
 
-void draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uint32_t color)
+void render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height)
 {
-    for (int y = drawStart; y < drawEnd; y++)
-    {
-        mlx_put_pixel(img, x, y, color);
-    }
-}
+    int lineHeight;
+    int drawStart;
+    int drawEnd;
+    int x;
+    int y;
 
-void clear_image(mlx_image_t *img, uint32_t color)
-{
-    for (uint32_t y = 0; y < img->height; y++)
-    {
-        for (uint32_t x = 0; x < img->width; x++)
-        {
-            mlx_put_pixel(img, x, y, color);
-        }
-    }
-}
-
-// void render_scene(mlx_t *mlx, mlx_image_t *img)
-// {
-//     int lineHeight, drawStart, drawEnd;
-//     clear_image(img, 0x0C0604FF);
-//     if (cast_ray(player_x, player_y, player_angle, Window_Height, &lineHeight, &drawStart, &drawEnd))
-//     {
-//         draw_vertical_line(img, Window_Width/2, drawStart, drawEnd, 0xFFFFFFFF); // Draw a vertical line in the middle of the screen
-//     }
-//     mlx_image_to_window(mlx, img, 0, 0);
-// }
-
-void    render_scene(mlx_t *mlx, mlx_image_t *img)
-{
-    int y, x, lineHeight, drawStart, drawEnd;
-
-
-    // Clear the image with a black color
-    clear_image(img, 0x000000);
-
-    // Loop through each vertical stripe of the screen
+	mlx_image_t *img = mlx_new_image(mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+    clear_image(img, 0x000000); // Clear the image with a black color
     x = 0;
-    while (x < Window_Width)
+    while (x < WINDOW_WIDTH)
     {
-        // Cast a ray from the player's position and angle
-        if (cast_ray(player_x, player_y, player_angle + (x - Window_Width / 2) * (FOV / Window_Width), Window_Height, &lineHeight, &drawStart, &drawEnd))
+        if (cast_ray(config->player.x, config->player.y, config->player.angle + (x - WINDOW_WIDTH / 2) * (FOV / window_height), window_height, &lineHeight, &drawStart, &drawEnd, map, config))
         {
-            // Draw the ceiling
             y = 0;
             while (y < drawStart)
             {
-                mlx_put_pixel(img, x, y, 0x89CFF3FF); // Light blue color for ceiling
+                mlx_put_pixel(img, x, y, 0x89CFF3FF); // Sky color
                 y++;
             }
-
-            // Draw the wall
-            draw_vertical_line(img, x, drawStart, drawEnd, 0xFFFFFF); // White color for wall
-
-            // Draw the floor
+            draw_vertical_line(img, x, drawStart, drawEnd, 0xFFFFFF); // Wall texture
             y = drawEnd;
-            while (y < Window_Height)
+            while (y < WINDOW_HEIGHT)
             {
-                mlx_put_pixel(img, x, y, 0xB99470FF); // Brown color for floor
+                mlx_put_pixel(img, x, y, 0xB99470FF); // Floor color
                 y++;
             }
         }
         x++;
     }
-    // Display the image in the window
     mlx_image_to_window(mlx, img, 0, 0);
-}
-
-
-void key_hook(mlx_key_data_t keydata, void *param)
-{
-    mlx_t *mlx = (mlx_t *)param;
-    mlx_image_t *img = mlx_new_image(mlx, Window_Width, Window_Height);
-    if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
-    {
-        switch (keydata.key)
-        {
-            case MLX_KEY_W:
-                player_x += 0.1;
-                break;
-            case MLX_KEY_S:
-                player_x -= 0.1;
-                break;
-            case MLX_KEY_A:
-                player_y -= 0.1;
-                break;
-            case MLX_KEY_D:
-                player_y += 0.1;
-                break;
-            case MLX_KEY_LEFT:
-                player_angle -= 0.1;
-                break;
-            case MLX_KEY_RIGHT:
-                player_angle += 0.1;
-                break;
-            default:
-                break;
-        }
-        render_scene(mlx, img);
-        printf("\nPlayer position: x = %f, y = %f angle = %f\n", player_x, player_y, player_angle);
-    }
-}
-
-// void key_hook(mlx_key_data_t keydata, void *param)
-// {
-//     mlx_t *mlx = (mlx_t *)param;
-//     mlx_image_t *img = mlx_new_image(mlx, Window_Width, Window_Height);
-//     float moveSpeed = 0.1;
-//     float rotSpeed = 0.1;
-
-//     if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
-//     {
-//         switch (keydata.key)
-//         {
-//             case MLX_KEY_W:
-//                 if (map[(int)(player_y - sin(player_angle) * moveSpeed)][(int)player_x] == 0)
-//                     player_y -= sin(player_angle) * moveSpeed;
-//                 if (map[(int)player_y][(int)(player_x + cos(player_angle) * moveSpeed)] == 0)
-//                     player_x += cos(player_angle) * moveSpeed;
-//                 break;
-//             case MLX_KEY_S:
-//                 if (map[(int)(player_y + sin(player_angle) * moveSpeed)][(int)player_x] == 0)
-//                     player_y += sin(player_angle) * moveSpeed;
-//                 if (map[(int)player_y][(int)(player_x - cos(player_angle) * moveSpeed)] == 0)
-//                     player_x -= cos(player_angle) * moveSpeed;
-//                 break;
-//             case MLX_KEY_A:
-//                 player_angle -= rotSpeed;
-//                 break;
-//             case MLX_KEY_D:
-//                 player_angle += rotSpeed;
-//                 break;
-//             case MLX_KEY_LEFT:
-//                 player_angle -= rotSpeed;
-//                 break;
-//             case MLX_KEY_RIGHT:
-//                 player_angle += rotSpeed;
-//                 break;
-//             default:
-//                 break;
-//         }
-//         render_scene(mlx, img);
-//         printf("\nPlayer position: x = %f, y = %f angle = %f\n", player_x, player_y, player_angle);
-//     }
-// }
-
-
-int main(void)
-{
-    mlx_t *mlx;
-    mlx_image_t *img;
-
-    mlx = mlx_init(Window_Width, Window_Height, "Cube3d", false);
-    if (!mlx)
-    {
-        printf("Error: mlx_init failed\n");
-        return 0;
-    }
-
-    img = mlx_new_image(mlx, Window_Width, Window_Height);
-    if (!img)
-    {
-        printf("Error: mlx_new_image failed\n");
-        return 0;
-    }
-
-    mlx_key_hook(mlx, key_hook, mlx);
-    render_scene(mlx, img);
-    mlx_loop(mlx);
-    return 0;
 }
