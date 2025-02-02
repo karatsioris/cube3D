@@ -3,32 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   file_and_argv_valid.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:32:54 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/01 09:54:44 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/02/01 16:37:11 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "parser.h"
 
-void	validate_args_and_load_map(int argc, char **argv, t_map *map)
+bool	validate_args_and_load_map(int argc,
+			char **argv, t_config *config, t_memory *mem)
 {
+	ft_printf("[DEBUG] Validating command-line arguments...\n");
 	if (argc < 2)
 	{
-		ft_printf("Missing map path argument!\n");
-		exit(1);
+		ft_printf("[ERROR] Missing map path argument!\n");
+		return (false);
 	}
 	else if (argc > 2)
 	{
-		ft_printf("Too many arguments!\n");
-		exit(1);
+		ft_printf("[ERROR] Too many arguments! Received %d arguments.\n", argc);
+		return (false);
 	}
-	*map = (t_map){0};
-	if (load_map(map, argv[1]) != 0)
-	{
-		exit(1);
-	}
+	ft_printf("[DEBUG] Parsing map file: %s\n", argv[1]);
+	parse_cub_file(config, mem, argv[1]);
+	ft_printf("[DEBUG] Map parsed and loaded successfully.\n");
+	return (true);
 }
 
 int	has_valid_extension(const char *path, const char *extension)
@@ -50,14 +51,4 @@ int	has_valid_extension(const char *path, const char *extension)
 		extension++;
 	}
 	return (1);
-}
-
-void	validate_file_extension(t_map *map)
-{
-	if (!has_valid_extension(map->path, ".cub"))
-	{
-		ft_printf("Error: The map file must end with *.cub!\n");
-		exit(1);
-	}
-	map->fd = open(map->path, O_RDONLY);
 }
