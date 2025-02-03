@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 17:09:10 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/03 11:33:37 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef struct s_config
 	t_memory	*memory;
 	t_resources	resources;
 	bool		use_textures;
+	mlx_image_t *img; // Add this line to include the img member
 }	t_config;
 
 void	ft_error(int code);
@@ -111,8 +112,11 @@ void	calculate_draw_parameters(int h, float perpWallDist, int *lineHeight, int *
 bool	cast_ray(float start_x, float start_y, float angle, int h,
 			  int *lineHeight, int *drawStart, int *drawEnd, float *wallX, int *hit_side,
 			  t_map *map, t_config *config);
-void	render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height);
+// void	render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height);
+void	render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height, mlx_image_t *img);
 void	clear_image(mlx_image_t *img, uint32_t color);
 void	player_move_handler(mlx_key_data_t keydata, void *param);
+void	render_scene_wrapper(void *param);
+void	check_corner(float side_dist_x, float side_dist_y, int *map_x, int *map_y, int *step_x, int *step_y);
 
 #endif

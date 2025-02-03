@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 18:01:32 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/03 09:59:15 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void player_move_handler(mlx_key_data_t keydata, void *param)
 			default:
 				break;
 		}
-		render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT);
+		// render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT);
 	}
 }
 
@@ -137,11 +137,18 @@ void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *
 	res->image_count = count;
 }
 
+void render_scene_wrapper(void *param)
+{
+    t_config *config = (t_config *)param;
+    render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT, config->img);
+}
 
 void	game_loop(t_map *map, t_config *config)
 {	
+	config->img = mlx_new_image(map->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	
 	mlx_key_hook(map->mlx, key_event_handler, config);
-	render_scene(map->mlx, &config->map, config, WINDOW_HEIGHT);
+    mlx_loop_hook(map->mlx, render_scene_wrapper, config);
 	mlx_loop(map->mlx);
 	ft_printf("[DEBUG] Game loop ended.\n");
 }
@@ -181,7 +188,6 @@ int main(int argc, char **argv)
 		ft_clean(&config.map, &mem, &config.resources);
 		return (1);
 	}
-
 	if (config.use_textures)
 	{
 		ft_printf("[DEBUG] Loading textures...\n");
