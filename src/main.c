@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 14:18:56 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:32:59 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,55 +14,40 @@
 
 #define COLLISION_MARGIN 0.1f
 
-bool can_move_forward(t_config *config, t_map *map, float move_distance, float angle_offset)
+bool	can_move_forward(t_config *config, t_map *map, float move_distance, float angle_offset)
 {
-	float new_x = config->player.x + cosf(config->player.angle + angle_offset) * move_distance;
-	float new_y = config->player.y + sinf(config->player.angle + angle_offset) * move_distance;
-	
+	float	new_x = config->player.x + cosf(config->player.angle + angle_offset) * move_distance;
+	float	new_y = config->player.y + sinf(config->player.angle + angle_offset) * move_distance;
+
 	int grid_x = (int)new_x;
 	int grid_y = (int)new_y;
 
-	// Check boundaries first
 	if (grid_x < 0 || grid_x >= map->width || grid_y < 0 || grid_y >= map->height)
 		return false;
-	
-	// If the grid cell is a wall, no movement is allowed
 	if (map->grid[grid_y][grid_x] == '1')
 		return false;
-	
 	float frac_x = new_x - grid_x;
 	float frac_y = new_y - grid_y;
-	
-	// Check left edge of cell
 	if (frac_x < COLLISION_MARGIN && grid_x > 0 && map->grid[grid_y][grid_x - 1] == '1')
 		return false;
-	
-	// Check right edge of cell
 	if ((1.0f - frac_x) < COLLISION_MARGIN && grid_x < map->width - 1 && map->grid[grid_y][grid_x + 1] == '1')
 		return false;
-	
-	// Check top edge of cell
 	if (frac_y < COLLISION_MARGIN && grid_y > 0 && map->grid[grid_y - 1][grid_x] == '1')
 		return false;
-	
-	// Check bottom edge of cell
 	if ((1.0f - frac_y) < COLLISION_MARGIN && grid_y < map->height - 1 && map->grid[grid_y + 1][grid_x] == '1')
 		return false;
-
-	return true;
+	return (true);
 }
 
-
-/*
- * Updates the player's position by the given move distance and angle offset,
- * but only if the collision check passes. Otherwise, the player's position remains unchanged.
- */
-void update_player_position(t_config *config, t_map *map, float move_distance, float angle_offset)
+void	update_player_position(t_config *config, t_map *map,
+	float move_distance, float angle_offset)
 {
 	if (can_move_forward(config, map, move_distance, angle_offset))
 	{
-		config->player.x += cosf(config->player.angle + angle_offset) * move_distance;
-		config->player.y += sinf(config->player.angle + angle_offset) * move_distance;
+		config->player.x += cosf(config->player.angle + angle_offset)
+			* move_distance;
+		config->player.y += sinf(config->player.angle + angle_offset)
+			* move_distance;
 	}
 	else
 	{
@@ -70,12 +55,11 @@ void update_player_position(t_config *config, t_map *map, float move_distance, f
 	}
 }
 
-
-void player_move_handler(mlx_key_data_t keydata, void *param)
+void	player_move_handler(mlx_key_data_t keydata, void *param)
 {
-	t_config *config = (t_config *)param;
-	float move_speed = 0.3f;
-	float rot_speed = 0.3f; 
+	t_config	*config = (t_config *)param;
+	float		move_speed = 0.3f;
+	float		rot_speed = 0.3f; 
 
 	if (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT)
 	{
@@ -102,7 +86,6 @@ void player_move_handler(mlx_key_data_t keydata, void *param)
 			default:
 				break;
 		}
-		// Optionally, trigger a re-render here if your rendering is not continuously updating.
 	}
 }
 
@@ -110,7 +93,7 @@ void player_move_handler(mlx_key_data_t keydata, void *param)
  * Key event handler which first checks for the ESC key to exit,
  * otherwise it passes the event to the player movement handler.
  */
-void key_event_handler(mlx_key_data_t keydata, void *param)
+void	key_event_handler(mlx_key_data_t keydata, void *param)
 {
 	(void)param;
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
@@ -127,7 +110,7 @@ void key_event_handler(mlx_key_data_t keydata, void *param)
 /*
  * Clears the entire image to a specified color.
  */
-void clear_image(mlx_image_t *img, uint32_t color)
+void	clear_image(mlx_image_t *img, uint32_t color)
 {
 	for (uint32_t y = 0; y < img->height; y++)
 	{
@@ -140,9 +123,8 @@ void clear_image(mlx_image_t *img, uint32_t color)
 
 void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *mem)
 {
-	int count = 4;
+	int	count = 4;
 	res->texture_count = count;
-	
 	res->images = mem_alloc(mem, sizeof(mlx_image_t *) * count);
 	if (!res->images)
 	{
@@ -178,19 +160,16 @@ void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *
 			cleanup_textures(res, mlx);
 			exit(1);
 		}
-		ft_printf("[DEBUG] Loaded texture dimensions: %dx%d\n", tex->width, tex->height);
 		ft_printf("[DEBUG] Converting texture to image...\n");
 		res->images[i] = mlx_texture_to_image(mlx, tex);
 		if (!res->images[i])
 		{
-			ft_printf("[ERROR] Failed to create image from PNG texture: %s\n", paths[i]);
 			mlx_delete_texture(tex);
 			cleanup_textures(res, mlx);
 			exit(1);
 		}
 		ft_printf("[DEBUG] Freeing intermediate PNG texture...\n");
 		mlx_delete_texture(tex);
-		ft_printf("[DEBUG] Texture %d loaded successfully from: %s\n", i, paths[i]);
 	}
 	res->image_count = count;
 }
@@ -225,8 +204,8 @@ void game_loop(t_map *map, t_config *config)
  */
 int main(int argc, char **argv)
 {
-	t_config config = {0};
-	t_memory mem = {0};
+	t_config	config = {0};
+	t_memory	mem = {0};
 
 	config.use_textures = true;
 	ft_printf("[DEBUG] Initializing memory manager...\n");
@@ -236,10 +215,8 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	config.memory = &mem;
-
 	ft_printf("[DEBUG] Initializing configuration...\n");
 	initialize_config(&config);
-
 	ft_printf("[DEBUG] Validating arguments and parsing map...\n");
 	if (!validate_args_and_load_map(argc, argv, &config, &mem))
 	{
@@ -248,7 +225,6 @@ int main(int argc, char **argv)
 	}
 	ft_printf("[DEBUG] Validating map structure...\n");
 	validate_map(&config.map);
-
 	ft_printf("[DEBUG] Initializing MLX window...\n");
 	config.map.mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT, "Cube3D - Textured Walls", true);
 	if (!config.map.mlx)

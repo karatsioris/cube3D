@@ -6,45 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 14:22:43 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:44:14 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-// char	*extract_path(char *line, t_memory *mem)
-// {
-// 	char	*raw_path;
-// 	int		len;
-// 	int		fd;
-
-// 	ft_printf("[DEBUG] Extracting path from line: '%s'\n", line);
-// 	while (*line != ' ')
-// 		line++;
-// 	while (*line == ' ')
-// 		line++;
-// 	if (!*line)
-// 		return (NULL);
-// 	raw_path = ft_strdup_cub(line, mem);
-// 	if (!raw_path)
-// 		exit(1);
-// 	len = ft_strlen(raw_path);
-// 	while (len > 0 && (raw_path[len - 1] == ' ' || raw_path[len - 1] == '\n'
-// 			|| raw_path[len - 1] == '\t'))
-// 	{
-// 		raw_path[len - 1] = '\0';
-// 		len--;
-// 	}
-// 	ft_printf("[DEBUG] Cleaned path: '%s'\n", raw_path);
-// 	fd = open(raw_path, O_RDONLY);
-// 	if (fd < 0)
-// 	{
-// 		free(raw_path);
-// 		exit(1);
-// 	}
-// 	close(fd);
-// 	return (raw_path);
-// }
 
 char	*clean_path(char *line, t_memory *mem)
 {

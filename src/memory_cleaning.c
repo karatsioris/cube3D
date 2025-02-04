@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:23:39 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/19 12:57:12 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:35:39 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	cleanup_resources(t_resources *res, mlx_t *mlx)
 
 	if (!res || !mlx)
 		return ;
-	ft_printf("[DEBUG] Cleaning up textures...\n");
 	i = res->texture_count;
 	while (i--)
 	{
@@ -26,14 +25,11 @@ void	cleanup_resources(t_resources *res, mlx_t *mlx)
 		{
 			mlx_delete_texture(res->textures[i]);
 			res->textures[i] = NULL;
-			ft_printf("[DEBUG] Deleted texture %d.\n", i);
 		}
 	}
 	free(res->textures);
 	res->textures = NULL;
 	res->texture_count = 0;
-	ft_printf("[DEBUG] Texture resources freed successfully.\n");
-	ft_printf("[DEBUG] Cleaning up images...\n");
 	i = res->image_count;
 	while (i--)
 	{
@@ -41,13 +37,11 @@ void	cleanup_resources(t_resources *res, mlx_t *mlx)
 		{
 			mlx_delete_image(mlx, res->images[i]);
 			res->images[i] = NULL;
-			ft_printf("[DEBUG] Deleted image %d.\n", i);
 		}
 	}
 	free(res->images);
 	res->images = NULL;
 	res->image_count = 0;
-	ft_printf("[DEBUG] Image resources freed successfully.\n");
 }
 
 void	cleanup_textures(t_resources *res, mlx_t *mlx)
@@ -77,7 +71,6 @@ void	cleanup_textures(t_resources *res, mlx_t *mlx)
 		res->images = NULL;
 	}
 	res->image_count = 0;
-	ft_printf("[DEBUG] All image resources freed successfully.\n");
 }
 
 void	ft_clean(t_map *map, t_memory *mem, t_resources *res)
@@ -118,13 +111,8 @@ void	ft_clean(t_map *map, t_memory *mem, t_resources *res)
 			}
 			map->list = NULL;
 		}
-		ft_printf("[DEBUG] Map resources freed successfully.\n");
 	}
 	if (mem)
-	{
 		mem_free_all(mem);
-		ft_printf("[DEBUG] Memory manager freed successfully.\n");
-	}
-	ft_printf("[DEBUG] Resources and memory cleaned. Exiting...\n");
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 14:13:43 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:49:32 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ void	ft_clean(t_map *map, t_memory *mem, t_resources *res);
 void	initialize_config(t_config *config);
 void	cleanup_textures(t_resources *res, mlx_t *mlx);
 void	cleanup_resources(t_resources *res, mlx_t *mlx);
+void	validate_outer_walls(t_map *map);
+void	validate_inner_map(t_map *map);
 
 /* -------------------   kkaratsi functions  ---------------------*/
 

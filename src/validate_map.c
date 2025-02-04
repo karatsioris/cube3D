@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 13:48:35 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:47:57 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,10 @@ void	validate_map(t_map *map)
 	validate_map_boundary(map);
 	ft_printf("[DEBUG] Map boundaries validated.\n");
 	ft_printf("[DEBUG] ----- Map Structure Validated Successfully -----\n");
+}
+
+void	validate_map_boundary(t_map *map)
+{
+	validate_outer_walls(map);
+	validate_inner_map(map);
 }

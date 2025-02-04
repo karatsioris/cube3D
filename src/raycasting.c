@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:33:24 by kkaratsi          #+#    #+#             */
-/*   Updated: 2025/02/04 14:15:17 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:29:56 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,6 @@ void render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height, m
 		if (cast_ray(config->player.x, config->player.y, ray_angle, window_height,
 					 &lineHeight, &drawStart, &drawEnd, &wallX, &hit_side, map, config))
 		{
-			// Draw sky (above the wall)
 			for (y = 0; y < drawStart; y++)
 				mlx_put_pixel(img, x, y, 0x89CFF3FF); // Sky color
 
