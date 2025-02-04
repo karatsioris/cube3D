@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 15:49:32 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:31:56 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,9 @@ void	cleanup_textures(t_resources *res, mlx_t *mlx);
 void	cleanup_resources(t_resources *res, mlx_t *mlx);
 void	validate_outer_walls(t_map *map);
 void	validate_inner_map(t_map *map);
+void	game_loop(t_map *map, t_config *config);
+void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
+			t_memory *mem);
 
 /* -------------------   kkaratsi functions  ---------------------*/
 
@@ -121,7 +124,5 @@ void	render_scene(mlx_t *mlx, t_map *map, t_config *config,
 void	clear_image(mlx_image_t *img, uint32_t color);
 void	player_move_handler(mlx_key_data_t keydata, void *param);
 void	render_scene_wrapper(void *param);
-void	check_corner(float side_dist_x, float side_dist_y, int *map_x,
-			int *map_y, int *step_x, int *step_y);
 
 #endif

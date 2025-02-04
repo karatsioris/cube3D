@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 16:01:02 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:08:25 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,55 +23,6 @@ bool	is_map_line(char *line)
 	}
 	return (true);
 }
-
-// void	parse_line(char *line, t_config *config, t_memory *mem,
-// 	bool *is_parsing_map)
-// {
-// 	while (*line == ' ' || *line == '\t')
-// 		line++;
-// 	if (*line == '\0' || *line == '\n')
-// 		return ;
-// 	if (*is_parsing_map)
-// 	{
-// 		if (is_map_line(line))
-// 		{
-// 			if (!put_on_list(line, &config->map.list, mem))
-// 				exit(1);
-// 			for (int i = 0; line[i] != '\0'; i++)
-// 			{
-// 				if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
-// 				{
-// 					config->player.x = config->map.current_row + 1;
-// 					config->player.y = i;
-// 				}
-// 			}
-// 			config->map.current_row++;
-// 		}
-// 		else
-// 			exit(1);
-// 		return ;
-// 	}
-// 	if (ft_strncmp(line, "NO ", 3) == 0 || ft_strncmp(line, "SO ", 3) == 0
-// 		|| ft_strncmp(line, "WE ", 3) == 0 || ft_strncmp(line, "EA ", 3) == 0)
-// 	{
-// 		parse_texture(line, &config->textures, mem);
-// 		return ;
-// 	}
-// 	else if (line[0] == 'F' || line[0] == 'C')
-// 	{
-// 		parse_color(line, (line[0] == 'F') ? config->colors.floor
-// 			: config->colors.ceiling);
-// 		return ;
-// 	}
-// 	else if (is_map_line(line))
-// 	{
-// 		*is_parsing_map = true;
-// 		if (!put_on_list(line, &config->map.list, mem))
-// 			exit(1);
-// 	}
-// 	else
-// 		exit(1);
-// }
 
 void	handle_map_line(char *line, t_config *config, t_memory *mem)
 {
