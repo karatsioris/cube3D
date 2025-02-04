@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 20:34:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 16:54:25 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:27:36 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,21 @@ bool	mem_init(t_memory *mem)
 void	*mem_alloc(t_memory *mem, size_t size)
 {
 	void	*ptr;
+	size_t	old_capacity;
 
 	if (!mem || !mem->allocated_pointers)
 	{
-		ft_printf("[ERROR] Invalid memory manager.\n");
 		exit(1);
 	}
 	if (mem->count >= mem->capacity)
 	{
-		size_t	old_capacity = mem->capacity;
+		old_capacity = mem->capacity;
 		mem->capacity *= 2;
 		mem->allocated_pointers = ft_realloc(mem->allocated_pointers,
-			old_capacity * sizeof(void *),
-			mem->capacity * sizeof(void *));
+				old_capacity * sizeof(void *),
+				mem->capacity * sizeof(void *));
 		if (!mem->allocated_pointers)
-		{
-			ft_printf("[ERROR] Failed to expand memory capacity.\n");
 			exit(1);
-		}
 	}
 	ptr = malloc(size);
 	if (!ptr)
@@ -61,8 +58,6 @@ void	*mem_alloc(t_memory *mem, size_t size)
 		exit(1);
 	}
 	mem->allocated_pointers[mem->count++] = ptr;
-	ft_printf("[DEBUG] Allocated %zu bytes. Total allocations: %zu\n",
-		size, mem->count);
 	return (ptr);
 }
 

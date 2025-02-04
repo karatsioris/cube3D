@@ -1,4 +1,4 @@
-NAME    = cube3D
+NAME    = cub3D
 
 # Compiler
 CC      = gcc
@@ -13,10 +13,11 @@ OBJ_DIR = src/bin
 
 # Source files for Cube3D
 SRC = error_handling.c file_and_argv_valid.c \
-      map_boundary_val.c initialize_game.c \
-      memory_cleaning.c parsing_functions.c \
-      parsing_textures.c validate_map.c \
-      main.c memory.c parsing.c raycasting.c
+	  map_boundary_val.c initialize_game.c \
+	  memory_cleaning.c parsing_functions.c \
+	  parsing_textures.c validate_map.c \
+	  main.c memory.c parsing.c raycasting.c \
+	  cleaning.c loading_texture.c cast_ray.c \
 
 # Object files
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

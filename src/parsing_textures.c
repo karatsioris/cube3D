@@ -6,17 +6,16 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 17:18:35 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:44:14 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-char	*extract_path(char *line, t_memory *mem)
+char	*clean_path(char *line, t_memory *mem)
 {
 	char	*raw_path;
 	int		len;
-	int		fd;
 
 	ft_printf("[DEBUG] Extracting path from line: '%s'\n", line);
 	while (*line != ' ')
@@ -24,16 +23,10 @@ char	*extract_path(char *line, t_memory *mem)
 	while (*line == ' ')
 		line++;
 	if (!*line)
-	{
-		ft_printf("[ERROR] No valid path found after directive.\n");
 		return (NULL);
-	}
 	raw_path = ft_strdup_cub(line, mem);
 	if (!raw_path)
-	{
-		ft_printf("[ERROR] Memory allocation failed while extracting path.\n");
 		exit(1);
-	}
 	len = ft_strlen(raw_path);
 	while (len > 0 && (raw_path[len - 1] == ' ' || raw_path[len - 1] == '\n'
 			|| raw_path[len - 1] == '\t'))
@@ -42,17 +35,31 @@ char	*extract_path(char *line, t_memory *mem)
 		len--;
 	}
 	ft_printf("[DEBUG] Cleaned path: '%s'\n", raw_path);
-	fd = open(raw_path, O_RDONLY);
+	return (raw_path);
+}
+
+int	validate_path(char *path)
+{
+	int	fd;
+
+	fd = open(path, O_RDONLY);
 	if (fd < 0)
 	{
-		ft_printf("[ERROR] Failed to open file: '%s' (errno: %d, %s)\n",
-			raw_path, errno, strerror(errno));
-		free(raw_path);
-		exit(1);
+		free(path);
+		return (0);
 	}
 	close(fd);
-	ft_printf("[DEBUG] Successfully validated texture path: '%s'\n", raw_path);
-	return (raw_path);
+	return (1);
+}
+
+char	*extract_path(char *line, t_memory *mem)
+{
+	char	*path;
+
+	path = clean_path(line, mem);
+	if (!path || !validate_path(path))
+		exit(1);
+	return (path);
 }
 
 void	parse_texture(char *line, t_texture *textures, t_memory *mem)
@@ -61,10 +68,7 @@ void	parse_texture(char *line, t_texture *textures, t_memory *mem)
 
 	ft_printf("[DEBUG] Entering parse_texture with line: '%s'\n", line);
 	if (!line || *line == '\0')
-	{
-		ft_printf("[ERROR] Received NULL or empty line in parse_texture.\n");
 		exit(1);
-	}
 	path = extract_path(line, mem);
 	if (!path)
 	{
@@ -85,44 +89,10 @@ void	parse_texture(char *line, t_texture *textures, t_memory *mem)
 		free(path);
 		exit(1);
 	}
-	ft_printf("[DEBUG] Texture path set successfully: '%s'\n", path);
 }
 
 void	validate_color_range(int color)
 {
 	if (color < 0 || color > 255)
 		ft_error(-7);
-}
-
-void	parse_color(char *line, int color[3])
-{
-	char	**rgb;
-	int		i;
-
-	ft_printf("[DEBUG] Parsing color line: '%s'\n", line);
-	if (color[0] != -1)
-	{
-		ft_printf("[ERROR] Duplicate color directive found.\n");
-		ft_error(-15);
-	}
-	while (*line != ' ')
-		line++;
-	while (*line == ' ')
-		line++;
-	rgb = ft_split(line, ',');
-	if (!rgb || ft_arraylen(rgb) != 3)
-	{
-		ft_printf("[ERROR] Invalid color format. Expected format: R,G,B\n");
-		ft_error(-8);
-	}
-	i = 0;
-	while (i < 3)
-	{
-		color[i] = ft_atoi(rgb[i]);
-		validate_color_range(color[i]);
-		i++;
-	}
-	ft_free_split(rgb);
-	ft_printf("[DEBUG] Color parsed successfully: %d, %d, %d\n",
-		color[0], color[1], color[2]);
 }
