@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 17:31:56 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:05:53 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,29 @@ typedef struct s_config
 	mlx_image_t	*img;
 }	t_config;
 
+typedef struct s_render_data
+{
+	mlx_t		*mlx;
+	t_map		*map;
+	t_config	*config;
+	mlx_image_t	*img;
+}	t_render_data;
+
+typedef struct s_draw_params
+{
+	int	lineheight;
+	int	drawstart;
+	int	drawend;
+}	t_draw_params;
+
+typedef struct s_texture_data
+{
+	mlx_image_t	*texture;
+	int			tex_width;
+	int			tex_height;
+	float		wallx;
+}	t_texture_data;
+
 void	ft_error(int code);
 void	validate_map(t_map *map);
 void	validate_map_boundary(t_map *map);
@@ -114,15 +137,16 @@ void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
 
 void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd,
 			uint32_t color);
-void	calculate_draw_parameters(int h, float perpWallDist, int *lineHeight,
-			int *drawStart, int *drawEnd);
+void	calculate_draw_parameters(int h, float perpWallDist,
+			t_draw_params *params);
 bool	cast_ray(float start_x, float start_y, float angle, int h,
 			int *lineHeight, int *drawStart, int *drawEnd, float *wallX,
 			int *hit_side, t_map *map, t_config *config);
-void	render_scene(mlx_t *mlx, t_map *map, t_config *config,
-			int window_height, mlx_image_t *img);
+void	render_scene(t_render_data *data, int window_height);
 void	clear_image(mlx_image_t *img, uint32_t color);
 void	player_move_handler(mlx_key_data_t keydata, void *param);
 void	render_scene_wrapper(void *param);
+void	draw_textured_vertical_line(mlx_image_t *img, int x,
+			t_draw_params *params, t_texture_data *tex_data);
 
 #endif

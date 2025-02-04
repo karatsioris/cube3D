@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:24:38 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/04 17:29:38 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:37:52 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,10 @@ void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
 
 void	render_scene_wrapper(void *param)
 {
-	t_config	*config;
+	t_render_data	*data;
 
-	config = (t_config *)param;
-	render_scene(config->map.mlx, &config->map, config,
-		WINDOW_HEIGHT, config->img);
+	data = (t_render_data *)param;
+	render_scene(data, WINDOW_HEIGHT);
 }
 
 void	key_event_handler(mlx_key_data_t keydata, void *param)
@@ -91,9 +90,21 @@ void	key_event_handler(mlx_key_data_t keydata, void *param)
 
 void	game_loop(t_map *map, t_config *config)
 {
+	t_render_data	*data;
+
 	config->img = mlx_new_image(map->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	data = mem_alloc(config->memory, sizeof(t_render_data));
+	if (!data)
+	{
+		ft_printf("[ERROR] Failed to allocate memory for render data.\n");
+		exit(1);
+	}
+	data->mlx = map->mlx;
+	data->map = map;
+	data->config = config;
+	data->img = config->img;
 	mlx_key_hook(map->mlx, key_event_handler, config);
-	mlx_loop_hook(map->mlx, render_scene_wrapper, config);
+	mlx_loop_hook(map->mlx, render_scene_wrapper, data);
 	mlx_loop(map->mlx);
 	ft_printf("[DEBUG] Game loop ended.\n");
 }
