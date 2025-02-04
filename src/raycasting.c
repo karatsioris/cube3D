@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:33:24 by kkaratsi          #+#    #+#             */
-/*   Updated: 2025/02/04 19:13:11 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 20:47:21 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ uint32_t	get_texture_pixel(mlx_image_t *texture, int x, int y)
 	return (color);
 }
 
-void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd,
+void	draw_vertical_line(mlx_image_t *img, int x, t_draw_params *params,
 	uint32_t color)
 {
 	int	y;
 
-	y = drawStart;
-	while (y < drawEnd)
+	y = params->drawstart;
+	while (y < params->drawend)
 	{
 		mlx_put_pixel(img, x, y, color);
 		y++;
@@ -102,52 +102,49 @@ void	calculate_draw_parameters(int h, float perpWallDist,
 		params->drawend = h - 1;
 }
 
-bool cast_ray(float start_x, float start_y, float angle, int h,
-	int *lineHeight, int *drawStart, int *drawEnd, float *wallX, int *hit_side,
-	t_map *map, t_config *config)
+bool cast_ray(t_cast_data *data)
 {
 	float	hit;
 	float	perpwalldist;
-	float	ray_dir_x = cosf(angle);
-	float	ray_dir_y = sinf(angle);
+	float	ray_dir_x = cosf(data->angle);
+	float	ray_dir_y = sinf(data->angle);
 	float	delta_dist_x = (ray_dir_x == 0.0f) ? 1e30f : fabsf(1.0f / ray_dir_x);
 	float	delta_dist_y = (ray_dir_y == 0.0f) ? 1e30f : fabsf(1.0f / ray_dir_y);
 	float	side_dist_x;
 	float	side_dist_y;
 	int		step_x;
 	int		step_y;
-	int		map_x = (int)start_x;
-	int		map_y = (int)start_y;
+	int		map_x = (int)data->start_x;
+	int		map_y = (int)data->start_y;
 	int		side;
 
-	if (fabsf(start_x - map_x) < 1e-6f)
-		start_x = map_x;
-	if (fabsf(start_y - map_y) < 1e-6f)
-		start_y = map_y;
+	if (fabsf(data->start_x - map_x) < 1e-6f)
+		data->start_x = map_x;
+	if (fabsf(data->start_y - map_y) < 1e-6f)
+		data->start_y = map_y;
 	if (ray_dir_x < 0.0f)
 	{
 		step_x = -1;
-		side_dist_x = (start_x - map_x) * delta_dist_x;
+		side_dist_x = (data->start_x - map_x) * delta_dist_x;
 	}
 	else
 	{
 		step_x = 1;
-		side_dist_x = ((float)map_x + 1.0f - start_x) * delta_dist_x;
+		side_dist_x = ((float)map_x + 1.0f - data->start_x) * delta_dist_x;
 	}
 	if (ray_dir_y < 0.0f)
 	{
 		step_y = -1;
-		side_dist_y = (start_y - map_y) * delta_dist_y;
+		side_dist_y = (data->start_y - map_y) * delta_dist_y;
 	}
 	else
 	{
 		step_y = 1;
-		side_dist_y = ((float)map_y + 1.0f - start_y) * delta_dist_y;
+		side_dist_y = ((float)map_y + 1.0f - data->start_y) * delta_dist_y;
 	}
 	while (true)
 	{
-		if (side_dist_x < side_dist_y || (side_dist_x == side_dist_y
-				&& ray_dir_x < 0))
+		if (side_dist_x < side_dist_y)
 		{
 			side_dist_x += delta_dist_x;
 			map_x += step_x;
@@ -159,40 +156,40 @@ bool cast_ray(float start_x, float start_y, float angle, int h,
 			map_y += step_y;
 			side = 1;
 		}
-		if (map_x < 0 || map_x >= map->width || map_y < 0
-			|| map_y >= map->height)
+		if (map_x < 0 || map_x >= data->map->width || map_y < 0
+			|| map_y >= data->map->height)
 		{
 			printf("[DEBUG] Ray went out of bounds.\n");
 			break ;
 		}
-		if (map->grid[map_y][map_x] == '1')
+		if (data->map->grid[map_y][map_x] == '1')
 		{
 			if (side == 0)
 				perpwalldist = fmaxf(side_dist_x - delta_dist_x, 0.0001f);
 			else
 				perpwalldist = fmaxf(side_dist_y - delta_dist_y, 0.0001f);
-			perpwalldist *= cosf(angle - config->player.angle);
-			t_draw_params params;
-			calculate_draw_parameters(h, perpwalldist, &params);
-			*lineHeight = params.lineheight;
-			*drawStart = params.drawstart;
-			*drawEnd = params.drawend;
+			perpwalldist *= cosf(data->angle - data->config->player.angle);
+			data->ray.draw_params.lineheight = 0;
+			data->ray.draw_params.drawstart = 0;
+			data->ray.draw_params.drawend = 0;
+			calculate_draw_parameters(data->h, perpwalldist,
+				&data->ray.draw_params);
 			if (side == 0)
 			{
-				hit = start_y + perpwalldist * ray_dir_y;
-				*wallX = hit - floorf(hit);
+				hit = data->start_y + perpwalldist * ray_dir_y;
+				data->ray.wallx = hit - floorf(hit);
 				if (ray_dir_x > 0)
-					*wallX = 1.0f - *wallX;
+					data->ray.wallx = 1.0f - data->ray.wallx;
 			}
 			else
 			{
-				hit = start_x + perpwalldist * ray_dir_x;
-				*wallX = hit - floorf(hit);
+				hit = data->start_x + perpwalldist * ray_dir_x;
+				data->ray.wallx = hit - floorf(hit);
 				if (ray_dir_y < 0)
-					*wallX = 1.0f - *wallX;
+					data->ray.wallx = 1.0f - data->ray.wallx;
 			}
-			*wallX = fmaxf(0.0f, fminf(*wallX, 1.0f));
-			*hit_side = side;
+			data->ray.wallx = fmaxf(0.0f, fminf(data->ray.wallx, 1.0f));
+			data->ray.hit_side = side;
 			return (true);
 		}
 	}

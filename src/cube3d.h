@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 19:05:53 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 20:49:15 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,27 @@ typedef struct s_texture_data
 	float		wallx;
 }	t_texture_data;
 
+typedef struct s_ray_data
+{
+	t_draw_params	draw_params;
+	mlx_image_t		*texture;
+	int				tex_width;
+	int				tex_height;
+	float			wallx;
+	int				hit_side;
+}	t_ray_data;
+
+typedef struct s_cast_data
+{
+	t_ray_data	ray;
+	t_map		*map;
+	t_config	*config;
+	float		start_x;
+	float		start_y;
+	float		angle;
+	int			h;
+}	t_cast_data;
+
 void	ft_error(int code);
 void	validate_map(t_map *map);
 void	validate_map_boundary(t_map *map);
@@ -135,13 +156,11 @@ void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
 
 /* -------------------   kkaratsi functions  ---------------------*/
 
-void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd,
+void	draw_vertical_line(mlx_image_t *img, int x, t_draw_params *params,
 			uint32_t color);
 void	calculate_draw_parameters(int h, float perpWallDist,
 			t_draw_params *params);
-bool	cast_ray(float start_x, float start_y, float angle, int h,
-			int *lineHeight, int *drawStart, int *drawEnd, float *wallX,
-			int *hit_side, t_map *map, t_config *config);
+bool	cast_ray(t_cast_data *data);
 void	render_scene(t_render_data *data, int window_height);
 void	clear_image(mlx_image_t *img, uint32_t color);
 void	player_move_handler(mlx_key_data_t keydata, void *param);
