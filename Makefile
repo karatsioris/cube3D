@@ -16,7 +16,8 @@ SRC = error_handling.c file_and_argv_valid.c \
 	  map_boundary_val.c initialize_game.c \
 	  memory_cleaning.c parsing_functions.c \
 	  parsing_textures.c validate_map.c \
-	  main.c memory.c parsing.c raycasting.c
+	  main.c memory.c parsing.c raycasting.c \
+	  cleaning.c \
 
 # Object files
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
