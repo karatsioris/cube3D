@@ -6,21 +6,17 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 09:39:53 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 17:15:52 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:03:58 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-void	list_to_array(t_map *map, t_memory *mem)
+void	count_rows(t_map *map)
 {
-	int				i;
-	int				len;
 	int				rows;
 	const t_list	*temp;
-	char			*line;
 
-	i = 0;
 	rows = 0;
 	temp = map->list;
 	while (temp)
@@ -28,40 +24,46 @@ void	list_to_array(t_map *map, t_memory *mem)
 		rows++;
 		temp = temp->next;
 	}
-	ft_printf("[DEBUG] Total rows in map list: %d\n", rows);
 	map->height = rows;
-	map->grid = mem_alloc(mem, sizeof(char *) * (rows + 1));
+}
+
+void	allocate_grid(t_map *map, t_memory *mem)
+{
+	map->grid = mem_alloc(mem, sizeof(char *) * (map->height + 1));
 	if (!map->grid)
-	{
-		ft_printf("[ERROR] Failed to allocate memory for map grid.\n");
 		exit(1);
-	}
+}
+
+void	fill_grid(t_map *map, t_memory *mem)
+{
+	int				i;
+	int				len;
+	const t_list	*temp;
+	char			*line;
+
 	temp = map->list;
+	i = 0;
+	map->width = 0;
 	while (temp)
 	{
 		line = ft_strdup_cub(temp->line, mem);
 		if (!line)
-		{
-			ft_printf("[ERROR] Failed to duplicate map line.\n");
 			exit(1);
-		}
 		len = ft_strlen(line);
 		if (len > 0 && line[len - 1] == '\n')
 			line[len - 1] = '\0';
-		map->grid[i++] = line;
+		map->grid[i] = line;
+		if ((int)ft_strlen(line) > map->width)
+			map->width = ft_strlen(line);
+		i++;
 		temp = temp->next;
 	}
-	map->grid[rows] = NULL;
-	ft_printf("[DEBUG] Map list successfully converted to grid array.\n");
+	map->grid[i] = NULL;
+}
 
-	for (i = 0; i < rows; i++)
-	{
-		int line_length = strlen(map->grid[i]);
-		if (line_length > map->width)
-		{
-			map->width = line_length;
-		}
-	}
-	ft_printf("[DEBUG] Map dimensions - Height: %d, Width: %d\n", map->height, map->width);
-
+void	list_to_array(t_map *map, t_memory *mem)
+{
+	count_rows(map);
+	allocate_grid(map, mem);
+	fill_grid(map, mem);
 }

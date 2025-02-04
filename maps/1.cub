@@ -1,6 +1,6 @@
 C 255,255,254
-NO ./assets/sand.png  
-SO ./assets/wall2.png
+NO ./assets/wall2.png  
+SO ./assets/sand.png
 WE ./assets/sand.png
 EA ./assets/sand.png 
 

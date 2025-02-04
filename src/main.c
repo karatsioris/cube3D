@@ -3,26 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/03 09:59:15 by kkaratsi         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:15:35 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-void	key_event_handler(mlx_key_data_t keydata, void *param)
+#define COLLISION_MARGIN 0.1f
+
+bool can_move_forward(t_config *config, t_map *map, float move_distance, float angle_offset)
 {
-	(void)param;
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+	float new_x = config->player.x + cosf(config->player.angle + angle_offset) * move_distance;
+	float new_y = config->player.y + sinf(config->player.angle + angle_offset) * move_distance;
+	
+	int grid_x = (int)new_x;
+	int grid_y = (int)new_y;
+
+	// Check boundaries first
+	if (grid_x < 0 || grid_x >= map->width || grid_y < 0 || grid_y >= map->height)
+		return false;
+	
+	// If the grid cell is a wall, no movement is allowed
+	if (map->grid[grid_y][grid_x] == '1')
+		return false;
+	
+	float frac_x = new_x - grid_x;
+	float frac_y = new_y - grid_y;
+	
+	// Check left edge of cell
+	if (frac_x < COLLISION_MARGIN && grid_x > 0 && map->grid[grid_y][grid_x - 1] == '1')
+		return false;
+	
+	// Check right edge of cell
+	if ((1.0f - frac_x) < COLLISION_MARGIN && grid_x < map->width - 1 && map->grid[grid_y][grid_x + 1] == '1')
+		return false;
+	
+	// Check top edge of cell
+	if (frac_y < COLLISION_MARGIN && grid_y > 0 && map->grid[grid_y - 1][grid_x] == '1')
+		return false;
+	
+	// Check bottom edge of cell
+	if ((1.0f - frac_y) < COLLISION_MARGIN && grid_y < map->height - 1 && map->grid[grid_y + 1][grid_x] == '1')
+		return false;
+
+	return true;
+}
+
+
+/*
+ * Updates the player's position by the given move distance and angle offset,
+ * but only if the collision check passes. Otherwise, the player's position remains unchanged.
+ */
+void update_player_position(t_config *config, t_map *map, float move_distance, float angle_offset)
+{
+	if (can_move_forward(config, map, move_distance, angle_offset))
 	{
-		ft_printf("[DEBUG] ESC key pressed. Closing window...\n");
-		exit(0);
+		config->player.x += cosf(config->player.angle + angle_offset) * move_distance;
+		config->player.y += sinf(config->player.angle + angle_offset) * move_distance;
 	}
 	else
-		player_move_handler(keydata, param);
+	{
+		ft_printf("[DEBUG] Movement blocked: Collision detected.\n");
+	}
 }
+
 
 void player_move_handler(mlx_key_data_t keydata, void *param)
 {
@@ -35,20 +82,16 @@ void player_move_handler(mlx_key_data_t keydata, void *param)
 		switch (keydata.key)
 		{
 			case MLX_KEY_W:
-				config->player.x += cosf(config->player.angle) * move_speed;
-				config->player.y += sinf(config->player.angle) * move_speed;
+				update_player_position(config, &config->map, move_speed, 0.0f);
 				break;
 			case MLX_KEY_S:
-				config->player.x -= cosf(config->player.angle) * move_speed;
-				config->player.y -= sinf(config->player.angle) * move_speed;
+				update_player_position(config, &config->map, move_speed, M_PI);
 				break;
 			case MLX_KEY_A:
-				config->player.x += cosf(config->player.angle - M_PI_2) * move_speed;
-				config->player.y += sinf(config->player.angle - M_PI_2) * move_speed;
+				update_player_position(config, &config->map, move_speed, -M_PI_2);
 				break;
 			case MLX_KEY_D:
-				config->player.x += cosf(config->player.angle + M_PI_2) * move_speed;
-				config->player.y += sinf(config->player.angle + M_PI_2) * move_speed;
+				update_player_position(config, &config->map, move_speed, M_PI_2);
 				break;
 			case MLX_KEY_LEFT:
 				config->player.angle -= rot_speed;
@@ -59,10 +102,31 @@ void player_move_handler(mlx_key_data_t keydata, void *param)
 			default:
 				break;
 		}
-		// render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT);
+		// Optionally, trigger a re-render here if your rendering is not continuously updating.
 	}
 }
 
+/*
+ * Key event handler which first checks for the ESC key to exit,
+ * otherwise it passes the event to the player movement handler.
+ */
+void key_event_handler(mlx_key_data_t keydata, void *param)
+{
+	(void)param;
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+	{
+		ft_printf("[DEBUG] ESC key pressed. Closing window...\n");
+		exit(0);
+	}
+	else
+	{
+		player_move_handler(keydata, param);
+	}
+}
+
+/*
+ * Clears the entire image to a specified color.
+ */
 void clear_image(mlx_image_t *img, uint32_t color)
 {
 	for (uint32_t y = 0; y < img->height; y++)
@@ -74,6 +138,9 @@ void clear_image(mlx_image_t *img, uint32_t color)
 	}
 }
 
+/*
+ * Loads textures from file paths. (This function is unchanged from your version.)
+ */
 void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *mem)
 {
 	int count = 4;
@@ -137,22 +204,34 @@ void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *
 	res->image_count = count;
 }
 
+/*
+ * A wrapper that calls render_scene (presumed to be defined elsewhere)
+ * to update the graphics on the window.
+ */
 void render_scene_wrapper(void *param)
 {
-    t_config *config = (t_config *)param;
-    render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT, config->img);
+	t_config *config = (t_config *)param;
+	render_scene(config->map.mlx, &config->map, config, WINDOW_HEIGHT, config->img);
 }
 
-void	game_loop(t_map *map, t_config *config)
-{	
+/*
+ * The main game loop: creates an image, registers the key event and loop hooks,
+ * and then starts the MLX loop.
+ */
+void game_loop(t_map *map, t_config *config)
+{   
 	config->img = mlx_new_image(map->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	
 	mlx_key_hook(map->mlx, key_event_handler, config);
-    mlx_loop_hook(map->mlx, render_scene_wrapper, config);
+	mlx_loop_hook(map->mlx, render_scene_wrapper, config);
 	mlx_loop(map->mlx);
 	ft_printf("[DEBUG] Game loop ended.\n");
 }
 
+/*
+ * Main function: Initializes configuration, validates the map, loads textures,
+ * creates the MLX window, and starts the game loop.
+ */
 int main(int argc, char **argv)
 {
 	t_config config = {0};

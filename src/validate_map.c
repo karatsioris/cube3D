@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 17:04:06 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:48:35 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,35 +39,22 @@ int	put_on_list(const char *line, t_list **list, t_memory *mem)
 	t_list	*temp;
 
 	if (!line || *line == '\0' || *line == '\n')
-	{
-		ft_printf("[ERROR] Cannot add an empty or NULL line to the list.\n");
 		return (0);
-	}
 	node = mem_alloc(mem, sizeof(t_list));
 	if (!node)
-	{
-		ft_printf("[ERROR] Failed to allocate memory for map list node.\n");
 		return (0);
-	}
 	node->line = ft_strdup_cub(line, mem);
 	if (!node->line || node->line[0] == '\0')
-	{
-		ft_printf("[ERROR] Failed to duplicate map line content.\n");
 		return (0);
-	}
 	node->next = NULL;
 	if (!(*list))
-	{
 		*list = node;
-		ft_printf("[DEBUG] Added first node to map list: '%s'\n", node->line);
-	}
 	else
 	{
 		temp = *list;
 		while (temp->next)
 			temp = temp->next;
 		temp->next = node;
-		ft_printf("[DEBUG] Added node to map list: '%s'\n", node->line);
 	}
 	print_list1(*list);
 	return (1);
@@ -85,30 +72,20 @@ int	calculate_map_dimensions(char **grid, int *height, int *width)
 	i = 0;
 	if (!grid || !height || !width)
 	{
-		ft_printf("[ERROR] Invalid grid or dimension pointers.\n");
 		return (-1);
 	}
 	while (grid[i] != NULL)
 	{
 		row_count++;
 		row_length = strlen(grid[i]);
-		ft_printf("[DEBUG] Processing Grid Row %d: '%s' (Length: %d)\n",
-			i, grid[i], row_length);
 		if (row_length > max_width)
-		{
 			max_width = row_length;
-		}
 		i++;
 	}
 	*height = row_count;
 	*width = max_width;
 	if (*height == 0 || *width == 0)
-	{
-		ft_printf("[ERROR] Invalid map dimensions. Height=%d, Width=%d\n",
-			*height, *width);
 		return (-1);
-	}
-	ft_printf("[DEBUG] Map dimensions calculated successfully.");
 	return (0);
 }
 

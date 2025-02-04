@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:33:24 by kkaratsi          #+#    #+#             */
-/*   Updated: 2025/02/03 12:30:49 by kkaratsi         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:15:17 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 uint32_t convert_abgr_to_rgba(uint32_t abgr)
 {
-	uint32_t a = (abgr & 0xFF000000);
-	uint32_t b = (abgr & 0x00FF0000) >> 16;
-	uint32_t g = (abgr & 0x0000FF00);
-	uint32_t r = (abgr & 0x000000FF) << 16;
+	uint32_t a = (abgr & 0xFF000000);       // Alpha
+	uint32_t b = (abgr & 0x00FF0000) >> 16; // Blue
+	uint32_t g = (abgr & 0x0000FF00);       // Green
+	uint32_t r = (abgr & 0x000000FF) << 16; // Red
 	return a | r | g | b;
 }
 
@@ -27,9 +27,16 @@ uint32_t get_texture_pixel(mlx_image_t *texture, int x, int y)
 	int index = y * texture->width + x;
 	uint32_t color = pixels[index];
 	color = convert_abgr_to_rgba(color);
-	color |= 0xFF000000;
+	color |= 0xFF000000; // Ensure full opacity
 	return color;
 }
+// uint32_t get_mlx_texture_pixel(mlx_texture_t *tex, int x, int y)
+// {
+//     return ((tex->pixels[(y * tex->width + x) * 4] << 24)
+//           | (tex->pixels[(y * tex->width + x) * 4 + 1] << 16)
+//           | (tex->pixels[(y * tex->width + x) * 4 + 2] << 8)
+//           | (tex->pixels[(y * tex->width + x) * 4 + 3]));
+// }
 
 void	draw_vertical_line(mlx_image_t *img, int x, int drawStart, int drawEnd, uint32_t color)
 {
@@ -96,23 +103,6 @@ void calculate_draw_parameters(int h, float perpWallDist, int *lineHeight, int *
 	}
 }
 
-// void check_corner(float side_dist_x, float side_dist_y, float D)
-// {
-// 	if (side_dist_x < side_dist_y)
-//     {
-//         side_dist_x += delta_dist_x;
-//         map_x += step_x;
-//         side = 0; // Vertical wall hit
-//     }
-//     else
-//     {
-//         side_dist_y += delta_dist_y;
-//         map_y += step_y;
-//         side = 1; // Horizontal wall hit
-//     }
-// }
-
-
 bool cast_ray(float start_x, float start_y, float angle, int h,
 			  int *lineHeight, int *drawStart, int *drawEnd, float *wallX, int *hit_side,
 			  t_map *map, t_config *config)
@@ -128,6 +118,10 @@ bool cast_ray(float start_x, float start_y, float angle, int h,
 	int map_x = (int)start_x;
 	int map_y = (int)start_y;
 	int side;
+
+	// Prevent floating-point inaccuracies at grid boundaries
+	if (fabsf(start_x - map_x) < 1e-6f) start_x = map_x;
+	if (fabsf(start_y - map_y) < 1e-6f) start_y = map_y;
 
 	if (ray_dir_x < 0.0f)
 	{
@@ -149,9 +143,11 @@ bool cast_ray(float start_x, float start_y, float angle, int h,
 		step_y = 1;
 		side_dist_y = ((float)map_y + 1.0f - start_y) * delta_dist_y;
 	}
+
 	while (true)
 	{
-		if (side_dist_x < side_dist_y)
+		// Debug: Current side distances
+		if (side_dist_x < side_dist_y || (side_dist_x == side_dist_y && ray_dir_x < 0))
 		{
 			side_dist_x += delta_dist_x;
 			map_x += step_x;
@@ -165,8 +161,11 @@ bool cast_ray(float start_x, float start_y, float angle, int h,
 		}
 		// Stop if out of bounds
 		if (map_x < 0 || map_x >= map->width || map_y < 0 || map_y >= map->height)
+		{
+			printf("[DEBUG] Ray went out of bounds.\n");
 			break;
-		
+		}
+
 		if (map->grid[map_y][map_x] == '1')
 		{
 			float perpWallDist;
@@ -174,18 +173,28 @@ bool cast_ray(float start_x, float start_y, float angle, int h,
 				perpWallDist = fmaxf(side_dist_x - delta_dist_x, 0.0001f);
 			else
 				perpWallDist = fmaxf(side_dist_y - delta_dist_y, 0.0001f);
+
 			// Correct the fish-eye effect
 			perpWallDist *= cosf(angle - config->player.angle);
 			calculate_draw_parameters(h, perpWallDist, lineHeight, drawStart, drawEnd);
-			
+
 			// Compute the exact position of the hit on the wall (wallX)
 			float hit;
 			if (side == 0)
+			{
 				hit = start_y + perpWallDist * ray_dir_y;
+				*wallX = hit - floorf(hit);
+				if (ray_dir_x > 0) // Flip for east-facing walls
+					*wallX = 1.0f - *wallX;
+			}
 			else
+			{
 				hit = start_x + perpWallDist * ray_dir_x;
-			*wallX = hit - floorf(hit);
-			
+				*wallX = hit - floorf(hit);
+				if (ray_dir_y < 0) // Flip for south-facing walls
+					*wallX = 1.0f - *wallX;
+			}
+			*wallX = fmaxf(0.0f, fminf(*wallX, 1.0f));
 			*hit_side = side;
 			return true;
 		}
@@ -195,54 +204,40 @@ bool cast_ray(float start_x, float start_y, float angle, int h,
 
 void render_scene(mlx_t *mlx, t_map *map, t_config *config, int window_height, mlx_image_t *img)
 {
-    int lineHeight, drawStart, drawEnd;
-    int x, y;
-    float wallX;
-    int hit_side;
+	int lineHeight, drawStart, drawEnd;
+	int x, y;
+	float wallX;
+	int hit_side;
 
-    clear_image(img, 0x000000); // Ensure the image is cleared before rendering
+	clear_image(img, 0x000000); // Ensure the image is cleared before rendering
 
-    for (x = 0; x < WINDOW_WIDTH; x++)
-    {
-        // Compute the ray angle for this column
-        float ray_angle = config->player.angle + (x - WINDOW_WIDTH / 2) * (FOV / window_height);
-        if (cast_ray(config->player.x, config->player.y, ray_angle, window_height,
-                     &lineHeight, &drawStart, &drawEnd, &wallX, &hit_side, map, config))
-        {
-            // Draw sky (above the wall)
-            for (y = 0; y < drawStart; y++)
-                mlx_put_pixel(img, x, y, 0x89CFF3FF); // Sky color
+	for (x = 0; x < WINDOW_WIDTH; x++)
+	{
+		// Compute the ray angle for this column
+		float ray_angle = config->player.angle + (x - WINDOW_WIDTH / 2) * (FOV / WINDOW_WIDTH);
+		if (cast_ray(config->player.x, config->player.y, ray_angle, window_height,
+					 &lineHeight, &drawStart, &drawEnd, &wallX, &hit_side, map, config))
+		{
+			// Draw sky (above the wall)
+			for (y = 0; y < drawStart; y++)
+				mlx_put_pixel(img, x, y, 0x89CFF3FF); // Sky color
 
-            // If textures are used, sample the texture; otherwise, use a flat color.
-            if (config->use_textures)
-            {
-                // For demonstration, choose a texture based on the hit side.
-                // (You can refine this logic to choose between north, south, east, and west.)
-                mlx_image_t *texture_img;
-                if (hit_side == 0)
-                {
-                    // For a vertical hit, you might decide based on the ray direction.
-                    // Here we simply use the "north" texture.
-                    texture_img = config->resources.images[0]; 
-                }
-                else
-                {
-                    // For a horizontal hit, for example, use the "south" texture.
-                    texture_img = config->resources.images[0];
-                }
-                // Assume texture_img is valid and has width/height properties.
-                draw_textured_vertical_line(img, x, drawStart, drawEnd, texture_img,
-                                            texture_img->width, texture_img->height, wallX);
-            }
-            else
-            {
-                draw_vertical_line(img, x, drawStart, drawEnd, 0xFFFFFF);
-            }
-            
-            // Draw floor (below the wall)
-            for (y = drawEnd; y < WINDOW_HEIGHT; y++)
-                mlx_put_pixel(img, x, y, 0xB99470FF); // Floor color
-        }
-    }
-    mlx_image_to_window(mlx, img, 0, 0);
+			// If textures are used, sample the texture; otherwise, use a flat color.
+			if (config->use_textures)
+			{
+				mlx_image_t *texture_img = hit_side == 0 ? config->resources.images[0] : config->resources.images[1];
+				draw_textured_vertical_line(img, x, drawStart, drawEnd, texture_img,
+											texture_img->width, texture_img->height, wallX);
+			}
+			else
+			{
+				draw_vertical_line(img, x, drawStart, drawEnd, 0xFFFFFF);
+			}
+
+			// Draw floor (below the wall)
+			for (y = drawEnd; y < WINDOW_HEIGHT; y++)
+				mlx_put_pixel(img, x, y, 0xB99470FF); // Floor color
+		}
+	}
+	mlx_image_to_window(mlx, img, 0, 0);
 }

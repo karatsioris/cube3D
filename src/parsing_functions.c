@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/01 16:44:45 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:07:56 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	parse_line(char *line, t_config *config, t_memory *mem,
 				ft_printf("[ERROR] Failed to add map line to the list.\n");
 				exit(1);
 			}
-			   // Check for player position --- i add it
 			for (int i = 0; line[i] != '\0'; i++)
 			{
 				if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E' || line[i] == 'W')
