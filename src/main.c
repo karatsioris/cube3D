@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 14:15:35 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:18:56 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,6 @@ void clear_image(mlx_image_t *img, uint32_t color)
 	}
 }
 
-/*
- * Loads textures from file paths. (This function is unchanged from your version.)
- */
 void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *mem)
 {
 	int count = 4;
@@ -153,13 +150,11 @@ void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *
 		cleanup_textures(res, mlx);
 		exit(1);
 	}
-	
 	char *paths[4];
 	paths[0] = textures->north;
 	paths[1] = textures->south;
 	paths[2] = textures->west;
 	paths[3] = textures->east;
-	
 	for (int i = 0; i < count; i++)
 	{
 		if (!paths[i])
@@ -168,7 +163,6 @@ void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *
 			cleanup_textures(res, mlx);
 			exit(1);
 		}
-		
 		ft_printf("[DEBUG] Verifying existence of file: %s\n", paths[i]);
 		if (access(paths[i], F_OK) == -1)
 		{
@@ -184,7 +178,6 @@ void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *
 			cleanup_textures(res, mlx);
 			exit(1);
 		}
-		
 		ft_printf("[DEBUG] Loaded texture dimensions: %dx%d\n", tex->width, tex->height);
 		ft_printf("[DEBUG] Converting texture to image...\n");
 		res->images[i] = mlx_texture_to_image(mlx, tex);
@@ -195,12 +188,10 @@ void load_textures(t_resources *res, t_texture *textures, mlx_t *mlx, t_memory *
 			cleanup_textures(res, mlx);
 			exit(1);
 		}
-		
 		ft_printf("[DEBUG] Freeing intermediate PNG texture...\n");
 		mlx_delete_texture(tex);
 		ft_printf("[DEBUG] Texture %d loaded successfully from: %s\n", i, paths[i]);
 	}
-	
 	res->image_count = count;
 }
 
@@ -238,7 +229,6 @@ int main(int argc, char **argv)
 	t_memory mem = {0};
 
 	config.use_textures = true;
-
 	ft_printf("[DEBUG] Initializing memory manager...\n");
 	if (!mem_init(&mem))
 	{
@@ -276,10 +266,8 @@ int main(int argc, char **argv)
 	{
 		ft_printf("[DEBUG] Skipping texture loading, using colors instead.\n");
 	}
-
 	ft_printf("[DEBUG] Textures successfully loaded. Starting game loop...\n");
 	game_loop(&config.map, &config);
-
 	ft_printf("[DEBUG] Cleaning up resources...\n");
 	cleanup_resources(&config.resources, config.map.mlx);
 	ft_clean(&config.map, &mem, &config.resources);

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 09:39:53 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 14:03:58 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:22:30 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,32 @@ void	list_to_array(t_map *map, t_memory *mem)
 	count_rows(map);
 	allocate_grid(map, mem);
 	fill_grid(map, mem);
+}
+
+void	parse_color(char *line, int color[3])
+{
+	char	**rgb;
+	int		i;
+
+	ft_printf("[DEBUG] Parsing color line: '%s'\n", line);
+	if (color[0] != -1)
+	{
+		ft_printf("[ERROR] Duplicate color directive found.\n");
+		ft_error(-15);
+	}
+	while (*line != ' ')
+		line++;
+	while (*line == ' ')
+		line++;
+	rgb = ft_split(line, ',');
+	if (!rgb || ft_arraylen(rgb) != 3)
+		ft_error(-8);
+	i = 0;
+	while (i < 3)
+	{
+		color[i] = ft_atoi(rgb[i]);
+		validate_color_range(color[i]);
+		i++;
+	}
+	ft_free_split(rgb);
 }
