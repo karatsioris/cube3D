@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 20:49:15 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:56:54 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define WINDOW_WIDTH 1200
 # define WINDOW_HEIGHT 1000
 # define INITIAL_MEM_CAPACITY 10
+# define COLLISION_MARGIN 0.1f
 # define FOV 3.14159 / 3
 
 typedef struct s_memory
@@ -138,6 +139,17 @@ typedef struct s_cast_data
 	int			h;
 }	t_cast_data;
 
+typedef struct s_collision_data
+{
+	t_map	*map;
+	float	new_x;
+	float	new_y;
+	int		grid_x;
+	int		grid_y;
+	float	margin_x;
+	float	margin_y;
+}	t_collision_data;
+
 void	ft_error(int code);
 void	validate_map(t_map *map);
 void	validate_map_boundary(t_map *map);
@@ -153,6 +165,9 @@ void	validate_inner_map(t_map *map);
 void	game_loop(t_map *map, t_config *config);
 void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
 			t_memory *mem);
+bool	can_move_forward(t_config *config, t_map *map, float move_distance,
+			float angle_offset);
+bool	is_wall(t_map *map, int x, int y);
 
 /* -------------------   kkaratsi functions  ---------------------*/
 
