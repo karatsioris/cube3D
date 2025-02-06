@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/05 18:56:54 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/06 15:53:24 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define WINDOW_HEIGHT 1000
 # define INITIAL_MEM_CAPACITY 10
 # define COLLISION_MARGIN 0.1f
-# define FOV 3.14159 / 3
+# define FOV 1.0471975512
 
 typedef struct s_memory
 {
@@ -150,37 +150,58 @@ typedef struct s_collision_data
 	float	margin_y;
 }	t_collision_data;
 
-void	ft_error(int code);
-void	validate_map(t_map *map);
-void	validate_map_boundary(t_map *map);
-void	mem_free_all(t_memory *mem);
-void	*mem_alloc(t_memory *mem, size_t size);
-bool	mem_init(t_memory *mem);
-void	ft_clean(t_map *map, t_memory *mem, t_resources *res);
-void	initialize_config(t_config *config);
-void	cleanup_textures(t_resources *res, mlx_t *mlx);
-void	cleanup_resources(t_resources *res, mlx_t *mlx);
-void	validate_outer_walls(t_map *map);
-void	validate_inner_map(t_map *map);
-void	game_loop(t_map *map, t_config *config);
-void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
-			t_memory *mem);
-bool	can_move_forward(t_config *config, t_map *map, float move_distance,
-			float angle_offset);
-bool	is_wall(t_map *map, int x, int y);
+typedef struct s_ray_calc
+{
+	float	ray_dir_x;
+	float	ray_dir_y;
+	int		map_x;
+	int		map_y;
+	float	delta_dist_x;
+	float	delta_dist_y;
+	int		step_x;
+	int		step_y;
+	float	side_dist_x;
+	float	side_dist_y;
+	int		side;
+}	t_ray_calc;
+
+void		ft_error(int code);
+void		validate_map(t_map *map);
+void		validate_map_boundary(t_map *map);
+void		mem_free_all(t_memory *mem);
+void		*mem_alloc(t_memory *mem, size_t size);
+bool		mem_init(t_memory *mem);
+void		ft_clean(t_map *map, t_memory *mem, t_resources *res);
+void		initialize_config(t_config *config);
+void		cleanup_textures(t_resources *res, mlx_t *mlx);
+void		cleanup_resources(t_resources *res, mlx_t *mlx);
+void		validate_outer_walls(t_map *map);
+void		validate_inner_map(t_map *map);
+void		game_loop(t_map *map, t_config *config);
+void		load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
+				t_memory *mem);
+bool		can_move_forward(t_config *config, t_map *map, float move_distance,
+				float angle_offset);
+bool		is_wall(t_map *map, int x, int y);
+float		compute_perpwalldist(t_cast_data *data, t_ray_calc *calc);
+bool		perform_dda(t_cast_data *data, t_ray_calc *calc);
+void		init_step_and_side_distances(t_cast_data *data, t_ray_calc *calc);
+bool		init_config_and_map(t_config *config, t_memory *mem,
+				int argc, char **argv);
+void		key_event_handler(mlx_key_data_t keydata, void *param);
 
 /* -------------------   kkaratsi functions  ---------------------*/
 
-void	draw_vertical_line(mlx_image_t *img, int x, t_draw_params *params,
-			uint32_t color);
-void	calculate_draw_parameters(int h, float perpWallDist,
-			t_draw_params *params);
-bool	cast_ray(t_cast_data *data);
-void	render_scene(t_render_data *data, int window_height);
-void	clear_image(mlx_image_t *img, uint32_t color);
-void	player_move_handler(mlx_key_data_t keydata, void *param);
-void	render_scene_wrapper(void *param);
-void	draw_textured_vertical_line(mlx_image_t *img, int x,
-			t_draw_params *params, t_texture_data *tex_data);
+void		draw_vertical_line(mlx_image_t *img, int x, t_draw_params *params,
+				uint32_t color);
+void		calculate_draw_parameters(int h, float perpWallDist,
+				t_draw_params *params);
+bool		cast_ray(t_cast_data *data);
+void		render_scene(t_render_data *data, int window_height);
+void		clear_image(mlx_image_t *img, uint32_t color);
+void		player_move_handler(mlx_key_data_t keydata, void *param);
+void		render_scene_wrapper(void *param);
+void		draw_textured_vertical_line(mlx_image_t *img, int x,
+				t_draw_params *params, t_texture_data *tex_data);
 
 #endif

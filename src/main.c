@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/05 19:02:46 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/06 15:23:14 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,31 +80,11 @@ void	clear_image(mlx_image_t *img, uint32_t color)
 
 int	main(int argc, char **argv)
 {
-	t_config	config = {0};
-	t_memory	mem = {0};
+	t_config	config;
+	t_memory	mem;
 
-	config.use_textures = true;
-	if (!mem_init(&mem))
+	if (!init_config_and_map(&config, &mem, argc, argv))
 		return (1);
-	config.memory = &mem;
-	initialize_config(&config);
-	if (!validate_args_and_load_map(argc, argv, &config, &mem))
-		return (1);
-	validate_map(&config.map);
-	config.map.mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT,
-			"Cube3D - Textured Walls", true);
-	if (!config.map.mlx)
-	{
-		ft_clean(&config.map, &mem, &config.resources);
-		return (1);
-	}
-	if (config.use_textures)
-		load_textures(&config.resources, &config.textures, config.map.mlx,
-			config.memory);
-	else
-	{
-		ft_printf("[DEBUG] Skipping texture loading, using colors instead.\n");
-	}
 	game_loop(&config.map, &config);
 	cleanup_resources(&config.resources, config.map.mlx);
 	ft_clean(&config.map, &mem, &config.resources);
