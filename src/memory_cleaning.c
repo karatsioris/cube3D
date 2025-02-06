@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:23:39 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/05 17:42:06 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:25:36 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	cleanup_texture(t_resources *res)
 			res->textures[i] = NULL;
 		}
 	}
-	free(res->textures);
 	res->textures = NULL;
 	res->texture_count = 0;
 }
@@ -39,6 +38,7 @@ void	cleanup_images(t_resources *res, mlx_t *mlx)
 
 	if (!res || !res->images)
 		return ;
+	printf("[DEBUG] Cleaning up images...\n");
 	i = res->image_count;
 	while (i > 0)
 	{
@@ -49,17 +49,29 @@ void	cleanup_images(t_resources *res, mlx_t *mlx)
 			res->images[i] = NULL;
 		}
 	}
-	free(res->images);
-	res->images = NULL;
 	res->image_count = 0;
 }
 
 void	cleanup_resources(t_resources *res, mlx_t *mlx)
 {
+	int	i;
+
 	if (!res || !mlx)
 		return ;
-	cleanup_texture(res);
-	cleanup_images(res, mlx);
+	i = 0;
+	while (res->textures && i < res->texture_count)
+	{
+		if (res->textures[i])
+			mlx_delete_texture(res->textures[i]);
+		res->textures[i++] = NULL;
+	}
+	i = 0;
+	while (res->images && i < res->image_count)
+	{
+		if (res->images[i])
+			mlx_delete_image(mlx, res->images[i]);
+		res->images[i++] = NULL;
+	}
 }
 
 void	cleanup_textures(t_resources *res, mlx_t *mlx)
@@ -80,7 +92,6 @@ void	cleanup_textures(t_resources *res, mlx_t *mlx)
 	}
 	if (res->images)
 	{
-		free(res->images);
 		res->images = NULL;
 	}
 	res->image_count = 0;

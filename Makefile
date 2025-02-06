@@ -4,6 +4,7 @@ NAME    = cub3D
 CC      = gcc
 CFLAGS  = -Wextra -Wall -Werror -g3
 
+
 # MLX library flags
 MLXFLAGS = -lglfw -L /usr/local/lib
 

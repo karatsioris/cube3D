@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/06 15:23:14 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:19:31 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int	main(int argc, char **argv)
 	if (!init_config_and_map(&config, &mem, argc, argv))
 		return (1);
 	game_loop(&config.map, &config);
-	cleanup_resources(&config.resources, config.map.mlx);
 	ft_clean(&config.map, &mem, &config.resources);
 	return (0);
 }

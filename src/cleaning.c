@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:26:29 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/04 16:28:02 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:21:01 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,11 @@
 
 void	cleanup_grid(t_map *map)
 {
-	int	i;
-
-	if (!map || !map->grid)
-		return ;
-	i = 0;
-	while (i < map->height)
-	{
-		free(map->grid[i]);
-		i++;
-	}
-	free(map->grid);
 	map->grid = NULL;
 }
 
 void	cleanup_list(t_map *map)
 {
-	t_list	*temp;
-
-	if (!map || !map->list)
-		return ;
-	while (map->list)
-	{
-		temp = map->list->next;
-		free(map->list->line);
-		free(map->list);
-		map->list = temp;
-	}
 	map->list = NULL;
 }
 
@@ -59,10 +37,22 @@ void	cleanup_map(t_map *map)
 
 void	ft_clean(t_map *map, t_memory *mem, t_resources *res)
 {
-	if (res && map && map->mlx)
+	static int	cleaned = 0;
+
+	printf("[DEBUG] Entering ft_clean...\n");
+	if (!cleaned && res && map && map->mlx)
+	{
+		printf("[DEBUG] Calling cleanup_resources...\n");
 		cleanup_resources(res, map->mlx);
+		cleaned = 1;
+	}
+	printf("[DEBUG] Calling cleanup_map...\n");
 	cleanup_map(map);
 	if (mem)
+	{
+		printf("[DEBUG] Calling mem_free_all...\n");
 		mem_free_all(mem);
+	}
+	printf("[DEBUG] Exiting ft_clean...\n");
 	exit(0);
 }
