@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:51:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/05 17:40:07 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:13:45 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,17 @@ void	initialize_config(t_config *config)
 	initialize_resources(&config->resources, &config->textures, &config->colors,
 		&config->player);
 	ft_printf("[DEBUG] Configuration initialized successfully.\n");
+}
+
+float	get_player_angle(char c)
+{
+	if (c == 'S')
+		return (M_PI_2);
+	else if (c == 'N')
+		return (3 * M_PI_2);
+	else if (c == 'W')
+		return (0);
+	else if (c == 'E')
+		return (M_PI);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:04:50 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/05 18:06:09 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:08:26 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,6 @@ void	render_scene(t_render_data *data, int window_height)
 		}
 		x++;
 	}
+	draw_minimap(data->mlx, data->config, 0, 0);
 	mlx_image_to_window(data->mlx, data->img, 0, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/06 17:19:43 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:14:27 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,23 @@ typedef struct s_ray_calc
 	int		side;
 }	t_ray_calc;
 
+typedef struct s_square
+{
+	float		x;
+	float		y;
+	float		size;
+	uint32_t	color;
+}	t_square;
+
+typedef struct s_minimap_render
+{
+	mlx_t		*mlx;
+	t_config	*config;
+	mlx_image_t	*minimap_img;
+	int			pos_x;
+	int			pos_y;
+}	t_minimap_render;
+
 void		ft_error(int code);
 void		validate_map(t_map *map);
 void		validate_map_boundary(t_map *map);
@@ -203,5 +220,12 @@ void		player_move_handler(mlx_key_data_t keydata, void *param);
 void		render_scene_wrapper(void *param);
 void		draw_textured_vertical_line(mlx_image_t *img, int x,
 				t_draw_params *params, t_texture_data *tex_data);
+void		draw_minimap(mlx_t *mlx, t_config *config, int pos_x, int pos_y);
+void		draw_square(mlx_image_t *img, t_square square);
+void		draw_minimap_in_main_image(mlx_image_t *main_img,
+				mlx_image_t *minimap_img, int pos_x, int pos_y);
+mlx_image_t	*create_minimap_image(mlx_t *mlx, int width, int height);
+void		draw_map_grid(mlx_image_t *minimap_img, t_config *config);
+float		get_player_angle(char c);
 
 #endif
