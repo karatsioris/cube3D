@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_texture.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:18:58 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/05 18:24:17 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/06 22:43:06 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ uint32_t	convert_abgr_to_rgba(uint32_t abgr)
 	uint32_t	g;
 	uint32_t	r;
 
-	a = (abgr & 0xFF000000);
-	b = (abgr & 0x00FF0000) >> 16;
-	g = (abgr & 0x0000FF00);
-	r = (abgr & 0x000000FF) << 16;
+	a = (abgr & 0xFF000000) >> 24;
+	b = (abgr & 0x00FF0000) >> 8;
+	g = (abgr & 0x0000FF00) << 8;
+	r = (abgr & 0x000000FF) << 24;
 	return (a | r | g | b);
 }
 
@@ -35,7 +35,7 @@ uint32_t	get_texture_pixel(mlx_image_t *texture, int x, int y)
 	index = y * texture->width + x;
 	color = pixels[index];
 	color = convert_abgr_to_rgba(color);
-	color |= 0xFF000000;
+	// color |= 0xFF000000;
 	return (color);
 }
 

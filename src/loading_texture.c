@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loading_texture.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:24:38 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/04 18:37:52 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:12:35 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
 
 	paths[0] = textures->north;
 	paths[1] = textures->south;
-	paths[2] = textures->west;
-	paths[3] = textures->east;
+	paths[2] = textures->east;
+	paths[3] = textures->west;
 	count = 4;
 	res->texture_count = count;
 	res->images = mem_alloc(mem, sizeof(mlx_image_t *) * count);

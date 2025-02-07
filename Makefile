@@ -18,7 +18,7 @@ SRC = error_handling.c file_and_argv_valid.c \
 	  parsing_textures.c validate_map.c \
 	  main.c memory.c parsing.c raycasting.c \
 	  cleaning.c loading_texture.c cast_ray.c \
-	  get_texture.c can_move.c \
+	  get_texture.c can_move.c minimap.c \
 
 # Object files
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

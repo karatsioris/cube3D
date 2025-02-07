@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/05 18:56:54 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:16:39 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,17 @@
 # include <string.h>
 # include <math.h>
 
-# define WINDOW_WIDTH 1200
-# define WINDOW_HEIGHT 1000
+# define WINDOW_WIDTH 1920
+# define WINDOW_HEIGHT 1080
 # define INITIAL_MEM_CAPACITY 10
 # define COLLISION_MARGIN 0.1f
 # define FOV 3.14159 / 3
+
+typedef struct s_ray
+{
+    int end_x;
+    int end_y;
+} t_ray;
 
 typedef struct s_memory
 {
@@ -93,6 +99,8 @@ typedef struct s_config
 	t_resources	resources;
 	bool		use_textures;
 	mlx_image_t	*img;
+	t_ray		*rays;
+	int			num_rays;
 }	t_config;
 
 typedef struct s_render_data
@@ -137,6 +145,7 @@ typedef struct s_cast_data
 	float		start_y;
 	float		angle;
 	int			h;
+	t_resources	*resources;
 }	t_cast_data;
 
 typedef struct s_collision_data
@@ -182,5 +191,14 @@ void	player_move_handler(mlx_key_data_t keydata, void *param);
 void	render_scene_wrapper(void *param);
 void	draw_textured_vertical_line(mlx_image_t *img, int x,
 			t_draw_params *params, t_texture_data *tex_data);
+
+void	draw_square(mlx_image_t *img, float x, float y, float size, uint32_t color);
+void	draw_minimap(mlx_t *mlx, t_config *config, int pos_x, int pos_y);
+void	draw_minimap_in_main_image(mlx_image_t *main_img, mlx_image_t *minimap_img,
+			int pos_x, int pos_y);
+uint32_t	get_texture_pixel(mlx_image_t *texture, int x, int y);
+
+void	draw_line(mlx_image_t *img, int x0, int y0, int x1, int y1, uint32_t color);
+
 
 #endif

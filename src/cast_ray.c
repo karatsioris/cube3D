@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cast_ray.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:04:50 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/05 18:06:09 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 16:18:59 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,19 @@ void	render_wall(mlx_image_t *img, int x, t_cast_data *cast_data,
 	t_config *config)
 
 {
+	
 	t_texture_data	tex_data;
 
 	if (config->use_textures)
 	{
 		if (cast_data->ray.hit_side == 0)
 			tex_data.texture = config->resources.images[0];
-		else
+		else if (cast_data->ray.hit_side == 1)
 			tex_data.texture = config->resources.images[1];
+		else if (cast_data->ray.hit_side == 2)
+			tex_data.texture = config->resources.images[2];
+		else
+			tex_data.texture = config->resources.images[3];
 		tex_data.tex_width = tex_data.texture->width;
 		tex_data.tex_height = tex_data.texture->height;
 		tex_data.wallx = cast_data->ray.wallx;
@@ -90,5 +95,9 @@ void	render_scene(t_render_data *data, int window_height)
 		}
 		x++;
 	}
+	draw_minimap(data->mlx, data->config, 0, 0);
 	mlx_image_to_window(data->mlx, data->img, 0, 0);
+	// free(data->config->rays);
+	// data->config->rays = NULL;
+	// data->config->num_rays = 0;
 }

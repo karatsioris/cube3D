@@ -1,14 +1,14 @@
 C 255,255,254
-NO ./assets/wall2.png
-SO ./assets/wall2.png
+NO ./assets/Solid_blue.png
+SO ./assets/Solid_green.png
 WE ./assets/wall2.png
-EA ./assets/wall2.png
+EA ./assets/Solid_yellow.png
 
 F 50,50,50
 
 11111111111111
-11110000000011
-10000000000011
-1000N000000011
-10110000111011
+10000011100001
+10000011100011
+10N00000000001
+10000001100001
 11111111111111

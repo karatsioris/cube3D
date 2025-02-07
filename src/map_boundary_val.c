@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_boundary_val.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 15:48:09 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:00:22 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	validate_side_walls(char *line, int width)
 {
 	if (!line)
 		exit(1);
-	if (line[0] != '1' || line[width - 2] != '1')
+	if (line[0] != '1' || line[width - 1] != '1')
 		exit(1);
 	ft_printf("[DEBUG] Side walls validated successfully.\n");
 }

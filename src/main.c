@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 12:23:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/05 19:02:46 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 15:14:20 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	update_player_position(t_config *config, t_map *map,
 	}
 }
 
+
 bool	is_wall(t_map *map, int x, int y)
 {
 	if (x < 0 || x >= map->width || y < 0 || y >= map->height)
@@ -41,8 +42,8 @@ void	player_move_handler(mlx_key_data_t keydata, void *param)
 	float		move_speed;
 	float		rot_speed;
 
-	move_speed = 0.3f;
-	rot_speed = 0.3f;
+	move_speed = 0.4f;
+	rot_speed = 0.2f;
 	config = (t_config *)param;
 	if (keydata.action != MLX_PRESS && keydata.action != MLX_REPEAT)
 		return ;

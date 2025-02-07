@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize_game.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kkaratsi <kkaratsi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:51:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/05 17:40:07 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 01:29:07 by kkaratsi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	initialize_resources(t_resources *resources, t_texture *textures,
 	colors->wall[2] = -1;
 	player->x = -1;
 	player->y = -1;
-	player->angle = 3.14;
+	player->angle = M_PI ;
 	player->direction = '\0';
 	resources->textures = NULL;
 	resources->texture_count = 0;
