@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   file_and_argv_valid.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: piotrwojnarowski <piotrwojnarowski@stud    +#+  +:+       +#+        */
+/*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:32:54 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/01/06 22:05:31 by piotrwojnar      ###   ########.fr       */
+/*   Updated: 2025/02/06 15:49:02 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "parser.h"
 
 bool	validate_args_and_load_map(int argc,
 			char **argv, t_config *config, t_memory *mem)
@@ -51,4 +51,50 @@ int	has_valid_extension(const char *path, const char *extension)
 		extension++;
 	}
 	return (1);
+}
+
+bool	init_config_and_map(t_config *config, t_memory *mem,
+	int argc, char **argv)
+{
+	ft_memset(config, 0, sizeof(*config));
+	ft_memset(mem, 0, sizeof(*mem));
+	config->use_textures = true;
+	if (!mem_init(mem))
+		return (false);
+	config->memory = mem;
+	initialize_config(config);
+	if (!validate_args_and_load_map(argc, argv, config, mem))
+		return (false);
+	validate_map(&config->map);
+	config->map.mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT,
+			"Cube3D - Textured Walls", true);
+	if (!config->map.mlx)
+	{
+		ft_clean(&config->map, mem, &config->resources);
+		return (false);
+	}
+	load_textures(&config->resources, &config->textures, config->map.mlx,
+		config->memory);
+	return (true);
+}
+
+void	game_loop(t_map *map, t_config *config)
+{
+	t_render_data	*data;
+
+	config->img = mlx_new_image(map->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	data = mem_alloc(config->memory, sizeof(t_render_data));
+	if (!data)
+	{
+		ft_printf("[ERROR] Failed to allocate memory for render data.\n");
+		exit(1);
+	}
+	data->mlx = map->mlx;
+	data->map = map;
+	data->config = config;
+	data->img = config->img;
+	mlx_key_hook(map->mlx, key_event_handler, config);
+	mlx_loop_hook(map->mlx, render_scene_wrapper, data);
+	mlx_loop(map->mlx);
+	ft_printf("[DEBUG] Game loop ended.\n");
 }
