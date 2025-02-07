@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/07 18:54:57 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:14:27 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,5 +226,6 @@ void		draw_minimap_in_main_image(mlx_image_t *main_img,
 				mlx_image_t *minimap_img, int pos_x, int pos_y);
 mlx_image_t	*create_minimap_image(mlx_t *mlx, int width, int height);
 void		draw_map_grid(mlx_image_t *minimap_img, t_config *config);
+float		get_player_angle(char c);
 
 #endif

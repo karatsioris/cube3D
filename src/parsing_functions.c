@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 17:08:25 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:14:36 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ void	handle_map_line(char *line, t_config *config, t_memory *mem)
 		if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E'
 			|| line[i] == 'W')
 		{
-			config->player.x = config->map.current_row + 1;
-			config->player.y = i;
+			config->player.y = config->map.current_row + 0.5;
+			config->player.x = i + 0.5;
+			config->player.angle = get_player_angle(line[i]);
 		}
 		i++;
 	}
