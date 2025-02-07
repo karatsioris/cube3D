@@ -6,29 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:34:17 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/05 18:57:25 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/07 19:34:07 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
-
-float	get_margin_x(float new_x, int grid_x, int direction)
-{
-	if (direction == -1)
-		return (new_x - grid_x);
-	if (direction == 1)
-		return (1.0f - (new_x - grid_x));
-	return (1.0f);
-}
-
-float	get_margin_y(float new_y, int grid_y, int direction)
-{
-	if (direction == -1)
-		return (new_y - grid_y);
-	if (direction == 1)
-		return (1.0f - (new_y - grid_y));
-	return (1.0f);
-}
 
 bool	check_direction(t_collision_data *data, int direction)
 {
