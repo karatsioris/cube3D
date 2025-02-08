@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 09:39:53 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 14:22:30 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 12:34:44 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	parse_color(char *line, int color[3])
 	char	**rgb;
 	int		i;
 
-	ft_printf("[DEBUG] Parsing color line: '%s'\n", line);
 	if (color[0] != -1)
 	{
 		ft_printf("[ERROR] Duplicate color directive found.\n");

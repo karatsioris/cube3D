@@ -6,11 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 15:33:24 by kkaratsi          #+#    #+#             */
-/*   Updated: 2025/02/06 15:01:42 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:18:28 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "raycaster.h"
 
 void	draw_vertical_line(mlx_image_t *img, int x, t_draw_params *params,
 	uint32_t color)

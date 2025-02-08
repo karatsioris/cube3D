@@ -6,11 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:53:05 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/06 15:16:06 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:17:47 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "raycaster.h"
 
 void	compute_wall_hit(t_cast_data *data, t_ray_calc *calc,
 	float perpwalldist)

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:32:54 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/06 15:49:02 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 12:38:22 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 bool	validate_args_and_load_map(int argc,
 			char **argv, t_config *config, t_memory *mem)
 {
-	ft_printf("[DEBUG] Validating command-line arguments...\n");
 	if (argc < 2)
 	{
 		ft_printf("[ERROR] Missing map path argument!\n");
@@ -26,7 +25,6 @@ bool	validate_args_and_load_map(int argc,
 		ft_printf("[ERROR] Too many arguments! Received %d arguments.\n", argc);
 		return (false);
 	}
-	ft_printf("[DEBUG] Parsing map file: %s\n", argv[1]);
 	parse_cub_file(config, mem, argv[1]);
 	ft_printf("[DEBUG] Map parsed and loaded successfully.\n");
 	return (true);
@@ -96,5 +94,4 @@ void	game_loop(t_map *map, t_config *config)
 	mlx_key_hook(map->mlx, key_event_handler, config);
 	mlx_loop_hook(map->mlx, render_scene_wrapper, data);
 	mlx_loop(map->mlx);
-	ft_printf("[DEBUG] Game loop ended.\n");
 }

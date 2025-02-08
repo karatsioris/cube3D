@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 20:34:56 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 14:27:36 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 12:42:53 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ bool	mem_init(t_memory *mem)
 		ft_printf("[ERROR] Failed to allocate memory for pointer array.\n");
 		return (false);
 	}
-	ft_printf("[DEBUG] Memory manager initialized with capacity: %zu\n",
-		mem->capacity);
 	return (true);
 }
 
@@ -54,7 +52,6 @@ void	*mem_alloc(t_memory *mem, size_t size)
 	ptr = malloc(size);
 	if (!ptr)
 	{
-		ft_printf("[ERROR] Failed to allocate %zu bytes.\n", size);
 		exit(1);
 	}
 	mem->allocated_pointers[mem->count++] = ptr;
@@ -71,7 +68,6 @@ void	mem_free_all(t_memory *mem)
 		ft_printf("[ERROR] mem_free_all received an uninitialized memory.\n");
 		return ;
 	}
-	ft_printf("[DEBUG] Freeing %zu allocations...\n", mem->count);
 	while (i < mem->count)
 	{
 		if (mem->allocated_pointers[i])
@@ -106,7 +102,5 @@ char	*ft_strdup_cub(const char *src, t_memory *mem)
 		exit(1);
 	}
 	ft_strlcpy(dest, src, len + 1);
-	ft_printf("[DEBUG] ft_strdup_cub successfully duplicated string: '%s'\n",
-		dest);
 	return (dest);
 }
