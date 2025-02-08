@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/07 19:14:36 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 15:45:03 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ bool	is_map_line(char *line)
 	{
 		if (*line != '1' && *line != '0' && *line != 'N' && *line != 'S'
 			&& *line != 'E' && *line != 'W' && *line != ' ' && *line != '\n')
+		{
+			ft_printf("Error: Unknown symbol '%c' found in the map!\n", *line);
 			return (false);
+		}
 		line++;
 	}
 	return (true);
@@ -78,10 +81,13 @@ void	parse_line(char *line, t_config *config, t_memory *mem,
 		if (is_map_line(line))
 			handle_map_line(line, config, mem);
 		else
+		{
+			ft_printf("Error: Invalid character found in map: %s\n", line);
 			exit(1);
+		}
 		return ;
 	}
-	if (is_map_line(line))
+	if (*line == '0' || *line == '1')
 	{
 		*is_parsing_map = true;
 		handle_map_line(line, config, mem);

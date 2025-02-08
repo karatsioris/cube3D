@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 13:29:03 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 15:38:00 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,27 @@ void	validate_side_walls(char *line, int width)
 void	validate_outer_walls(t_map *map)
 {
 	int	i;
+	int	width;
+	int	height;
 
-	if (!map || !map->grid)
-		exit(1);
-	if (map->height < 3 || map->width < 3)
-		exit(1);
-	validate_top_bottom_walls(map->grid[0], map->width, 1);
-	validate_top_bottom_walls(map->grid[map->height - 1], map->width, 0);
-	i = 1;
-	while (i < map->height - 1)
+	width = map->width;
+	height = map->height;
+	i = 0;
+	while (i < width)
 	{
-		if (!map->grid[i])
-			exit(1);
-		validate_side_walls(map->grid[i], map->width);
+		if (map->grid[0][i] != '1')
+			ft_wall_err("Map is not enclosed at", i, "top row");
+		if (map->grid[height - 1][i] != '1')
+			ft_wall_err("Map is not enclosed at", i, "bottom row");
+		i++;
+	}
+	i = 0;
+	while (i < height)
+	{
+		if (map->grid[i][0] != '1')
+			ft_wall_err("Map is not enclosed at", i, "left column");
+		if (map->grid[i][width - 1] != '1')
+			ft_wall_err("Map is not enclosed at", i, "right column");
 		i++;
 	}
 }
@@ -79,22 +87,24 @@ void	validate_inner_map(t_map *map)
 	int	j;
 	int	player_found;
 
-	i = 1;
 	player_found = 0;
-	while (i < map->height - 1)
+	i = 0;
+	while (i < map->height)
 	{
-		j = 1;
-		while (j < map->width - 1)
+		j = 0;
+		while (j < map->width)
 		{
 			if (ft_strchr("NSEW", map->grid[i][j]))
 			{
-				if (++player_found > 1 || is_invalid_player_position(map, i, j))
-					exit(1);
+				if (++player_found > 1)
+					ft_error(-4);
 			}
+			if (map->grid[i][j] == ' ')
+				ft_error(-6);
 			j++;
 		}
 		i++;
 	}
 	if (!player_found)
-		exit(1);
+		ft_error(-2);
 }
