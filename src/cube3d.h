@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/07 19:14:27 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:12:57 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,42 +103,6 @@ typedef struct s_render_data
 	mlx_image_t	*img;
 }	t_render_data;
 
-typedef struct s_draw_params
-{
-	int	lineheight;
-	int	drawstart;
-	int	drawend;
-}	t_draw_params;
-
-typedef struct s_texture_data
-{
-	mlx_image_t	*texture;
-	int			tex_width;
-	int			tex_height;
-	float		wallx;
-}	t_texture_data;
-
-typedef struct s_ray_data
-{
-	t_draw_params	draw_params;
-	mlx_image_t		*texture;
-	int				tex_width;
-	int				tex_height;
-	float			wallx;
-	int				hit_side;
-}	t_ray_data;
-
-typedef struct s_cast_data
-{
-	t_ray_data	ray;
-	t_map		*map;
-	t_config	*config;
-	float		start_x;
-	float		start_y;
-	float		angle;
-	int			h;
-}	t_cast_data;
-
 typedef struct s_collision_data
 {
 	t_map	*map;
@@ -149,21 +113,6 @@ typedef struct s_collision_data
 	float	margin_x;
 	float	margin_y;
 }	t_collision_data;
-
-typedef struct s_ray_calc
-{
-	float	ray_dir_x;
-	float	ray_dir_y;
-	int		map_x;
-	int		map_y;
-	float	delta_dist_x;
-	float	delta_dist_y;
-	int		step_x;
-	int		step_y;
-	float	side_dist_x;
-	float	side_dist_y;
-	int		side;
-}	t_ray_calc;
 
 typedef struct s_square
 {
@@ -200,30 +149,15 @@ void		load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
 bool		can_move_forward(t_config *config, t_map *map, float move_distance,
 				float angle_offset);
 bool		is_wall(t_map *map, int x, int y);
-float		compute_perpwalldist(t_cast_data *data, t_ray_calc *calc);
-bool		perform_dda(t_cast_data *data, t_ray_calc *calc);
-void		init_step_and_side_distances(t_cast_data *data, t_ray_calc *calc);
 bool		init_config_and_map(t_config *config, t_memory *mem,
 				int argc, char **argv);
 void		key_event_handler(mlx_key_data_t keydata, void *param);
-
-/* -------------------   kkaratsi functions  ---------------------*/
-
-void		draw_vertical_line(mlx_image_t *img, int x, t_draw_params *params,
-				uint32_t color);
-void		calculate_draw_parameters(int h, float perpWallDist,
-				t_draw_params *params);
-bool		cast_ray(t_cast_data *data);
 void		render_scene(t_render_data *data, int window_height);
 void		clear_image(mlx_image_t *img, uint32_t color);
 void		player_move_handler(mlx_key_data_t keydata, void *param);
 void		render_scene_wrapper(void *param);
-void		draw_textured_vertical_line(mlx_image_t *img, int x,
-				t_draw_params *params, t_texture_data *tex_data);
 void		draw_minimap(mlx_t *mlx, t_config *config, int pos_x, int pos_y);
 void		draw_square(mlx_image_t *img, t_square square);
-void		draw_minimap_in_main_image(mlx_image_t *main_img,
-				mlx_image_t *minimap_img, int pos_x, int pos_y);
 mlx_image_t	*create_minimap_image(mlx_t *mlx, int width, int height);
 void		draw_map_grid(mlx_image_t *minimap_img, t_config *config);
 float		get_player_angle(char c);

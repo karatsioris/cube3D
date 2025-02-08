@@ -6,11 +6,11 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:04:50 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/07 18:08:26 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:18:13 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "raycaster.h"
 
 void	draw_ceiling_and_floor(mlx_image_t *img, int x, t_ray_data *ray)
 {

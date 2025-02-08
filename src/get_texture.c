@@ -6,11 +6,12 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:18:58 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/08 12:18:25 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:00:20 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
+#include "raycaster.h"
 
 uint32_t	convert_abgr_to_rgba(uint32_t abgr)
 {
