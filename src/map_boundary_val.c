@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 15:48:09 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 12:37:00 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	validate_top_bottom_walls(char *line, int width, int is_top)
 		wall_name = "Top";
 	else
 		wall_name = "Bottom";
-	ft_printf("[DEBUG] Validating %s wall: %s\n", wall_name, line);
 	if (!line)
 	{
 		ft_printf("[ERROR] Line is NULL while %s wall.\n", wall_name);
@@ -38,7 +37,6 @@ void	validate_top_bottom_walls(char *line, int width, int is_top)
 		}
 		i++;
 	}
-	ft_printf("[DEBUG] %s wall validated successfully.\n", wall_name);
 }
 
 void	validate_side_walls(char *line, int width)
@@ -47,7 +45,6 @@ void	validate_side_walls(char *line, int width)
 		exit(1);
 	if (line[0] != '1' || line[width - 2] != '1')
 		exit(1);
-	ft_printf("[DEBUG] Side walls validated successfully.\n");
 }
 
 void	validate_outer_walls(t_map *map)
