@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:40:11 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 12:37:00 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 13:29:03 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	validate_inner_map(t_map *map)
 	int	player_found;
 
 	i = 1;
-	j = 0;
 	player_found = 0;
 	while (i < map->height - 1)
 	{
