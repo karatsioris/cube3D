@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:18:58 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/07 17:41:35 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 12:18:25 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,24 @@ int	get_texture_y(float tex_pos, int tex_height)
 }
 
 void	draw_textured_vertical_line(mlx_image_t *img, int x,
-	t_draw_params *params,
-	t_texture_data *tex_data)
+	t_draw_params *params, t_texture_data *tex_data)
 {
 	int		tex_x;
+	int		tex_y;
 	float	tex_pos;
 	float	step;
 	int		y;
 
 	tex_x = get_texture_x(tex_data);
-	tex_pos = 0;
-	step = (float)tex_data->tex_height / (params->drawend - params->drawstart);
+	step = (float)tex_data->tex_height / (float)(params->lineheight);
+	tex_pos = (params->drawstart - (WINDOW_HEIGHT / 2)
+			+ (params->lineheight / 2)) * step;
 	y = params->drawstart;
 	while (y < params->drawend)
 	{
-		mlx_put_pixel(img, x, y, get_texture_pixel(tex_data->texture, tex_x,
-				get_texture_y(tex_pos, tex_data->tex_height)));
+		tex_y = get_texture_y(tex_pos, tex_data->tex_height);
+		mlx_put_pixel(img, x, y, get_texture_pixel(tex_data->texture,
+				tex_x, tex_y));
 		tex_pos += step;
 		y++;
 	}
