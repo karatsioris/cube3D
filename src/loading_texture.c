@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:24:38 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/06 15:49:13 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:45:11 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,33 +56,61 @@ static mlx_image_t	*load_texture_for_path(char *path, mlx_t *mlx,
 	return (image);
 }
 
+// void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
+// 	t_memory *mem)
+// {
+// 	int		i;
+// 	char	*paths[4];
+
+// 	paths[0] = textures->north;
+// 	paths[1] = textures->south;
+// 	paths[2] = textures->west;
+// 	paths[3] = textures->east;
+// 	res->texture_count = 4;
+// 	res->images = mem_alloc(mem, sizeof(mlx_image_t *) * res->texture_count);
+// 	if (!res->images)
+// 	{
+// 		ft_printf("[ERROR] Failed to allocate memory for textures.\n");
+// 		cleanup_textures(res, mlx);
+// 		exit(1);
+// 	}
+// 	i = 0;
+// 	while (i < res->texture_count)
+// 	{
+// 		if (paths[i] == NULL)
+// 		{
+// 			ft_printf("[ERROR] Missing texture for index %d\n", i);
+// 			cleanup_textures(res, mlx);
+// 			exit(1);
+// 		}
+// 		res->images[i] = load_texture_for_path(paths[i], mlx, res);
+// 		i++;
+// 	}
+// 	res->image_count = res->texture_count;
+// }
 void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
 	t_memory *mem)
 {
-	int				count;
-	int				i;
-	char			*paths[4];
+	int		i;
+	char	*paths[4];
 
 	paths[0] = textures->north;
 	paths[1] = textures->south;
 	paths[2] = textures->west;
 	paths[3] = textures->east;
-	count = 4;
+	res->texture_count = 4;
+	res->images = mem_alloc(mem, sizeof(mlx_image_t *) * res->texture_count);
+	if (!res->images)
+		ft_texture_err("Failed to allocate memory for textures", -1, res, mlx);
 	i = 0;
-	res->texture_count = count;
-	res->images = mem_alloc(mem, sizeof(mlx_image_t *) * count);
-	if (res->images == NULL)
+	while (i < res->texture_count)
 	{
-		ft_printf("[ERROR] Failed to allocate memory for images.\n");
-		cleanup_textures(res, mlx);
-		exit(1);
-	}
-	while (i < count)
-	{
+		if (paths[i] == NULL)
+			ft_texture_err("Missing texture", i, res, mlx);
 		res->images[i] = load_texture_for_path(paths[i], mlx, res);
 		i++;
 	}
-	res->image_count = count;
+	res->image_count = res->texture_count;
 }
 
 void	render_scene_wrapper(void *param)

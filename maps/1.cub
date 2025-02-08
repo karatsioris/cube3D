@@ -1,8 +1,8 @@
 C 255,255,254
 NO ./assets/wall2.png  
 SO ./assets/sand.png
-WE ./assets/sand.png
-EA ./assets/sand.png 
+WE ./assets/nebula.png
+EA ./assets/green.png 
 
 F 50,50,50
 

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:04:50 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/08 13:18:13 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:52:17 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,45 @@ void	draw_ceiling_and_floor(mlx_image_t *img, int x, t_ray_data *ray)
 	}
 }
 
-void	render_wall(mlx_image_t *img, int x, t_cast_data *cast_data,
-	t_config *config)
-
+int	get_texture_index(t_cast_data *cast_data, float ray_dir_x, float ray_dir_y)
 {
-	t_texture_data	tex_data;
-
-	if (config->use_textures)
+	if (cast_data->ray.hit_side == 0)
 	{
-		if (cast_data->ray.hit_side == 0)
-			tex_data.texture = config->resources.images[0];
+		if (ray_dir_x > 0)
+			return (3);
 		else
-			tex_data.texture = config->resources.images[1];
-		tex_data.tex_width = tex_data.texture->width;
-		tex_data.tex_height = tex_data.texture->height;
-		tex_data.wallx = cast_data->ray.wallx;
-		draw_textured_vertical_line(img, x, &cast_data->ray.draw_params,
-			&tex_data);
+			return (2);
 	}
 	else
 	{
-		draw_vertical_line(img, x, &cast_data->ray.draw_params, 0xFFFFFF);
+		if (ray_dir_y > 0)
+			return (1);
+		else
+			return (0);
 	}
+}
+
+void	render_wall(mlx_image_t *img, int x, t_cast_data *cast_data,
+	t_config *config)
+{
+	t_texture_data	tex_data;
+	float			ray_dir_x;
+	float			ray_dir_y;
+	int				tex_index;
+
+	if (!config->use_textures)
+	{
+		draw_vertical_line(img, x, &cast_data->ray.draw_params, 0xFFFFFF);
+		return ;
+	}
+	ray_dir_x = cosf(cast_data->angle);
+	ray_dir_y = sinf(cast_data->angle);
+	tex_index = get_texture_index(cast_data, ray_dir_x, ray_dir_y);
+	tex_data.texture = config->resources.images[tex_index];
+	tex_data.tex_width = tex_data.texture->width;
+	tex_data.tex_height = tex_data.texture->height;
+	tex_data.wallx = cast_data->ray.wallx;
+	draw_textured_vertical_line(img, x, &cast_data->ray.draw_params, &tex_data);
 }
 
 void	init_cast_data(t_cast_data *cast_data, t_render_data *data,

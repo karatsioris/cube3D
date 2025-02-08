@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:51:55 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 16:18:39 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:44:31 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,13 @@ void	ft_error(int code)
 void	ft_wall_err(const char *message, int value, const char *context)
 {
 	ft_printf("Error: %s %s %d!\n", message, context, value);
+	exit(1);
+}
+
+void	ft_texture_err(const char *message, int index, t_resources *res,
+	mlx_t *mlx)
+{
+	ft_printf("[ERROR] %s (Index: %d)\n", message, index);
+	cleanup_textures(res, mlx);
 	exit(1);
 }
