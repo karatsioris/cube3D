@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:58:00 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 15:45:03 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:15:13 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	parse_cub_file(t_config *config, t_memory *mem, char *file_path)
 		ft_error(-1);
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
-		exit(1);
+		ft_error(-10);
 	config->map.path = mem_alloc(mem, ft_strlen(file_path) + 1);
 	ft_strlcpy(config->map.path, file_path, ft_strlen(file_path) + 1);
 	line = get_next_line(fd);
@@ -122,6 +122,6 @@ void	parse_cub_file(t_config *config, t_memory *mem, char *file_path)
 	}
 	close(fd);
 	if (!config->map.list)
-		ft_error(-13);
+		ft_error(-11);
 	list_to_array(&config->map, mem);
 }

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/04 15:44:14 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/08 16:18:09 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*clean_path(char *line, t_memory *mem)
 		return (NULL);
 	raw_path = ft_strdup_cub(line, mem);
 	if (!raw_path)
-		exit(1);
+		ft_error(-12);
 	len = ft_strlen(raw_path);
 	while (len > 0 && (raw_path[len - 1] == ' ' || raw_path[len - 1] == '\n'
 			|| raw_path[len - 1] == '\t'))
@@ -94,5 +94,5 @@ void	parse_texture(char *line, t_texture *textures, t_memory *mem)
 void	validate_color_range(int color)
 {
 	if (color < 0 || color > 255)
-		ft_error(-7);
+		ft_error(-9);
 }
