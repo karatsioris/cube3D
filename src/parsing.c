@@ -6,90 +6,72 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 09:39:53 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 16:08:42 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:03:52 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-void	count_rows(t_map *map)
+bool	is_valid_color_component(char *str)
 {
-	int				rows;
-	const t_list	*temp;
-
-	rows = 0;
-	temp = map->list;
-	while (temp)
+	if (!str || *str == '\0')
+		return (false);
+	while (*str)
 	{
-		rows++;
-		temp = temp->next;
+		if (!ft_isdigit((unsigned char)*str))
+			return (false);
+		str++;
 	}
-	map->height = rows;
+	return (true);
 }
 
-void	allocate_grid(t_map *map, t_memory *mem)
+static char	*extract_trimmed_line_after_directive(char *line)
 {
-	map->grid = mem_alloc(mem, sizeof(char *) * (map->height + 1));
-	if (!map->grid)
-		exit(1);
+	while (*line && *line != ' ')
+		line++;
+	while (*line == ' ')
+		line++;
+	return (ft_strtrim(line, " \t\n"));
 }
 
-void	fill_grid(t_map *map, t_memory *mem)
+static int	parse_component(char *str)
 {
-	int				i;
-	int				len;
-	const t_list	*temp;
-	char			*line;
+	char	*trimmed;
+	int		value;
 
-	temp = map->list;
-	i = 0;
-	map->width = 0;
-	while (temp)
+	trimmed = ft_strtrim(str, " \t\n");
+	if (!trimmed || !is_valid_color_component(trimmed))
 	{
-		line = ft_strdup_cub(temp->line, mem);
-		if (!line)
-			exit(1);
-		len = ft_strlen(line);
-		if (len > 0 && line[len - 1] == '\n')
-			line[len - 1] = '\0';
-		map->grid[i] = line;
-		if ((int)ft_strlen(line) > map->width)
-			map->width = ft_strlen(line);
-		i++;
-		temp = temp->next;
+		if (trimmed)
+			free(trimmed);
+		ft_error(-7);
 	}
-	map->grid[i] = NULL;
-}
-
-void	list_to_array(t_map *map, t_memory *mem)
-{
-	count_rows(map);
-	allocate_grid(map, mem);
-	fill_grid(map, mem);
+	value = ft_atoi(trimmed);
+	validate_color_range(value);
+	free(trimmed);
+	return (value);
 }
 
 void	parse_color(char *line, int color[3])
 {
 	char	**rgb;
-	int		i;
+	char	*trimmed_line;
+	int		idx;
 
 	if (color[0] != -1)
-	{
 		ft_error(-8);
-	}
-	while (*line != ' ')
-		line++;
-	while (*line == ' ')
-		line++;
-	rgb = ft_split(line, ',');
+	trimmed_line = extract_trimmed_line_after_directive(line);
+	if (!trimmed_line)
+		ft_error(-7);
+	rgb = ft_split(trimmed_line, ',');
+	free(trimmed_line);
 	if (!rgb || ft_arraylen(rgb) != 3)
 		ft_error(-7);
-	i = 0;
-	while (i < 3)
+	idx = 0;
+	while (idx < 3)
 	{
-		color[i] = ft_atoi(rgb[i]);
-		validate_color_range(color[i]);
-		i++;
+		color[idx] = parse_component(rgb[idx]);
+		idx++;
 	}
 	ft_free_split(rgb);
 }
