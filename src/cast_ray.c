@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:04:50 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/08 16:52:17 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:48:26 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ void	draw_ceiling_and_floor(mlx_image_t *img, int x, t_ray_data *ray)
 	y = 0;
 	while (y < ray->draw_params.drawstart)
 	{
-		mlx_put_pixel(img, x, y, 0x89CFF3FF);
+		mlx_put_pixel(img, x, y, ray->ceiling_color);
 		y++;
 	}
 	y = ray->draw_params.drawend;
 	while (y < WINDOW_HEIGHT)
 	{
-		mlx_put_pixel(img, x, y, 0xB99470FF);
+		mlx_put_pixel(img, x, y, ray->floor_color);
 		y++;
 	}
 }
@@ -100,6 +100,8 @@ void	render_scene(t_render_data *data, int window_height)
 		ray_angle = data->config->player.angle + (x - WINDOW_WIDTH / 2)
 			* (FOV / WINDOW_WIDTH);
 		init_cast_data(&cast_data, data, ray_angle, window_height);
+		cast_data.ray.ceiling_color = create_rgb(data->config->colors.ceiling);
+		cast_data.ray.floor_color = create_rgb(data->config->colors.floor);
 		if (cast_ray(&cast_data))
 		{
 			draw_ceiling_and_floor(data->img, x, &cast_data.ray);

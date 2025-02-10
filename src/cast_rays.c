@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:53:05 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/08 13:17:47 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:40:22 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,9 @@ bool	cast_ray(t_cast_data *data)
 	compute_wall_hit(data, &calc, perpwalldist);
 	data->ray.hit_side = calc.side;
 	return (true);
+}
+
+int	create_rgb(int color[3])
+{
+	return ((color[0] << 24) | (color[1] << 16) | (color[2] << 8) | 0xFF);
 }

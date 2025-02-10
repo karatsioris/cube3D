@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:32:54 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 12:38:22 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:09:37 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ bool	init_config_and_map(t_config *config, t_memory *mem,
 		return (false);
 	validate_map(&config->map);
 	config->map.mlx = mlx_init(WINDOW_WIDTH, WINDOW_HEIGHT,
-			"Cube3D - Textured Walls", true);
+			"Cube3D - Textured Walls", false);
 	if (!config->map.mlx)
 	{
 		ft_clean(&config->map, mem, &config->resources);

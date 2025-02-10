@@ -1,11 +1,11 @@
-C 255,255,254
+C 0,100,255
 
 NO ./assets/wall2.png
 SO ./assets/sand.png
 WE ./assets/nebula.png
 EA ./assets/green.png 
 
-F 50,50,50
+F 150,255,150
 
 11111111111111
 11110000000001

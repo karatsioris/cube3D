@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:50:39 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/08 13:16:56 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:44:58 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ typedef struct s_ray_data
 	int				tex_height;
 	float			wallx;
 	int				hit_side;
+	int				ceiling_color;
+	int				floor_color;
 }	t_ray_data;
 
 typedef struct s_cast_data
@@ -76,5 +78,6 @@ bool		cast_ray(t_cast_data *data);
 void		init_step_and_side_distances(t_cast_data *data, t_ray_calc *calc);
 bool		perform_dda(t_cast_data *data, t_ray_calc *calc);
 float		compute_perpwalldist(t_cast_data *data, t_ray_calc *calc);
+int			create_rgb(int color[3]);
 
 #endif
