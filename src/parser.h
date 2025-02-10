@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 16:31:29 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/04 14:23:19 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:38:19 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ int		put_on_list(const char *line, t_list **list, t_memory *mem);
 int		has_valid_extension(const char *path, const char *extension);
 char	*ft_strdup_cub(const char *src, t_memory *mem);
 void	validate_color_range(int color);
+void	validate_config(t_config *config);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:53:32 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 12:34:15 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:54:37 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,11 @@ void	validate_map_boundary(t_map *map)
 {
 	validate_outer_walls(map);
 	validate_inner_map(map);
+}
+
+bool	is_wall(t_map *map, int x, int y)
+{
+	if (x < 0 || x >= map->width || y < 0 || y >= map->height)
+		return (true);
+	return (map->grid[y][x] == '1');
 }

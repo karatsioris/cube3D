@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 18:34:17 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/08 13:26:39 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:52:13 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,45 @@ bool	can_move_forward(t_config *config, t_map *map, float move_distance,
 	if (is_wall(map, data.grid_x, data.grid_y))
 		return (false);
 	return (check_collision(&data));
+}
+
+void	update_player_position(t_config *config, t_map *map,
+	float move_distance, float angle_offset)
+{
+	if (can_move_forward(config, map, move_distance, angle_offset))
+	{
+		config->player.x += cosf(config->player.angle + angle_offset)
+			* move_distance;
+		config->player.y += sinf(config->player.angle + angle_offset)
+			* move_distance;
+	}
+	else
+	{
+		ft_printf("[DEBUG] Movement blocked: Collision detected.\n");
+	}
+}
+
+void	player_move_handler(mlx_key_data_t keydata, void *param)
+{
+	t_config	*config;
+	float		move_speed;
+	float		rot_speed;
+
+	move_speed = 0.3f;
+	rot_speed = 0.3f;
+	config = (t_config *)param;
+	if (keydata.action != MLX_PRESS && keydata.action != MLX_REPEAT)
+		return ;
+	if (keydata.key == MLX_KEY_W)
+		update_player_position(config, &config->map, move_speed, 0.0f);
+	else if (keydata.key == MLX_KEY_S)
+		update_player_position(config, &config->map, move_speed, M_PI);
+	else if (keydata.key == MLX_KEY_A)
+		update_player_position(config, &config->map, move_speed, -M_PI_2);
+	else if (keydata.key == MLX_KEY_D)
+		update_player_position(config, &config->map, move_speed, M_PI_2);
+	else if (keydata.key == MLX_KEY_LEFT)
+		config->player.angle -= rot_speed;
+	else if (keydata.key == MLX_KEY_RIGHT)
+		config->player.angle += rot_speed;
 }
