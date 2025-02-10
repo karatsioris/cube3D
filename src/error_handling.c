@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 09:51:55 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 16:44:31 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:35:41 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,10 @@ void	ft_texture_err(const char *message, int index, t_resources *res,
 	ft_printf("[ERROR] %s (Index: %d)\n", message, index);
 	cleanup_textures(res, mlx);
 	exit(1);
+}
+
+char	*err_path(const char *message, char *line)
+{
+	ft_printf("[ERROR] %s: '%s'\n", message, line);
+	return (NULL);
 }

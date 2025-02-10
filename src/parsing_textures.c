@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 10:54:18 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 16:18:09 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:38:18 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ char	*clean_path(char *line, t_memory *mem)
 	int		len;
 
 	ft_printf("[DEBUG] Extracting path from line: '%s'\n", line);
-	while (*line != ' ')
+	while (*line && *line != ' ')
 		line++;
 	while (*line == ' ')
 		line++;
 	if (!*line)
-		return (NULL);
+		return (err_path("Texture path is missing in line", line));
 	raw_path = ft_strdup_cub(line, mem);
 	if (!raw_path)
 		ft_error(-12);
@@ -34,7 +34,8 @@ char	*clean_path(char *line, t_memory *mem)
 		raw_path[len - 1] = '\0';
 		len--;
 	}
-	ft_printf("[DEBUG] Cleaned path: '%s'\n", raw_path);
+	if (*raw_path == '\0')
+		return (err_path("Cleaned path is empty after trimming", line));
 	return (raw_path);
 }
 
@@ -57,8 +58,16 @@ char	*extract_path(char *line, t_memory *mem)
 	char	*path;
 
 	path = clean_path(line, mem);
-	if (!path || !validate_path(path))
+	if (!path)
+	{
+		ft_printf("[ERROR] Extracted path is NULL for line: '%s'\n", line);
 		exit(1);
+	}
+	if (!validate_path(path))
+	{
+		ft_printf("[ERROR] File does not exist : '%s'\n", path);
+		exit(1);
+	}
 	return (path);
 }
 

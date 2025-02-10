@@ -1,18 +1,13 @@
 NAME    = cub3D
 
-# Compiler
-CC      = gcc
-CFLAGS  = -Wextra -Wall -Werror -g3
+CC      = cc
+CFLAGS  = -Wextra -Wall -Werror
 
-
-# MLX library flags
 MLXFLAGS = -lglfw -L /usr/local/lib
 
-# Directories
 SRC_DIR = src
 OBJ_DIR = src/bin
 
-# Source files for Cube3D
 SRC = error_handling.c file_and_argv_valid.c \
 	  map_boundary_val.c initialize_game.c \
 	  memory_cleaning.c parsing_functions.c \
@@ -22,10 +17,8 @@ SRC = error_handling.c file_and_argv_valid.c \
 	  get_texture.c can_move.c cast_rays.c minimap.c \
 	  minimap_helper.c \
 
-# Object files
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
-# Libraries
 LIB = src/libft/bin/libft.a
 MLX42 = MLX42/build/libmlx42.a
 
@@ -47,28 +40,23 @@ $(MLX42):
 	@cd MLX42 && cmake -B build
 	@cd MLX42 && cmake --build build -j4
 
-# Build everything
 all: $(MLX42) $(NAME)
 
-# Clean MLX42
 cleanmlx:
 	@rm -rf MLX42
 	@echo "MLX42 folder removed"
 
-# Clean object files
 clean:
 	@cd src/libft && make clean
 	@rm -rf $(OBJ_DIR)
 	@echo "Objects removed"
 
-# Remove objects and executable
 fclean:
 	@cd src/libft && make fclean
 	@rm -rf $(OBJ_DIR)
 	@rm -rf $(NAME)
 	@echo "Objects and executable removed"
 
-# Rebuild everything
 re: fclean all
 
 .PHONY: all clean fclean re cleanmlx

@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 11:58:20 by piotrwojnar       #+#    #+#             */
-/*   Updated: 2025/02/08 16:45:35 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:36:24 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,5 +164,6 @@ float		get_player_angle(char c);
 void		ft_wall_err(const char *message, int value, const char *context);
 void		ft_texture_err(const char *message, int index, t_resources *res,
 				mlx_t *mlx);
+char		*err_path(const char *message, char *line);
 
 #endif

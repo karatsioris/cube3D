@@ -6,7 +6,7 @@
 /*   By: pwojnaro <pwojnaro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:24:38 by pwojnaro          #+#    #+#             */
-/*   Updated: 2025/02/08 16:45:11 by pwojnaro         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:40:19 by pwojnaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static mlx_texture_t	*validate_and_load_texture(char *path, mlx_t *mlx,
 {
 	mlx_texture_t	*tex;
 
-	if (path == NULL)
+	if (path == NULL || *path == '\0')
 	{
-		ft_printf("[ERROR] Texture path is NULL.\n");
+		ft_printf("[ERROR] Texture path is NULL or empty.\n");
 		cleanup_textures(res, mlx);
 		exit(1);
 	}
@@ -32,6 +32,7 @@ static mlx_texture_t	*validate_and_load_texture(char *path, mlx_t *mlx,
 	tex = mlx_load_png(path);
 	if (tex == NULL)
 	{
+		ft_printf("[ERROR] Failed to load texture from path: %s\n", path);
 		cleanup_textures(res, mlx);
 		exit(1);
 	}
@@ -56,38 +57,6 @@ static mlx_image_t	*load_texture_for_path(char *path, mlx_t *mlx,
 	return (image);
 }
 
-// void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
-// 	t_memory *mem)
-// {
-// 	int		i;
-// 	char	*paths[4];
-
-// 	paths[0] = textures->north;
-// 	paths[1] = textures->south;
-// 	paths[2] = textures->west;
-// 	paths[3] = textures->east;
-// 	res->texture_count = 4;
-// 	res->images = mem_alloc(mem, sizeof(mlx_image_t *) * res->texture_count);
-// 	if (!res->images)
-// 	{
-// 		ft_printf("[ERROR] Failed to allocate memory for textures.\n");
-// 		cleanup_textures(res, mlx);
-// 		exit(1);
-// 	}
-// 	i = 0;
-// 	while (i < res->texture_count)
-// 	{
-// 		if (paths[i] == NULL)
-// 		{
-// 			ft_printf("[ERROR] Missing texture for index %d\n", i);
-// 			cleanup_textures(res, mlx);
-// 			exit(1);
-// 		}
-// 		res->images[i] = load_texture_for_path(paths[i], mlx, res);
-// 		i++;
-// 	}
-// 	res->image_count = res->texture_count;
-// }
 void	load_textures(t_resources *res, t_texture *textures, mlx_t *mlx,
 	t_memory *mem)
 {
